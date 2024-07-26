@@ -12,16 +12,29 @@ export const dragGraph = function (x, y, w, h, fillStyle, canvas, graphShape) {
 
 dragGraph.prototype = {
   paint: function () {
+    this.context.save();
     this.context.beginPath();
     this.context.fillStyle = this.fillStyle;
+    this.context.translate(window.myscrollX,0)
     this.shapeDraw();
     this.context.fill();
     this.context.closePath();
+    this.context.restore();
   },
   isMouseInGraph: function (mouse) {
+    this.context.save();
+    this.context.translate(window.myscrollX,0)
     this.context.beginPath();
     this.shapeDraw();
-    return this.context.isPointInPath(mouse.x, mouse.y);
+    this.context.restore();
+    if (this.context.isPointInPath(mouse.x, mouse.y)){
+      if (Math.abs(mouse.x - (this.w + this.x + window.myscrollX)) < 10){
+        return 'edge'
+      }
+      return true
+    }
+    return false;
+
   },
   shapeDraw: function () {
     if (this.graphShape == "circle") {

@@ -16,16 +16,16 @@ export function Timeline(props) {
   const initCanvas = () => {
     if (window.initReady) return false;
     window.initReady = true;
-
+    window.myscrollX = 0
     var canvas = document.getElementById("canvas"),
       graphs = [],
       graphAttr = [],
       tempGraphArr = [];
 
-    for (var i = 0; i < 2000; i++) {
+    for (var i = 0; i < 20; i++) {
       var graph = new dragGraph(
         randomInt(0, 1200),
-        randomInt(0, 450),
+        randomInt(0, 280),
         randomInt(100, 400),
         20,
         `rgba(${randomInt(0, 255)}, ${randomInt(0, 255)}, ${randomInt(0, 255)} , 1) `,
@@ -48,13 +48,15 @@ export function Timeline(props) {
             x: mouse.x - shape.x,
             y: mouse.y - shape.y,
           };
-          if (shape.isMouseInGraph(mouse)) {
+          var action = shape.isMouseInGraph(mouse)
+          if (action) {
             tempGraphArr.push(shape);
-            if (Math.abs(mouse.x - (shape.w + shape.x)) < 10) {
-              window.action = "edge";
-            } else {
-              window.action = "none";
-            }
+            window.action = action
+            // if (Math.abs(mouse.x - (shape.w + shape.x + window.myscrollX)) < 10) {
+            //   window.action = "edge";
+            // } else {
+            //   window.action = "none";
+            // }
           }
         });
         e.preventDefault();
@@ -99,6 +101,17 @@ export function Timeline(props) {
       },
       false,
     );
+    canvas.addEventListener(
+      "mousewheel",
+      function (e) {
+        console.log(e)
+        window.myscrollX +=e.deltaY
+        graphs[0].erase();
+        drawGraph();
+        // console.log(e.window.scrollX)
+      },
+      false,
+    );
 
     function drawGraph() {
       for (var i = 0; i < graphs.length; i++) {
@@ -110,7 +123,7 @@ export function Timeline(props) {
 
   return (
     <div>
-      <canvas id="canvas" class="canvas" width="1500" height="500"></canvas>
+      <canvas id="canvas" class="canvas" width="1500" height="300"></canvas>
     </div>
   );
 }
