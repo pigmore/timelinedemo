@@ -22,7 +22,7 @@ export function Timeline(props) {
       graphAttr = [],
       tempGraphArr = [];
 
-    for (var i = 0; i < 20; i++) {
+    for (var i = 0; i < 2000; i++) {
       var graph = new dragGraph(
         randomInt(0, 1200),
         randomInt(0, 280),
