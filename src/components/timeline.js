@@ -3,6 +3,11 @@ import { randomInt } from './util';
 import { dragGraph } from './dragGraph';
 
 export function Timeline(props) {
+  var canvas = null,
+   graphs = [],
+    graphAttr = [],
+    tempGraphArr = [];
+
   useEffect(() => {
     async function init() {
       if (typeof window !== "undefined" || window.initReady !== true) {
@@ -13,20 +18,20 @@ export function Timeline(props) {
     window.initReady = true;
   }, []);
 
+
   const initCanvas = () => {
     if (window.initReady) return false;
+    canvas = document.getElementById("canvas");
     window.initReady = true;
     window.myscrollX = 0
-    var canvas = document.getElementById("canvas"),
-      graphs = [],
-      graphAttr = [],
-      tempGraphArr = [];
+    window.xScale = 10
+
 
     for (var i = 0; i < 2000; i++) {
       var graph = new dragGraph(
         randomInt(0, 1200),
         randomInt(0, 280),
-        randomInt(100, 400),
+        randomInt(10, 40),
         20,
         `rgba(${randomInt(0, 255)}, ${randomInt(0, 255)}, ${randomInt(0, 255)} , 1) `,
         canvas,
@@ -78,12 +83,12 @@ export function Timeline(props) {
           // console.log('mouse.x - (shape.w + shape.x)',mouse.x - (shape.w + shape.x))
 
           if (window.action === "edge") {
-            shape.w += e.movementX;
+            shape.w += e.movementX / window.xScale;
 
             shape.erase();
             drawGraph();
           } else {
-            shape.x += e.movementX;
+            shape.x += e.movementX / window.xScale;
             shape.y += e.movementY;
 
             shape.erase();
@@ -112,18 +117,25 @@ export function Timeline(props) {
       },
       false,
     );
-
-    function drawGraph() {
+    const drawGraph = ()=>{
+      // console.log(graphs)
       for (var i = 0; i < graphs.length; i++) {
         graphs[i].paint();
       }
     }
+
+    window.redraw_function = ()=>{
+      graphs[0].erase();
+      drawGraph();
+    }
+
     drawGraph();
   };
 
+
   return (
     <div>
-      <canvas id="canvas" class="canvas" width="1500" height="300"></canvas>
+      <canvas id="canvas" className="canvas" width="1500" height="300"></canvas>
     </div>
   );
 }

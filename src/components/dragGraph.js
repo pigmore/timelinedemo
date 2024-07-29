@@ -28,7 +28,7 @@ dragGraph.prototype = {
     this.shapeDraw();
     this.context.restore();
     if (this.context.isPointInPath(mouse.x, mouse.y)){
-      if (Math.abs(mouse.x - (this.w + this.x + window.myscrollX)) < 10){
+      if (Math.abs(mouse.x - (this.w * window.xScale + this.x * window.xScale + window.myscrollX)) < 10){
         return 'edge'
       }
       return true
@@ -44,7 +44,7 @@ dragGraph.prototype = {
       this.context.lineTo(this.x + 100, this.y + 130);
       this.context.lineTo(this.x, this.y + 130);
     } else {
-      this.context.rect(this.x, this.y, this.w, this.h);
+      this.context.rect(this.x * window.xScale, this.y, this.w * window.xScale, this.h);
     }
   },
   erase: function () {
