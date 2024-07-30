@@ -3,6 +3,7 @@ import './App.css';
 import React,{useState,memo,useRef} from 'react';
 import {Timelinememo} from './components/timeline';
 import {CallChild,CallChildMemo} from './components/callChild';
+import {Test,Testmemo} from './components/testmodule';
 
 function App() {
   const [count,setCount]=useState(0)
@@ -48,6 +49,7 @@ function App() {
         redrawTrigger = {redraw}
       />
       <CallChildMemo ref={myRef} />
+      <Testmemo/>
     </div>
   );
 }

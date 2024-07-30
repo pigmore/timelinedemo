@@ -110,7 +110,7 @@ export function Timeline(props) {
       "mousewheel",
       function (e) {
         console.log(e)
-        window.myscrollX +=e.deltaY
+        window.myscrollX =Math.min(Math.max(window.myscrollX + e.deltaY,-2400),0)
         graphs[0].erase();
         drawGraph();
         // console.log(e.window.scrollX)
