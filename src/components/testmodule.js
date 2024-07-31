@@ -77,6 +77,8 @@ export const Test = forwardRef((props,ref)=> {
       }
     }
     setJsonInit(JSON.stringify(json))
+
+    window.initJsonForCanvas(json)
   }
 
 

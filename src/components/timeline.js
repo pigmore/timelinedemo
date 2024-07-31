@@ -128,6 +128,27 @@ export function Timeline(props) {
       graphs[0].erase();
       drawGraph();
     }
+    window.initJsonForCanvas = (items)=>{
+      // graphs[0].erase();
+      var canvas = document.getElementById("canvas")
+      canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+      graphs = []
+      for (var item of items) {
+        var graph = new dragGraph(
+          item.x / 100,
+          item.y * 20,
+          item.w / 100,
+          20,
+          `rgba(${randomInt(0, 255)}, ${randomInt(0, 255)}, ${randomInt(0, 255)} , 1) `,
+          canvas,
+          'rectangle'
+        );
+        graphs.push(graph);
+      }
+
+
+      drawGraph();
+    }
 
     drawGraph();
   };
