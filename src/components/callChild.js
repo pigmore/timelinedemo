@@ -1,41 +1,47 @@
-import { useState, useEffect, memo,forwardRef,useImperativeHandle } from "react";
-import { randomInt } from './util';
-import { dragGraph } from './dragGraph';
+import {
+  useState,
+  useEffect,
+  memo,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
+import { randomInt } from "./util";
+import { dragGraph } from "./dragGraph";
 
-export const CallChild = forwardRef((props,ref)=> {
-  let mycount = 1
-  const [count,setCount] = useState(0)
+export const CallChild = forwardRef((props, ref) => {
+  let mycount = 1;
+  const [count, setCount] = useState(0);
   useEffect(() => {
     async function init() {
       if (typeof window !== "undefined" || window.initReady !== true) {
         // initCanvas();
-        console.log('mycount',mycount)
-        mycount = 100
+        console.log("mycount", mycount);
+        mycount = 100;
       }
     }
     init();
     window.initReady = true;
   }, []);
   useImperativeHandle(ref, () => ({
-
     callmycount() {
-        mycount += 1
-        console.log(mycount)
-    }
-
+      mycount += 1;
+      console.log(mycount);
+    },
   }));
-
 
   return (
     <div>
-      <button onClick={
-        ()=>{
-          console.log(mycount)
-        }
-      }>{count}{mycount}</button>
+      <button
+        onClick={() => {
+          console.log(mycount);
+        }}
+      >
+        {count}
+        {mycount}
+      </button>
     </div>
   );
-})
+});
 // export default Timeline;
 
 export const CallChildMemo = memo(CallChild);

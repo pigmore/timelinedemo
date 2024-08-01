@@ -15,7 +15,7 @@ dragGraph.prototype = {
     this.context.save();
     this.context.beginPath();
     this.context.fillStyle = this.fillStyle;
-    this.context.translate(window.myscrollX,0)
+    this.context.translate(window.myscrollX, 0);
     this.shapeDraw();
     this.context.fill();
     this.context.closePath();
@@ -23,18 +23,24 @@ dragGraph.prototype = {
   },
   isMouseInGraph: function (mouse) {
     this.context.save();
-    this.context.translate(window.myscrollX,0)
+    this.context.translate(window.myscrollX, 0);
     this.context.beginPath();
     this.shapeDraw();
     this.context.restore();
-    if (this.context.isPointInPath(mouse.x, mouse.y)){
-      if (Math.abs(mouse.x - (this.w * window.xScale + this.x * window.xScale + window.myscrollX)) < 10){
-        return 'edge'
+    if (this.context.isPointInPath(mouse.x, mouse.y)) {
+      if (
+        Math.abs(
+          mouse.x -
+            (this.w * window.xScale +
+              this.x * window.xScale +
+              window.myscrollX),
+        ) < 10
+      ) {
+        return "edge";
       }
-      return true
+      return true;
     }
     return false;
-
   },
   shapeDraw: function () {
     if (this.graphShape == "circle") {
@@ -44,7 +50,12 @@ dragGraph.prototype = {
       this.context.lineTo(this.x + 100, this.y + 130);
       this.context.lineTo(this.x, this.y + 130);
     } else {
-      this.context.rect(this.x * window.xScale, this.y, this.w * window.xScale, this.h);
+      this.context.rect(
+        this.x * window.xScale,
+        this.y,
+        this.w * window.xScale,
+        this.h,
+      );
     }
   },
   erase: function () {

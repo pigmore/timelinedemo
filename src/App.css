@@ -6,8 +6,14 @@
   height: 40vmin;
   pointer-events: none;
 }
-body{margin:0;padding:0;}
-.canvas{margin:20px;background:#ddd;}
+body {
+  margin: 0;
+  padding: 0;
+}
+.canvas {
+  margin: 20px;
+  background: #ddd;
+}
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
