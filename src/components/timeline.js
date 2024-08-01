@@ -102,6 +102,7 @@ export function Timeline(props) {
       "mouseup",
       function () {
         tempGraphArr = [];
+        window.exportJson()
         window.action = "none";
       },
       false,
@@ -148,6 +149,21 @@ export function Timeline(props) {
 
 
       drawGraph();
+    }
+
+    window.exportJson = () =>{
+      let result = []
+      for (var item of graphs) {
+        var temp = {
+          x:item.x *100,
+          y:item.y / 20,
+          w:item.w *100
+        }
+
+        result.push(temp)
+      }
+      window.mapJson = result
+      return result
     }
 
     drawGraph();
