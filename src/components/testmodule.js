@@ -1,17 +1,28 @@
 import { useState, useEffect, memo,forwardRef,useImperativeHandle } from "react";
 import { randomInt } from './util';
+import { sample } from './sample';
 import { dragGraph } from './dragGraph';
 
 export const Test = forwardRef((props,ref)=> {
   let mycount = 1
   const [count,setCount] = useState(0)
-  const [jsonInit,setJsonInit] = useState('json转换结果')
-  const [inputJson,setinputJson] = useState('')
+  const [jsonInit,setJsonInit] = useState('输入新的json')
+  const [jsonupdate,setJsonupdate] = useState('json位移结果')
+  const [inputJson,setinputJson] = useState(sample)
   useEffect(() => {
     async function init() {
       if (typeof window !== "undefined" || window.initReady !== true) {
         // initCanvas();
         console.log('mycount',mycount)
+
+        window.canvasEventDriver.register('update',(_prop)=>{
+          setJsonupdate(_prop)
+        })
+        // window.canvasCallBack = (p)=>{
+        //   setJsonupdate(p)
+        // }
+        // ...在 elem 上 dispatch！
+
         mycount = 100
       }
     }
@@ -97,6 +108,7 @@ export const Test = forwardRef((props,ref)=> {
         }
       }>initJson</button>
       <p>{jsonInit}</p>
+      <p>{JSON.stringify(jsonupdate)}</p>
     </div>
   );
 })

@@ -1,6 +1,37 @@
 import { useState, useEffect, memo } from "react";
 import { randomInt } from './util';
 import { dragGraph } from './dragGraph';
+;(function(){
+  var table = {};
+  window.canvasEventDriver = {}
+  // console.log(canvasEventDriver,'Commons.canvasEventDriver')
+  window.canvasEventDriver.register = function(event,callback){
+    var tablelist = table[event]||[]
+    tablelist.push(callback)
+    table[event] = tablelist
+  };
+  window.canvasEventDriver.unregister = function(event,callback){
+    var tablelist = table[event]||[];
+    var mark = -1;
+    for (var i = 0; i < tablelist.length; i++) {
+      if (tablelist[i] == callback) {
+        mark = i;
+        break;
+      }
+    }
+    if (mark != -1){
+      tablelist.splice(mark,1)
+    }
+  };
+  window.canvasEventDriver.pop = function(event,props){
+    var tablelist = table[event];
+    if (tablelist) {
+      for (var item of tablelist) {
+        item(props)
+      }
+    }
+  };
+}());
 
 export function Timeline(props) {
   var canvas = null,
@@ -11,6 +42,7 @@ export function Timeline(props) {
   useEffect(() => {
     async function init() {
       if (typeof window !== "undefined" || window.initReady !== true) {
+
         initCanvas();
       }
     }
@@ -18,10 +50,35 @@ export function Timeline(props) {
     window.initReady = true;
   }, []);
 
+  const exportJson = () =>{
+    let result = []
+    for (var item of graphs) {
+      var temp = {
+        x:item.x *100,
+        y:item.y / 20,
+        w:item.w *100
+      }
+
+      result.push(temp)
+    }
+    window.mapJson = result
+    window.canvasEventDriver.pop('update',result)
+    // window.canvasCallBack(result)
+    // let event = new Event("hello", {bubbles: true}); // (2)
+    // canvas.dispatchEvent(event);
+
+
+
+    return result
+  }
 
   const initCanvas = () => {
     if (window.initReady) return false;
+
+
+
     canvas = document.getElementById("canvas");
+
     window.initReady = true;
     window.myscrollX = 0
     window.xScale = 10
@@ -40,6 +97,7 @@ export function Timeline(props) {
       graphs.push(graph);
     }
 
+
     canvas.addEventListener(
       "mousedown",
       function (e) {
@@ -47,7 +105,7 @@ export function Timeline(props) {
           x: e.clientX - canvas.getBoundingClientRect().left,
           y: e.clientY - canvas.getBoundingClientRect().top,
         };
-        console.log(mouse.x);
+        // console.log(mouse.x);
         graphs.forEach(function (shape) {
           var offset = {
             x: mouse.x - shape.x,
@@ -94,6 +152,7 @@ export function Timeline(props) {
             shape.erase();
             drawGraph();
           }
+          exportJson()
         }
       },
       false,
@@ -102,8 +161,9 @@ export function Timeline(props) {
       "mouseup",
       function () {
         tempGraphArr = [];
-        window.exportJson()
+        exportJson()
         window.action = "none";
+
       },
       false,
     );
@@ -151,20 +211,7 @@ export function Timeline(props) {
       drawGraph();
     }
 
-    window.exportJson = () =>{
-      let result = []
-      for (var item of graphs) {
-        var temp = {
-          x:item.x *100,
-          y:item.y / 20,
-          w:item.w *100
-        }
 
-        result.push(temp)
-      }
-      window.mapJson = result
-      return result
-    }
 
     drawGraph();
   };
