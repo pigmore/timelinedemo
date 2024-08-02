@@ -1,9 +1,10 @@
+import {drawRoundedRect} from './util.js'
 export const dragGraph = function (x, y, w, h, fillStyle, canvas, graphShape) {
   this.x = x;
   this.y = y;
   this.w = w;
   this.h = h;
-  this.fillStyle = fillStyle || "rgba(26, 188, 156 , 0.5)";
+  this.fillStyle = fillStyle || "rgba(255, 255, 255 , 1)";
   this.canvas = canvas;
   this.context = canvas.getContext("2d");
   this.canvasPos = canvas.getBoundingClientRect();
@@ -14,7 +15,7 @@ dragGraph.prototype = {
   paint: function () {
     this.context.save();
     this.context.beginPath();
-    this.context.fillStyle = this.fillStyle;
+    this.context.fillStyle = this.fillStyle || 'rgba(255, 255, 255 , 1)';
     this.context.translate(window.myscrollX, 0);
     this.shapeDraw();
     this.context.fill();
@@ -38,7 +39,7 @@ dragGraph.prototype = {
       ) {
         return "edge";
       }
-      return true;
+      return 'move';
     }
     return false;
   },
@@ -50,13 +51,27 @@ dragGraph.prototype = {
       this.context.lineTo(this.x + 100, this.y + 130);
       this.context.lineTo(this.x, this.y + 130);
     } else {
-      this.context.rect(
-        this.x * window.xScale,
-        this.y,
-        this.w * window.xScale,
-        this.h,
-      );
+
+      drawRoundedRect(this.context, this.x * window.xScale, this.y, this.w * window.xScale, this.h,4)
+      // this.context.rect(
+      //   this.x * window.xScale,
+      //   this.y,
+      //   this.w * window.xScale,
+      //   this.h,
+      // );
     }
+  },
+  drawTheLineonHover: function () {
+    this.context.save()
+    this.context.fillStyle = "rgba(200, 200, 200, 0.5)";
+    this.context.rect(
+      0,
+      Math.floor(this.y / 20) * 20,
+      this.canvas.width,
+      this.h,
+    );
+    this.context.fill();
+    this.context.restore()
   },
   erase: function () {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);

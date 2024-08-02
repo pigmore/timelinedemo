@@ -108,11 +108,6 @@ export function Timeline(props) {
           if (action) {
             tempGraphArr.push(shape);
             window.action = action;
-            // if (Math.abs(mouse.x - (shape.w + shape.x + window.myscrollX)) < 10) {
-            //   window.action = "edge";
-            // } else {
-            //   window.action = "none";
-            // }
           }
         });
         e.preventDefault();
@@ -138,11 +133,12 @@ export function Timeline(props) {
 
             shape.erase();
             drawGraph();
-          } else {
+          } else if (window.action === "move"){
             shape.x += e.movementX / window.xScale;
             shape.y += e.movementY;
 
             shape.erase();
+            shape.drawTheLineonHover();
             drawGraph();
           }
           exportJson();
@@ -153,6 +149,12 @@ export function Timeline(props) {
     canvas.addEventListener(
       "mouseup",
       function () {
+        var shape = tempGraphArr[tempGraphArr.length - 1];
+        if(shape){
+          shape.y = Math.floor(shape.y / 20) * 20
+          shape.erase();
+          drawGraph();
+        }
         tempGraphArr = [];
         exportJson();
         window.action = "none";
@@ -179,7 +181,6 @@ export function Timeline(props) {
         graphs[i].paint();
       }
     };
-
     window.redraw_function = () => {
       graphs[0].erase();
       drawGraph();
