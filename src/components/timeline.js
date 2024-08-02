@@ -72,10 +72,10 @@ export function Timeline(props) {
   const checkIfAttach = (_x,_w) =>{
     for (var item of xArray) {
       if (Math.abs(_x - item)<0.1){
-        return item
+        return [item,0]
         break;
       }else if(Math.abs(_x + _w - item)<0.1){
-        return item - _w
+        return [item - _w,1]
         break;
       }
     }
@@ -132,6 +132,7 @@ export function Timeline(props) {
             xArray.push(shape.x)
             xArray.push(shape.x+shape.w)
           }
+          shape.paint();
         });
         // getXArray(graphs)
         e.preventDefault();
@@ -171,12 +172,12 @@ export function Timeline(props) {
             shape.y += e.movementY;
             shape.erase();
             if (x) {
-              shape.x = x;
+              shape.x = x[0];
             }
             shape.drawTheLineonHover();
             drawGraph();
             if (x) {
-              shape.drawTheXAttach(shape.x);
+              shape.drawTheXAttach(x[1]?shape.x + shape.w:shape.x);
             }
           }
           exportJson();
