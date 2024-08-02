@@ -37,6 +37,7 @@ export function Timeline(props) {
   var canvas = null,
     graphs = [],
     graphAttr = [],
+    xArray = [],
     tempGraphArr = [];
 
   useEffect(() => {
@@ -68,7 +69,25 @@ export function Timeline(props) {
 
     return result;
   };
+  const checkIfAttach = (_x,_w) =>{
+    for (var item of xArray) {
+      if (Math.abs(_x - item)<0.1){
+        return item
+        break;
+      }else if(Math.abs(_x + _w - item)<0.1){
+        return item - _w
+        break;
+      }
+    }
+    return false;
+  }
 
+  const getXArray = (_graphs) =>{
+    for (var item of _graphs) {
+      xArray.push(item.x)
+      xArray.push(item.x+item.w)
+    }
+  }
   const initCanvas = () => {
     if (window.initReady) return false;
 
@@ -99,6 +118,7 @@ export function Timeline(props) {
           y: e.clientY - canvas.getBoundingClientRect().top,
         };
         // console.log(mouse.x);
+        xArray = [];
         graphs.forEach(function (shape) {
           var offset = {
             x: mouse.x - shape.x,
@@ -108,8 +128,12 @@ export function Timeline(props) {
           if (action) {
             tempGraphArr.push(shape);
             window.action = action;
+          }else{
+            xArray.push(shape.x)
+            xArray.push(shape.x+shape.w)
           }
         });
+        // getXArray(graphs)
         e.preventDefault();
       },
       false,
@@ -131,7 +155,6 @@ export function Timeline(props) {
           if (window.action === "edge0") {
             shape.w -= e.movementX / window.xScale;
             shape.x += e.movementX / window.xScale;
-
             shape.erase();
             drawGraph();
           }
@@ -143,11 +166,18 @@ export function Timeline(props) {
           }
           else if (window.action === "move"){
             shape.x += e.movementX / window.xScale;
-            shape.y += e.movementY;
+            const x = checkIfAttach(shape.x,shape.w)
 
+            shape.y += e.movementY;
             shape.erase();
+            if (x) {
+              shape.x = x;
+            }
             shape.drawTheLineonHover();
             drawGraph();
+            if (x) {
+              shape.drawTheXAttach(shape.x);
+            }
           }
           exportJson();
         }
@@ -159,11 +189,12 @@ export function Timeline(props) {
       function () {
         var shape = tempGraphArr[tempGraphArr.length - 1];
         if(shape){
-          shape.y = Math.floor(shape.y / 20) * 20
+          shape.y = Math.floor((shape.y + 10) / 20) * 20
           shape.erase();
           drawGraph();
         }
         tempGraphArr = [];
+        getXArray(graphs);
         exportJson();
         window.action = "none";
       },
@@ -179,10 +210,12 @@ export function Timeline(props) {
         );
         graphs[0].erase();
         drawGraph();
+        getXArray(graphs);
         // console.log(e.window.scrollX)
       },
       false,
     );
+
     const drawGraph = () => {
       // console.log(graphs)
       for (var i = 0; i < graphs.length; i++) {
@@ -215,6 +248,7 @@ export function Timeline(props) {
     };
 
     drawGraph();
+
   };
 
   return (

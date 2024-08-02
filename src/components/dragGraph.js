@@ -1,4 +1,4 @@
-import {drawRoundedRect} from './util.js'
+import {drawRoundedRect,drawLine,fillEdgeCircle} from './util.js'
 export const dragGraph = function (x, y, w, h, fillStyle, canvas, graphShape) {
   this.x = x;
   this.y = y;
@@ -17,7 +17,7 @@ dragGraph.prototype = {
     this.context.beginPath();
     this.context.fillStyle = this.fillStyle || 'rgba(255, 255, 255 , 1)';
     this.context.translate(window.myscrollX, 0);
-    this.shapeDraw();
+    this.shapeDrawWithCircle();
     this.context.fill();
     this.context.closePath();
     this.context.restore();
@@ -64,20 +64,34 @@ dragGraph.prototype = {
     } else {
 
       drawRoundedRect(this.context, this.x * window.xScale, this.y, this.w * window.xScale, this.h,4)
-      // this.context.rect(
-      //   this.x * window.xScale,
-      //   this.y,
-      //   this.w * window.xScale,
-      //   this.h,
-      // );
+
     }
+  },
+  shapeDrawWithCircle: function () {
+    if (this.graphShape == "circle") {
+      this.context.arc(this.x, this.y, 50, 0, Math.PI * 2);
+    } else if (this.graphShape == "triangle") {
+      this.context.moveTo(this.x + 50, this.y + 50);
+      this.context.lineTo(this.x + 100, this.y + 130);
+      this.context.lineTo(this.x, this.y + 130);
+    } else {
+
+      drawRoundedRect(this.context, this.x * window.xScale, this.y, this.w * window.xScale, this.h,4)
+      fillEdgeCircle(this.context, this.x * window.xScale,this.y, this.w * window.xScale)
+    }
+  },
+  drawTheXAttach: function (_x) {
+    console.log('drawTheXAttach',_x)
+    this.context.save()
+    drawLine(this.context, _x * window.xScale, 0, _x * window.xScale, this.canvas.height,)
+    this.context.restore()
   },
   drawTheLineonHover: function () {
     this.context.save()
     this.context.fillStyle = "rgba(200, 200, 200, 0.5)";
     this.context.rect(
       0,
-      Math.floor(this.y / 20) * 20,
+      Math.floor((this.y + 10) / 20) * 20,
       this.canvas.width,
       this.h,
     );
