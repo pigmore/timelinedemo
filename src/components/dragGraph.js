@@ -25,7 +25,8 @@ dragGraph.prototype = {
   isMouseInGraph: function (mouse) {
     this.context.save();
     this.context.translate(window.myscrollX, 0);
-    this.context.beginPath();
+    // this.context.beginPath();
+    this.context.fillStyle = this.fillStyle || 'rgba(255, 255, 255 , 1)';
     this.shapeDraw();
     this.context.restore();
     if (this.context.isPointInPath(mouse.x, mouse.y)) {
