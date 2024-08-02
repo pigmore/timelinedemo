@@ -53,9 +53,9 @@ export function Timeline(props) {
     let result = [];
     for (var item of graphs) {
       var temp = {
-        x: item.x * 100,
-        y: item.y / 20,
-        w: item.w * 100,
+        x: (item.x * 100).toFixed(),
+        y: (item.y / 20) .toFixed(),
+        w: (item.w * 100) .toFixed(),
       };
 
       result.push(temp);
@@ -78,10 +78,10 @@ export function Timeline(props) {
     window.myscrollX = 0;
     window.xScale = 10;
 
-    for (var i = 0; i < 2000; i++) {
+    for (var i = 0; i < 20; i++) {
       var graph = new dragGraph(
-        randomInt(0, 1200),
-        randomInt(0, 280),
+        randomInt(0, 120),
+        randomInt(0, 10) * 20,
         randomInt(10, 40),
         20,
         `rgba(${randomInt(0, 255)}, ${randomInt(0, 255)}, ${randomInt(0, 255)} , 1) `,

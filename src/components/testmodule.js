@@ -108,7 +108,7 @@ export const Test = forwardRef((props, ref) => {
           handleInitJson();
         }}
       >
-        initJson
+        初始化一波试试看
       </button>
       <p>{jsonInit}</p>
       <p>{JSON.stringify(jsonupdate)}</p>
