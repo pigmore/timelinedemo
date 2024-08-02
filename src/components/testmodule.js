@@ -95,7 +95,7 @@ export const Test = forwardRef((props, ref) => {
 
   return (
     <div>
-      <input
+      {/*<input
         type="text"
         placeholder="input the json data here"
         value={inputJson}
@@ -110,7 +110,7 @@ export const Test = forwardRef((props, ref) => {
       >
         初始化一波试试看
       </button>
-      <p>{jsonInit}</p>
+      <p>{jsonInit}</p>*/}
       <p>{JSON.stringify(jsonupdate)}</p>
     </div>
   );

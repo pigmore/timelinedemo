@@ -33,12 +33,22 @@ dragGraph.prototype = {
       if (
         Math.abs(
           mouse.x -
+            (
+              this.x * window.xScale +
+              window.myscrollX),
+        ) < 10
+      ) {
+        return "edge0";
+      }
+      if (
+        Math.abs(
+          mouse.x -
             (this.w * window.xScale +
               this.x * window.xScale +
               window.myscrollX),
         ) < 10
       ) {
-        return "edge";
+        return "edge1";
       }
       return 'move';
     }

@@ -45,16 +45,21 @@ function App() {
       >
         scale:{scale}+1
       </button>
-      <button
-        onClick={() => {
-          handlemyRefCount();
-        }}
-      >
-        handlemyRefCount
-      </button>
+
 
       <Timelinememo redrawTrigger={redraw} />
-      <CallChildMemo ref={myRef} />
+      {/*
+        <button
+          onClick={() => {
+            handlemyRefCount();
+          }}
+        >
+          handlemyRefCount
+        </button>
+        <CallChildMemo ref={myRef} />
+        */}
+
+
       <Testmemo />
     </div>
   );

@@ -128,12 +128,20 @@ export function Timeline(props) {
           // console.log('shape.w + shape.x',shape.w + shape.x)
           // console.log('mouse.x - (shape.w + shape.x)',mouse.x - (shape.w + shape.x))
 
-          if (window.action === "edge") {
+          if (window.action === "edge0") {
+            shape.w -= e.movementX / window.xScale;
+            shape.x += e.movementX / window.xScale;
+
+            shape.erase();
+            drawGraph();
+          }
+          else if (window.action === "edge1") {
             shape.w += e.movementX / window.xScale;
 
             shape.erase();
             drawGraph();
-          } else if (window.action === "move"){
+          }
+          else if (window.action === "move"){
             shape.x += e.movementX / window.xScale;
             shape.y += e.movementY;
 
