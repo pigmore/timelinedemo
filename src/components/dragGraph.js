@@ -3,6 +3,7 @@ import {
   fitString,
   drawRoundedRect,
   drawLine,
+  drawDoubleLine,
   fillEdgeCircle,
 } from "./util.js";
 export const dragGraph = function (
@@ -39,11 +40,14 @@ dragGraph.prototype = {
     this.context.closePath();
     this.context.fillStyle = "rgba(255, 255, 255 , 1)";
     this.context.font = "16px Arial";
-    this.context.fillText(
-      fitString(this.context, this.t, this.w * window.xScale - 25),
-      this.x * window.xScale + 12,
-      this.y + 15,
-    );
+    if (this.w > 3) {
+      this.context.fillText(
+        fitString(this.context, this.t, this.w * window.xScale - 25),
+        this.x * window.xScale + 12,
+        this.y + 15,
+      );
+    }
+
     this.context.restore();
   },
   isMouseInGraph: function (mouse) {
@@ -107,12 +111,29 @@ dragGraph.prototype = {
         this.h,
         4,
       );
-      fillEdgeCircle(
-        this.context,
-        this.x * window.xScale,
-        this.y,
-        this.w * window.xScale,
-      );
+      if (this.w > 1.5) {
+        drawDoubleLine(
+          this.context,
+          this.x * window.xScale + 5,
+          this.y + 4,
+          this.x * window.xScale + 5,
+          this.y + 16,
+        )
+        drawDoubleLine(
+          this.context,
+          this.x * window.xScale + this.w * window.xScale - 10,
+          this.y + 4,
+          this.x * window.xScale + this.w * window.xScale - 10,
+          this.y + 16,
+        )
+      }
+
+      // fillEdgeCircle(
+      //   this.context,
+      //   this.x * window.xScale,
+      //   this.y,
+      //   this.w * window.xScale,
+      // );
     }
   },
   drawTheXAttach: function (_x) {

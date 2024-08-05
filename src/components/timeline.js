@@ -190,12 +190,13 @@ export function Timeline(props) {
           // console.log('mouse.x - (shape.w + shape.x)',mouse.x - (shape.w + shape.x))
 
           if (window.action === "edge0") {
-            shape.w -= e.movementX / window.xScale;
-            shape.x += e.movementX / window.xScale;
+            shape.w = Math.max(10/ window.xScale,  shape.w - e.movementX / window.xScale);
+            shape.x += shape.w == 10 / window.xScale ? 0 : e.movementX / window.xScale;
             shape.erase();
             drawGraph();
           } else if (window.action === "edge1") {
-            shape.w += e.movementX / window.xScale;
+
+            shape.w = Math.max(10 / window.xScale, shape.w + e.movementX / window.xScale);
 
             shape.erase();
             drawGraph();
