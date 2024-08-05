@@ -14,7 +14,7 @@ import { dragGraph } from "./dragGraph";
     var tablelist = table[event] || [];
     var mark = -1;
     for (var i = 0; i < tablelist.length; i++) {
-      if (tablelist[i] == callback) {
+      if (tablelist[i] === callback) {
         mark = i;
         break;
       }
@@ -170,6 +170,7 @@ export function Timeline(props) {
     canvas.addEventListener(
       "mousemove",
       function (e) {
+
         var mouse = {
           x: e.clientX - canvas.getBoundingClientRect().left,
           y: e.clientY - canvas.getBoundingClientRect().top,
@@ -177,6 +178,14 @@ export function Timeline(props) {
 
         if (tempGraphArr[tempGraphArr.length - 1]) {
           var shape = tempGraphArr[tempGraphArr.length - 1];
+          if (e.offsetX > canvas.width - 35 && window.myscrollX > -2400 ) {
+            shape.x += 1 / window.xScale
+            window.myscrollX -= 1
+          }else if(e.offsetX < 35 && window.myscrollX <0){
+            shape.x -= 1 / window.xScale
+            window.myscrollX += 1
+          }
+
           // console.log('mouse.x',mouse.x)
           // console.log('shape.w + shape.x',shape.w + shape.x)
           // console.log('mouse.x - (shape.w + shape.x)',mouse.x - (shape.w + shape.x))
@@ -270,7 +279,7 @@ export function Timeline(props) {
 
     window.initJsonForCanvas = (items) => {
       // graphs[0].erase();
-      var canvas = document.getElementById("canvas");
+
       canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
       graphs = [];
       for (var item of items) {

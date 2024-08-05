@@ -86,8 +86,9 @@ dragGraph.prototype = {
     }
   },
   drawTheXAttach: function (_x) {
-    console.log('drawTheXAttach',_x)
+    // console.log('drawTheXAttach',_x)
     this.context.save()
+    this.context.translate(window.myscrollX, 0);
     drawLine(this.context, _x * window.xScale, 0, _x * window.xScale, this.canvas.height,)
     this.context.restore()
   },
