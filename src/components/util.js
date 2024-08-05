@@ -56,9 +56,20 @@ export function drawDoubleLine(ctx, a, b, c, d) {
   ctx.lineTo(c+4, d);
   ctx.stroke();
 }
-export function drawLine(ctx, a, b, c, d) {
-  ctx.lineWidth = "0.5";
-  ctx.strokeStyle = "purple";
+export function drawScale(ctx) {
+  for (var i = 0; i < 200; i++) {
+    if (i % 5 == 0) {
+      drawLine(ctx, i* 50, 0, i* 50, 30,'white',2);
+    }else{
+      drawLine(ctx, i* 50, 0, i* 50, 15,'white',1);
+    }
+
+  }
+
+}
+export function drawLine(ctx, a, b, c, d,_color = 'purple',_lineWidth = 1) {
+  ctx.lineWidth = _lineWidth;
+  ctx.strokeStyle = _color;
   ctx.beginPath();
   ctx.moveTo(a, b);
   ctx.lineTo(c, d);

@@ -1,5 +1,5 @@
 import { useState, useEffect, memo } from "react";
-import { randomInt } from "./util";
+import { randomInt,drawScale } from "./util";
 import { dragGraph } from "./dragGraph";
 (function () {
   var table = {};
@@ -35,6 +35,7 @@ import { dragGraph } from "./dragGraph";
 
 export function Timeline(props) {
   var canvas = null,
+    canvasCtx = null,
     graphs = [],
     graphAttr = [],
     xArray = [],
@@ -118,7 +119,7 @@ export function Timeline(props) {
     if (window.initReady) return false;
 
     canvas = document.getElementById("canvas");
-
+    canvasCtx = canvas.getContext('2d')
     window.initReady = true;
     window.myscrollX = 0;
     window.xScale = 10;
@@ -259,6 +260,7 @@ export function Timeline(props) {
 
     const drawGraph = () => {
       // console.log(graphs)
+      drawScale(canvasCtx);
       for (var i = 0; i < graphs.length; i++) {
         graphs[i].paint();
       }
