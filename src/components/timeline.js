@@ -49,6 +49,31 @@ export function Timeline(props) {
     init();
     window.initReady = true;
   }, []);
+  const checkIfInsideLoop = (_shape) =>{
+    if (checkIfInside(_shape.x,_shape.w,_shape.y)){
+      _shape.y += 20
+      console.log(_shape.y)
+      checkIfInsideLoop(_shape)
+    }
+  }
+  const checkIfInside = (_x,_w,_y) =>{
+    for (var item of graphs) {
+      if (_y >= item.y + 20 || _y <= item.y - 20) continue;
+      if (_x > item.x && _x < item.x + item.w){
+        return true
+      }
+      if (_x+_w > item.x && _x+_w < item.x + item.w){
+        return true
+      }
+      if (_x > item.x && _x+_w < item.x + item.w){
+        return true
+      }
+      if (_x < item.x && _x+_w > item.x + item.w){
+        return true
+      }
+    }
+    return false
+  }
 
   const exportJson = () => {
     let result = [];
@@ -107,6 +132,7 @@ export function Timeline(props) {
         canvas,
         "rectangle",
       );
+      checkIfInsideLoop(graph);
       graphs.push(graph);
     }
 
@@ -189,11 +215,17 @@ export function Timeline(props) {
       "mouseup",
       function () {
         var shape = tempGraphArr[tempGraphArr.length - 1];
+
         if(shape){
           shape.y = Math.floor((shape.y + 10) / 20) * 20
+          checkIfInsideLoop(shape);
+          shape.y = Math.floor((shape.y + 10) / 20) * 20
+
           shape.erase();
           drawGraph();
         }
+
+
         tempGraphArr = [];
         getXArray(graphs);
         exportJson();
@@ -223,10 +255,17 @@ export function Timeline(props) {
         graphs[i].paint();
       }
     };
+    // const checkIfInside = () => {
+    //   // console.log(graphs)
+    //   for (var i = 0; i < graphs.length; i++) {
+    //     checkIfInside(graphs[i].x,graphs[i].w,graphs[i].y);
+    //   }
+    // };
     window.redraw_function = () => {
       graphs[0].erase();
       drawGraph();
     };
+
     window.initJsonForCanvas = (items) => {
       // graphs[0].erase();
       var canvas = document.getElementById("canvas");
