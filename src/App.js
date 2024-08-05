@@ -46,7 +46,6 @@ function App() {
         scale:{scale}+1
       </button>
 
-
       <Timelinememo redrawTrigger={redraw} />
       {/*
         <button
@@ -58,7 +57,6 @@ function App() {
         </button>
         <CallChildMemo ref={myRef} />
         */}
-
 
       <Testmemo />
     </div>

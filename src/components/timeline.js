@@ -49,40 +49,40 @@ export function Timeline(props) {
     init();
     window.initReady = true;
   }, []);
-  const checkIfInsideLoop = (_shape) =>{
-    if (checkIfInside(_shape.x,_shape.w,_shape.y,_shape.id)){
-      _shape.y += 20
-      console.log(_shape.y)
-      checkIfInsideLoop(_shape)
+  const checkIfInsideLoop = (_shape) => {
+    if (checkIfInside(_shape.x, _shape.w, _shape.y, _shape.id)) {
+      _shape.y += 20;
+      console.log(_shape.y);
+      checkIfInsideLoop(_shape);
     }
-  }
-  const checkIfInside = (_x,_w,_y,_id) =>{
+  };
+  const checkIfInside = (_x, _w, _y, _id) => {
     for (var item of graphs) {
       if (_id === item.id) continue;
       if (_y >= item.y + 20 || _y <= item.y - 20) continue;
-      if (_x >= item.x && _x <= item.x + item.w){
-        return true
+      if (_x >= item.x && _x <= item.x + item.w) {
+        return true;
       }
-      if (_x+_w >= item.x && _x+_w <= item.x + item.w){
-        return true
+      if (_x + _w >= item.x && _x + _w <= item.x + item.w) {
+        return true;
       }
-      if (_x > item.x && _x+_w < item.x + item.w){
-        return true
+      if (_x > item.x && _x + _w < item.x + item.w) {
+        return true;
       }
-      if (_x < item.x && _x+_w > item.x + item.w){
-        return true
+      if (_x < item.x && _x + _w > item.x + item.w) {
+        return true;
       }
     }
-    return false
-  }
+    return false;
+  };
 
   const exportJson = () => {
     let result = [];
     for (var item of graphs) {
       var temp = {
         x: (item.x * 100).toFixed(),
-        y: (item.y / 20) .toFixed(),
-        w: (item.w * 100) .toFixed(),
+        y: (item.y / 20).toFixed(),
+        w: (item.w * 100).toFixed(),
       };
 
       result.push(temp);
@@ -95,25 +95,25 @@ export function Timeline(props) {
 
     return result;
   };
-  const checkIfAttach = (_x,_w) =>{
+  const checkIfAttach = (_x, _w) => {
     for (var item of xArray) {
-      if (Math.abs(_x - item)<0.1){
-        return [item,0]
+      if (Math.abs(_x - item) < 0.1) {
+        return [item, 0];
         break;
-      }else if(Math.abs(_x + _w - item)<0.1){
-        return [item - _w,1]
+      } else if (Math.abs(_x + _w - item) < 0.1) {
+        return [item - _w, 1];
         break;
       }
     }
     return false;
-  }
+  };
 
-  const getXArray = (_graphs) =>{
+  const getXArray = (_graphs) => {
     for (var item of _graphs) {
-      xArray.push(item.x)
-      xArray.push(item.x+item.w)
+      xArray.push(item.x);
+      xArray.push(item.x + item.w);
     }
-  }
+  };
   const initCanvas = () => {
     if (window.initReady) return false;
 
@@ -129,7 +129,7 @@ export function Timeline(props) {
         randomInt(0, 10) * 20,
         randomInt(10, 40),
         20,
-        'dragGraph',
+        "dragGraph",
         `rgba(${randomInt(0, 255)}, ${randomInt(0, 255)}, ${randomInt(0, 255)} , 1) `,
         canvas,
         "rectangle",
@@ -156,9 +156,9 @@ export function Timeline(props) {
           if (action) {
             tempGraphArr.push(shape);
             window.action = action;
-          }else{
-            xArray.push(shape.x)
-            xArray.push(shape.x+shape.w)
+          } else {
+            xArray.push(shape.x);
+            xArray.push(shape.x + shape.w);
           }
           shape.paint();
         });
@@ -170,7 +170,6 @@ export function Timeline(props) {
     canvas.addEventListener(
       "mousemove",
       function (e) {
-
         var mouse = {
           x: e.clientX - canvas.getBoundingClientRect().left,
           y: e.clientY - canvas.getBoundingClientRect().top,
@@ -178,12 +177,12 @@ export function Timeline(props) {
 
         if (tempGraphArr[tempGraphArr.length - 1]) {
           var shape = tempGraphArr[tempGraphArr.length - 1];
-          if (e.offsetX > canvas.width - 35 && window.myscrollX > -2400 ) {
-            shape.x += 1 / window.xScale
-            window.myscrollX -= 1
-          }else if(e.offsetX < 35 && window.myscrollX <0){
-            shape.x -= 1 / window.xScale
-            window.myscrollX += 1
+          if (e.offsetX > canvas.width - 35 && window.myscrollX > -2400) {
+            shape.x += 1 / window.xScale;
+            window.myscrollX -= 1;
+          } else if (e.offsetX < 35 && window.myscrollX < 0) {
+            shape.x -= 1 / window.xScale;
+            window.myscrollX += 1;
           }
 
           // console.log('mouse.x',mouse.x)
@@ -195,16 +194,14 @@ export function Timeline(props) {
             shape.x += e.movementX / window.xScale;
             shape.erase();
             drawGraph();
-          }
-          else if (window.action === "edge1") {
+          } else if (window.action === "edge1") {
             shape.w += e.movementX / window.xScale;
 
             shape.erase();
             drawGraph();
-          }
-          else if (window.action === "move"){
+          } else if (window.action === "move") {
             shape.x += e.movementX / window.xScale;
-            const x = checkIfAttach(shape.x,shape.w)
+            const x = checkIfAttach(shape.x, shape.w);
 
             shape.y += e.movementY;
             shape.erase();
@@ -214,7 +211,7 @@ export function Timeline(props) {
             shape.drawTheLineonHover();
             drawGraph();
             if (x) {
-              shape.drawTheXAttach(x[1]?shape.x + shape.w:shape.x);
+              shape.drawTheXAttach(x[1] ? shape.x + shape.w : shape.x);
             }
           }
           exportJson();
@@ -227,15 +224,14 @@ export function Timeline(props) {
       function () {
         var shape = tempGraphArr[tempGraphArr.length - 1];
 
-        if(shape){
-          shape.y = Math.floor((shape.y + 10) / 20) * 20
+        if (shape) {
+          shape.y = Math.floor((shape.y + 10) / 20) * 20;
           checkIfInsideLoop(shape);
-          shape.y = Math.floor((shape.y + 10) / 20) * 20
+          shape.y = Math.floor((shape.y + 10) / 20) * 20;
 
           shape.erase();
           drawGraph();
         }
-
 
         tempGraphArr = [];
         getXArray(graphs);
@@ -288,7 +284,7 @@ export function Timeline(props) {
           item.y * 20,
           item.w / 100,
           20,
-          'dragGraph',
+          "dragGraph",
           `rgba(${randomInt(0, 255)}, ${randomInt(0, 255)}, ${randomInt(0, 255)} , 1) `,
           canvas,
           "rectangle",
@@ -300,7 +296,6 @@ export function Timeline(props) {
     };
 
     drawGraph();
-
   };
 
   return (

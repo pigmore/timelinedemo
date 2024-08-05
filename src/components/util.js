@@ -2,28 +2,31 @@ export const randomInt = (a, b) => {
   return parseInt(Math.random() * (b - a) + a);
 };
 export function fitString(ctx, str, maxWidth) {
-  var width = ctx.measureText(str).width
-    , ellipsis = '...'
-    , ellipsisWidth = ctx.measureText(ellipsis).width;
+  var width = ctx.measureText(str).width,
+    ellipsis = "...",
+    ellipsisWidth = ctx.measureText(ellipsis).width;
 
-  if (width <= maxWidth || width <= ellipsisWidth){
+  if (width <= maxWidth || width <= ellipsisWidth) {
     return str;
   } else {
     var len = str.length;
-    while (width >= maxWidth - ellipsisWidth && len-- > 0){
+    while (width >= maxWidth - ellipsisWidth && len-- > 0) {
       str = str.substring(0, len);
       width = ctx.measureText(str).width;
     }
-    return str+ellipsis;
+    return str + ellipsis;
   }
-};
+}
 export function uuid() {
-    var u='',i=0;
-    while(i++<4) {
-        var c='xxxx'[i-1],r=Math.random()*16|0,v=c=='x'?r:(r&0x3|0x8);
-        u+=(c=='-'||c=='4')?c:v.toString(16)
-    }
-    return u;
+  var u = "",
+    i = 0;
+  while (i++ < 4) {
+    var c = "xxxx"[i - 1],
+      r = (Math.random() * 16) | 0,
+      v = c == "x" ? r : (r & 0x3) | 0x8;
+    u += c == "-" || c == "4" ? c : v.toString(16);
+  }
+  return u;
 }
 export function fillCircle(ctx, x, y, radius) {
   ctx.beginPath();
@@ -32,32 +35,32 @@ export function fillCircle(ctx, x, y, radius) {
   return this;
 }
 export function fillEdgeCircle(ctx, x, y, w) {
-  ctx.fillStyle = 'rgba(255, 255, 255 , 1)';
-  fillCircle(ctx, x+5, y +5, 2);
-  fillCircle(ctx, x+5, y +10, 2);
-  fillCircle(ctx, x+5, y +15, 2);
-  fillCircle(ctx, x+w-5, y +5, 2);
-  fillCircle(ctx, x+w-5, y +10, 2);
-  fillCircle(ctx, x+w-5, y +15, 2);
+  ctx.fillStyle = "rgba(255, 255, 255 , 1)";
+  fillCircle(ctx, x + 5, y + 5, 2);
+  fillCircle(ctx, x + 5, y + 10, 2);
+  fillCircle(ctx, x + 5, y + 15, 2);
+  fillCircle(ctx, x + w - 5, y + 5, 2);
+  fillCircle(ctx, x + w - 5, y + 10, 2);
+  fillCircle(ctx, x + w - 5, y + 15, 2);
   return this;
 }
 export function drawLine(ctx, a, b, c, d) {
-  ctx.lineWidth="0.5";
-  ctx.strokeStyle="purple";
+  ctx.lineWidth = "0.5";
+  ctx.strokeStyle = "purple";
   ctx.beginPath();
   ctx.moveTo(a, b);
   ctx.lineTo(c, d);
   ctx.stroke();
-};
-export function drawRoundedRect(ctx, x, y, w, h,r) {
+}
+export function drawRoundedRect(ctx, x, y, w, h, r) {
   if (w < 2 * r) r = w / 2;
   if (h < 2 * r) r = h / 2;
   ctx.beginPath();
-  ctx.moveTo(x+r, y);
-  ctx.arcTo(x+w, y,   x+w, y+h, r);
-  ctx.arcTo(x+w, y+h, x,   y+h, r);
-  ctx.arcTo(x,   y+h, x,   y,   r);
-  ctx.arcTo(x,   y,   x+w, y,   r);
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
   ctx.closePath();
   // ctx.stroke();
   ctx.fill();
