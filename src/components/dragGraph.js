@@ -1,10 +1,11 @@
-import {uuid,drawRoundedRect,drawLine,fillEdgeCircle} from './util.js'
-export const dragGraph = function (x, y, w, h, fillStyle, canvas, graphShape) {
+import {uuid,fitString,drawRoundedRect,drawLine,fillEdgeCircle} from './util.js'
+export const dragGraph = function (x, y, w, h, t,fillStyle, canvas, graphShape) {
   this.id = uuid();
   this.x = x;
   this.y = y;
   this.w = w;
   this.h = h;
+  this.t = t;
   this.fillStyle = fillStyle || "rgba(255, 255, 255 , 1)";
   this.canvas = canvas;
   this.context = canvas.getContext("2d");
@@ -21,6 +22,9 @@ dragGraph.prototype = {
     this.shapeDrawWithCircle();
     this.context.fill();
     this.context.closePath();
+    this.context.fillStyle = 'rgba(255, 255, 255 , 1)'
+    this.context.font = "16px Arial"
+    this.context.fillText(fitString(this.context,this.t,this.w * window.xScale - 25), this.x * window.xScale + 12, this.y + 15)
     this.context.restore();
   },
   isMouseInGraph: function (mouse) {

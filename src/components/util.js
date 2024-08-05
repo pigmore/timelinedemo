@@ -1,6 +1,22 @@
 export const randomInt = (a, b) => {
   return parseInt(Math.random() * (b - a) + a);
 };
+export function fitString(ctx, str, maxWidth) {
+  var width = ctx.measureText(str).width
+    , ellipsis = '...'
+    , ellipsisWidth = ctx.measureText(ellipsis).width;
+
+  if (width <= maxWidth || width <= ellipsisWidth){
+    return str;
+  } else {
+    var len = str.length;
+    while (width >= maxWidth - ellipsisWidth && len-- > 0){
+      str = str.substring(0, len);
+      width = ctx.measureText(str).width;
+    }
+    return str+ellipsis;
+  }
+};
 export function uuid() {
     var u='',i=0;
     while(i++<4) {
