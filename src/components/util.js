@@ -1,6 +1,14 @@
 export const randomInt = (a, b) => {
   return parseInt(Math.random() * (b - a) + a);
 };
+export function uuid() {
+    var u='',i=0;
+    while(i++<4) {
+        var c='xxxx'[i-1],r=Math.random()*16|0,v=c=='x'?r:(r&0x3|0x8);
+        u+=(c=='-'||c=='4')?c:v.toString(16)
+    }
+    return u;
+}
 export function fillCircle(ctx, x, y, radius) {
   ctx.beginPath();
   ctx.arc(x, y, radius, 0, Math.PI * 2, false);
@@ -8,7 +16,7 @@ export function fillCircle(ctx, x, y, radius) {
   return this;
 }
 export function fillEdgeCircle(ctx, x, y, w) {
-  ctx.fillStyle = 'rgba(220, 220, 220 , 1)';
+  ctx.fillStyle = 'rgba(255, 255, 255 , 1)';
   fillCircle(ctx, x+5, y +5, 2);
   fillCircle(ctx, x+5, y +10, 2);
   fillCircle(ctx, x+5, y +15, 2);

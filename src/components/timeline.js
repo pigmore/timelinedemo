@@ -50,19 +50,20 @@ export function Timeline(props) {
     window.initReady = true;
   }, []);
   const checkIfInsideLoop = (_shape) =>{
-    if (checkIfInside(_shape.x,_shape.w,_shape.y)){
+    if (checkIfInside(_shape.x,_shape.w,_shape.y,_shape.id)){
       _shape.y += 20
       console.log(_shape.y)
       checkIfInsideLoop(_shape)
     }
   }
-  const checkIfInside = (_x,_w,_y) =>{
+  const checkIfInside = (_x,_w,_y,_id) =>{
     for (var item of graphs) {
+      if (_id === item.id) continue;
       if (_y >= item.y + 20 || _y <= item.y - 20) continue;
-      if (_x > item.x && _x < item.x + item.w){
+      if (_x >= item.x && _x <= item.x + item.w){
         return true
       }
-      if (_x+_w > item.x && _x+_w < item.x + item.w){
+      if (_x+_w >= item.x && _x+_w <= item.x + item.w){
         return true
       }
       if (_x > item.x && _x+_w < item.x + item.w){

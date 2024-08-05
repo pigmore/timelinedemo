@@ -1,5 +1,6 @@
-import {drawRoundedRect,drawLine,fillEdgeCircle} from './util.js'
+import {uuid,drawRoundedRect,drawLine,fillEdgeCircle} from './util.js'
 export const dragGraph = function (x, y, w, h, fillStyle, canvas, graphShape) {
+  this.id = uuid();
   this.x = x;
   this.y = y;
   this.w = w;
