@@ -45,8 +45,8 @@ dragGraph.prototype = {
     if (this.w > 3) {
       this.context.fillText(
         fitString(this.context, this.t, this.w * window.xScale - 25),
-        this.x * window.xScale + 12,
-        this.y + 15,
+        this.x * window.xScale + 15,
+        this.y + 17,
       );
     }
 
@@ -119,14 +119,14 @@ dragGraph.prototype = {
           this.x * window.xScale + 5,
           this.y + 4,
           this.x * window.xScale + 5,
-          this.y + 16,
+          this.y + 20,
         )
         drawDoubleLine(
           this.context,
           this.x * window.xScale + this.w * window.xScale - 10,
           this.y + 4,
           this.x * window.xScale + this.w * window.xScale - 10,
-          this.y + 16,
+          this.y + 20,
         )
       }
 
@@ -156,7 +156,7 @@ dragGraph.prototype = {
     this.context.fillStyle = "rgba(200, 200, 200, 0.5)";
     this.context.rect(
       0,
-      Math.floor((this.y + 10) / 20) * 20,
+      Math.floor((this.y + 10) / 28) * 28,
       this.canvas.width,
       this.h,
     );

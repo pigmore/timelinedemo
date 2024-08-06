@@ -52,7 +52,7 @@ export function Timeline(props) {
   }, []);
   const checkIfInsideLoop = (_shape) => {
     if (checkIfInside(_shape.x, _shape.w, _shape.y, _shape.id)) {
-      _shape.y += 20;
+      _shape.y += 28;
       console.log(_shape.y);
       checkIfInsideLoop(_shape);
     }
@@ -60,7 +60,7 @@ export function Timeline(props) {
   const checkIfInside = (_x, _w, _y, _id) => {
     for (var item of graphs) {
       if (_id === item.id) continue;
-      if (_y >= item.y + 20 || _y <= item.y - 20) continue;
+      if (_y >= item.y + 28 || _y <= item.y - 28) continue;
       if (_x >= item.x && _x < item.x + item.w) {
         return true;
       }
@@ -82,7 +82,7 @@ export function Timeline(props) {
     for (var item of graphs) {
       var temp = {
         x: (item.x * 100).toFixed(),
-        y: (item.y / 20).toFixed(),
+        y: (item.y / 28).toFixed(),
         w: (item.w * 100).toFixed(),
       };
 
@@ -125,7 +125,7 @@ export function Timeline(props) {
     window.xScale = 10;
 
     for (var i = 0; i < 20; i++) {
-      var typeTemp = ['music','text','emojo','image','video'][randomInt(0, 4)]
+      var typeTemp = ['music','text','emojo','image','video'][randomInt(0, 5)]
       var color = ''
       switch (typeTemp) {
         case 'music':
@@ -141,16 +141,16 @@ export function Timeline(props) {
             color = 'rgba(59,194,81,1)'
           break;
         case 'video':
-            color = 'rgba(157,253,100,1)'
+            color = 'rgba(9,157,253,1)'
           break;
         default:
           color = ''
       }
       var graph = new dragGraph(
-        randomInt(0, 120),
-        randomInt(2, 10) * 20,
+        randomInt(0, 124),
+        randomInt(2, 10) * 28,
         randomInt(10, 40),
-        20,
+        24,
         typeTemp,
         typeTemp,
         color,
@@ -254,9 +254,9 @@ export function Timeline(props) {
         var shape = tempGraphArr[tempGraphArr.length - 1];
 
         if (shape) {
-          shape.y = Math.floor((shape.y + 10) / 20) * 20;
+          shape.y = Math.floor((shape.y + 10) / 28) * 28;
           checkIfInsideLoop(shape);
-          shape.y = Math.floor((shape.y + 10) / 20) * 20;
+          shape.y = Math.floor((shape.y + 10) / 28) * 28;
 
           shape.erase();
           drawGraph();
@@ -314,9 +314,9 @@ export function Timeline(props) {
       for (var item of items) {
         var graph = new dragGraph(
           item.x / 100,
-          item.y * 20,
+          item.y * 28,
           item.w / 100,
-          20,
+          24,
           "dragGraph",
           `rgba(${randomInt(0, 255)}, ${randomInt(0, 255)}, ${randomInt(0, 255)} , 1) `,
           canvas,
