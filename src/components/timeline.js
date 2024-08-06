@@ -125,22 +125,22 @@ export function Timeline(props) {
     window.xScale = 10;
 
     for (var i = 0; i < 20; i++) {
-      var typeTemp = ['music','text','emojo','image','video'][randomInt(0, 5)]
+      var typeTemp = ['Music','Text','Emojo','Image','Video'][randomInt(0, 5)]
       var color = ''
       switch (typeTemp) {
-        case 'music':
+        case 'Music':
             color = 'rgba(58,67,246,1)'
           break;
-        case 'text':
+        case 'Text':
             color = 'rgba(234,110,82,1)'
           break;
-        case 'emojo':
+        case 'Emojo':
             color = 'rgba(179,0,182,1)'
           break;
-        case 'image':
+        case 'Image':
             color = 'rgba(59,194,81,1)'
           break;
-        case 'video':
+        case 'Video':
             color = 'rgba(9,157,253,1)'
           break;
         default:
