@@ -1,12 +1,12 @@
 import { useState, useEffect, memo } from "react";
-import { randomInt,drawScale,loadImgProssse} from "./util";
-import iconEmojo from './icon/iconEmojo.svg'
-import iconImage from './icon/iconImage.svg'
-import iconMusic from './icon/iconMusic.svg'
-import iconText from './icon/iconText.svg'
-import iconVideo from './icon/iconVideo.svg'
-import iconVoice from './icon/iconVoice.svg'
-import iconScript from './icon/iconScript.svg'
+import { randomInt, drawScale, loadImgProssse } from "./util";
+import iconEmojo from "./icon/iconEmojo.svg";
+import iconImage from "./icon/iconImage.svg";
+import iconMusic from "./icon/iconMusic.svg";
+import iconText from "./icon/iconText.svg";
+import iconVideo from "./icon/iconVideo.svg";
+import iconVoice from "./icon/iconVoice.svg";
+import iconScript from "./icon/iconScript.svg";
 import { dragGraph } from "./dragGraph";
 (function () {
   var table = {};
@@ -126,44 +126,46 @@ export function Timeline(props) {
     if (window.initReady) return false;
 
     canvas = document.getElementById("canvas");
-    canvasCtx = canvas.getContext('2d')
+    canvasCtx = canvas.getContext("2d");
     window.initReady = true;
     window.myscrollX = 0;
     window.xScale = 10;
 
     for (var i = 0; i < 12; i++) {
-      var typeTemp = ['Music','Text','Emojo','Image','Video'][randomInt(0, 5)]
-      var color = ''
-      var strokeStyle = ''
-      var iconUrl = ''
+      var typeTemp = ["Music", "Text", "Emojo", "Image", "Video"][
+        randomInt(0, 5)
+      ];
+      var color = "";
+      var strokeStyle = "";
+      var iconUrl = "";
       switch (typeTemp) {
-        case 'Music':
-            color = 'rgba(140,26,255,0.6)'
-            strokeStyle = 'rgba(140,26,255,1)'
-            iconUrl = iconMusic
+        case "Music":
+          color = "rgba(140,26,255,0.6)";
+          strokeStyle = "rgba(140,26,255,1)";
+          iconUrl = iconMusic;
           break;
-        case 'Text':
-            color = 'rgba(255,114,26,0.6)'
-            strokeStyle = 'rgba(255,114,26,1)'
-            iconUrl = iconText
+        case "Text":
+          color = "rgba(255,114,26,0.6)";
+          strokeStyle = "rgba(255,114,26,1)";
+          iconUrl = iconText;
           break;
-        case 'Emojo':
-            color = 'rgba(242,73,143,0.6)'
-            strokeStyle = 'rgba(242,73,143,1)'
-            iconUrl = iconEmojo
+        case "Emojo":
+          color = "rgba(242,73,143,0.6)";
+          strokeStyle = "rgba(242,73,143,1)";
+          iconUrl = iconEmojo;
           break;
-        case 'Image':
-            color = 'rgba(0,217,109,0.6)'
-            strokeStyle = 'rgba(0,217,109,1)'
-            iconUrl = iconImage
+        case "Image":
+          color = "rgba(0,217,109,0.6)";
+          strokeStyle = "rgba(0,217,109,1)";
+          iconUrl = iconImage;
           break;
-        case 'Video':
-            color = 'rgba(0,170,255,0.6)'
-            strokeStyle = 'rgba(0,170,255,1)'
-            iconUrl = iconVideo
+        case "Video":
+          color = "rgba(0,170,255,0.6)";
+          strokeStyle = "rgba(0,170,255,1)";
+          iconUrl = iconVideo;
           break;
         default:
-          color = ''
+          color = "";
       }
       var graph = new dragGraph(
         randomInt(0, 124),
@@ -172,7 +174,7 @@ export function Timeline(props) {
         24,
         typeTemp,
         typeTemp,
-        await loadImgProssse(canvas,iconUrl),
+        await loadImgProssse(canvas, iconUrl),
         color,
         strokeStyle,
         canvas,
@@ -224,9 +226,9 @@ export function Timeline(props) {
         if (tempGraphArr[tempGraphArr.length - 1]) {
           var shape = tempGraphArr[tempGraphArr.length - 1];
           if (e.offsetX > canvas.width - 35 && window.myscrollX > -2400) {
-            if (window.action === "edge1"){
+            if (window.action === "edge1") {
               shape.w += 1 / window.xScale;
-            }else{
+            } else {
               shape.x += 1 / window.xScale;
             }
 
@@ -241,13 +243,19 @@ export function Timeline(props) {
           // console.log('mouse.x - (shape.w + shape.x)',mouse.x - (shape.w + shape.x))
 
           if (window.action === "edge0") {
-            shape.w = Math.max(10/ window.xScale,  shape.w - e.movementX / window.xScale);
-            shape.x += shape.w == 10 / window.xScale ? 0 : e.movementX / window.xScale;
+            shape.w = Math.max(
+              10 / window.xScale,
+              shape.w - e.movementX / window.xScale,
+            );
+            shape.x +=
+              shape.w == 10 / window.xScale ? 0 : e.movementX / window.xScale;
             shape.erase();
             drawGraph();
           } else if (window.action === "edge1") {
-
-            shape.w = Math.max(10 / window.xScale, shape.w + e.movementX / window.xScale);
+            shape.w = Math.max(
+              10 / window.xScale,
+              shape.w + e.movementX / window.xScale,
+            );
 
             shape.erase();
             drawGraph();

@@ -46,7 +46,11 @@ dragGraph.prototype = {
     this.context.fill();
     this.context.closePath();
     if (this.w > 5) {
-      this.context.drawImage(this.icon, this.x * window.xScale + 13, this.y + 2);
+      this.context.drawImage(
+        this.icon,
+        this.x * window.xScale + 13,
+        this.y + 2,
+      );
     }
 
     if (this.w > 7) {
@@ -129,16 +133,16 @@ dragGraph.prototype = {
           this.y + 6,
           this.x * window.xScale + 5,
           this.y + 18,
-          this.color
-        )
+          this.color,
+        );
         drawDoubleLine(
           this.context,
           this.x * window.xScale + this.w * window.xScale - 10,
           this.y + 6,
           this.x * window.xScale + this.w * window.xScale - 10,
           this.y + 18,
-          this.color
-        )
+          this.color,
+        );
       }
 
       // fillEdgeCircle(

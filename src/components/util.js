@@ -1,16 +1,16 @@
 export const randomInt = (a, b) => {
   return parseInt(Math.random() * (b - a) + a);
 };
-export function loadImgProssse(_canvas,_url){
+export function loadImgProssse(_canvas, _url) {
   return new Promise((resolve, reject) => {
     // let seal = _canvas.createImage()
     // seal.src = _url
     var seal = new Image();
     seal.src = _url;
     seal.onload = () => {
-      resolve(seal)
-    }
-  })
+      resolve(seal);
+    };
+  });
 }
 export function fitString(ctx, str, maxWidth) {
   var width = ctx.measureText(str).width,
@@ -55,7 +55,7 @@ export function fillEdgeCircle(ctx, x, y, w) {
   fillCircle(ctx, x + w - 5, y + 15, 2);
   return this;
 }
-export function drawDoubleLine(ctx, a, b, c, d,_strokeStyle) {
+export function drawDoubleLine(ctx, a, b, c, d, _strokeStyle) {
   ctx.lineWidth = "1";
   ctx.strokeStyle = _strokeStyle;
   ctx.beginPath();
@@ -63,26 +63,26 @@ export function drawDoubleLine(ctx, a, b, c, d,_strokeStyle) {
   ctx.lineTo(c, d);
   ctx.stroke();
   ctx.beginPath();
-  ctx.moveTo(a+4, b);
-  ctx.lineTo(c+4, d);
+  ctx.moveTo(a + 4, b);
+  ctx.lineTo(c + 4, d);
   ctx.stroke();
 }
 export function drawScale(ctx) {
   for (var i = 0; i < 200; i++) {
     if (i % 2 == 0) {
-      drawLine(ctx, i* 50 + 20, 0, i* 50 + 20, 10,'white',1);
+      drawLine(ctx, i * 50 + 20, 0, i * 50 + 20, 10, "white", 1);
       ctx.fillStyle = "rgba(255, 255, 255 , 1)";
       ctx.font = "12px Arial";
-      ctx.fillText(secondTrans(i),i* 50 + 6,25)
-    }else{
-      drawLine(ctx, i* 50 + 20, 0, i* 50 + 20, 10,'white',1);
+      ctx.fillText(secondTrans(i), i * 50 + 6, 25);
+    } else {
+      drawLine(ctx, i * 50 + 20, 0, i * 50 + 20, 10, "white", 1);
     }
   }
 }
-function secondTrans (_s) {
-  return new Date(_s * 1000).toISOString().substring(14, 19)
+function secondTrans(_s) {
+  return new Date(_s * 1000).toISOString().substring(14, 19);
 }
-export function drawLine(ctx, a, b, c, d,_color = 'purple',_lineWidth = 1) {
+export function drawLine(ctx, a, b, c, d, _color = "purple", _lineWidth = 1) {
   ctx.lineWidth = _lineWidth;
   ctx.strokeStyle = _color;
   ctx.beginPath();
