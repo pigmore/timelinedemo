@@ -12,7 +12,7 @@ body {
 }
 .canvas {
   margin: 20px;
-  background: #000;
+  background: #222;
 }
 
 @media (prefers-reduced-motion: no-preference) {

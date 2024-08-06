@@ -15,6 +15,7 @@ export const dragGraph = function (
   type,
   icon,
   fillStyle,
+  strokeStyle,
   canvas,
   graphShape,
 ) {
@@ -27,6 +28,7 @@ export const dragGraph = function (
   this.type = type;
   this.icon = icon;
   this.fillStyle = fillStyle || "rgba(255, 255, 255 , 1)";
+  this.strokeStyle = strokeStyle || "rgba(255, 255, 255 , 1)";
   this.canvas = canvas;
   this.context = canvas.getContext("2d");
   this.canvasPos = canvas.getBoundingClientRect();
@@ -38,16 +40,20 @@ dragGraph.prototype = {
     this.context.save();
     this.context.beginPath();
     this.context.fillStyle = this.fillStyle || "rgba(255, 255, 255 , 1)";
+    this.context.strokeStyle = this.strokeStyle || "rgba(255, 255, 255 , 1)";
     this.context.translate(window.myscrollX, 0);
     this.shapeDrawWithCircle();
     this.context.fill();
     this.context.closePath();
-    this.context.drawImage(this.icon, this.x * window.xScale + 12, this.y + 2);
-    this.context.fillStyle = "rgba(255, 255, 255 , 1)";
-    this.context.font = "14px Arial";
-    if (this.w > 3) {
+    if (this.w > 5) {
+      this.context.drawImage(this.icon, this.x * window.xScale + 13, this.y + 2);
+    }
+
+    if (this.w > 7) {
+      this.context.fillStyle = "rgba(255, 255, 255 , 1)";
+      this.context.font = "14px Arial";
       this.context.fillText(
-        fitString(this.context, this.t, this.w * window.xScale - 25),
+        fitString(this.context, this.t, this.w * window.xScale - 50),
         this.x * window.xScale + 38,
         this.y + 17,
       );
@@ -120,16 +126,18 @@ dragGraph.prototype = {
         drawDoubleLine(
           this.context,
           this.x * window.xScale + 5,
-          this.y + 4,
+          this.y + 6,
           this.x * window.xScale + 5,
-          this.y + 20,
+          this.y + 18,
+          this.color
         )
         drawDoubleLine(
           this.context,
           this.x * window.xScale + this.w * window.xScale - 10,
-          this.y + 4,
+          this.y + 6,
           this.x * window.xScale + this.w * window.xScale - 10,
-          this.y + 20,
+          this.y + 18,
+          this.color
         )
       }
 

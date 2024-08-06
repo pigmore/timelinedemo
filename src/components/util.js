@@ -55,9 +55,9 @@ export function fillEdgeCircle(ctx, x, y, w) {
   fillCircle(ctx, x + w - 5, y + 15, 2);
   return this;
 }
-export function drawDoubleLine(ctx, a, b, c, d) {
+export function drawDoubleLine(ctx, a, b, c, d,_strokeStyle) {
   ctx.lineWidth = "1";
-  ctx.strokeStyle = "white";
+  ctx.strokeStyle = _strokeStyle;
   ctx.beginPath();
   ctx.moveTo(a, b);
   ctx.lineTo(c, d);
@@ -100,7 +100,7 @@ export function drawRoundedRect(ctx, x, y, w, h, r) {
   ctx.arcTo(x, y + h, x, y, r);
   ctx.arcTo(x, y, x + w, y, r);
   ctx.closePath();
-  // ctx.stroke();
+  ctx.stroke();
   ctx.fill();
 
   return this;

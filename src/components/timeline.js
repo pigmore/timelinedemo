@@ -6,6 +6,7 @@ import iconMusic from './icon/iconMusic.svg'
 import iconText from './icon/iconText.svg'
 import iconVideo from './icon/iconVideo.svg'
 import iconVoice from './icon/iconVoice.svg'
+import iconScript from './icon/iconScript.svg'
 import { dragGraph } from "./dragGraph";
 (function () {
   var table = {};
@@ -133,26 +134,32 @@ export function Timeline(props) {
     for (var i = 0; i < 12; i++) {
       var typeTemp = ['Music','Text','Emojo','Image','Video'][randomInt(0, 5)]
       var color = ''
+      var strokeStyle = ''
       var iconUrl = ''
       switch (typeTemp) {
         case 'Music':
-            color = 'rgba(58,67,246,1)'
+            color = 'rgba(140,26,255,0.6)'
+            strokeStyle = 'rgba(140,26,255,1)'
             iconUrl = iconMusic
           break;
         case 'Text':
-            color = 'rgba(234,110,82,1)'
+            color = 'rgba(255,114,26,0.6)'
+            strokeStyle = 'rgba(255,114,26,1)'
             iconUrl = iconText
           break;
         case 'Emojo':
-            color = 'rgba(179,0,182,1)'
+            color = 'rgba(242,73,143,0.6)'
+            strokeStyle = 'rgba(242,73,143,1)'
             iconUrl = iconEmojo
           break;
         case 'Image':
-            color = 'rgba(59,194,81,1)'
+            color = 'rgba(0,217,109,0.6)'
+            strokeStyle = 'rgba(0,217,109,1)'
             iconUrl = iconImage
           break;
         case 'Video':
-            color = 'rgba(9,157,253,1)'
+            color = 'rgba(0,170,255,0.6)'
+            strokeStyle = 'rgba(0,170,255,1)'
             iconUrl = iconVideo
           break;
         default:
@@ -167,6 +174,7 @@ export function Timeline(props) {
         typeTemp,
         await loadImgProssse(canvas,iconUrl),
         color,
+        strokeStyle,
         canvas,
         "rectangle",
       );
@@ -196,8 +204,10 @@ export function Timeline(props) {
             xArray.push(shape.x);
             xArray.push(shape.x + shape.w);
           }
-          shape.paint();
+          // shape.paint();
         });
+        graphs[0].erase();
+        drawGraph();
         // getXArray(graphs)
         e.preventDefault();
       },
