@@ -12,6 +12,7 @@ export const dragGraph = function (
   w,
   h,
   t,
+  type,
   fillStyle,
   canvas,
   graphShape,
@@ -22,6 +23,7 @@ export const dragGraph = function (
   this.w = w;
   this.h = h;
   this.t = t;
+  this.type = type;
   this.fillStyle = fillStyle || "rgba(255, 255, 255 , 1)";
   this.canvas = canvas;
   this.context = canvas.getContext("2d");

@@ -125,13 +125,35 @@ export function Timeline(props) {
     window.xScale = 10;
 
     for (var i = 0; i < 20; i++) {
+      var typeTemp = ['music','text','emojo','image','video'][randomInt(0, 4)]
+      var color = ''
+      switch (typeTemp) {
+        case 'music':
+            color = 'rgba(58,67,246,1)'
+          break;
+        case 'text':
+            color = 'rgba(234,110,82,1)'
+          break;
+        case 'emojo':
+            color = 'rgba(179,0,182,1)'
+          break;
+        case 'image':
+            color = 'rgba(59,194,81,1)'
+          break;
+        case 'video':
+            color = 'rgba(157,253,100,1)'
+          break;
+        default:
+          color = ''
+      }
       var graph = new dragGraph(
         randomInt(0, 120),
         randomInt(2, 10) * 20,
         randomInt(10, 40),
         20,
-        "dragGraph",
-        `rgba(${randomInt(0, 255)}, ${randomInt(0, 255)}, ${randomInt(0, 255)} , 1) `,
+        typeTemp,
+        typeTemp,
+        color,
         canvas,
         "rectangle",
       );
