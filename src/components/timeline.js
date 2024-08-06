@@ -1,5 +1,11 @@
 import { useState, useEffect, memo } from "react";
-import { randomInt,drawScale } from "./util";
+import { randomInt,drawScale,loadImgProssse} from "./util";
+import iconEmojo from './icon/iconEmojo.svg'
+import iconImage from './icon/iconImage.svg'
+import iconMusic from './icon/iconMusic.svg'
+import iconText from './icon/iconText.svg'
+import iconVideo from './icon/iconVideo.svg'
+import iconVoice from './icon/iconVoice.svg'
 import { dragGraph } from "./dragGraph";
 (function () {
   var table = {};
@@ -115,7 +121,7 @@ export function Timeline(props) {
       xArray.push(item.x + item.w);
     }
   };
-  const initCanvas = () => {
+  const initCanvas = async () => {
     if (window.initReady) return false;
 
     canvas = document.getElementById("canvas");
@@ -124,35 +130,42 @@ export function Timeline(props) {
     window.myscrollX = 0;
     window.xScale = 10;
 
-    for (var i = 0; i < 20; i++) {
+    for (var i = 0; i < 12; i++) {
       var typeTemp = ['Music','Text','Emojo','Image','Video'][randomInt(0, 5)]
       var color = ''
+      var iconUrl = ''
       switch (typeTemp) {
         case 'Music':
             color = 'rgba(58,67,246,1)'
+            iconUrl = iconMusic
           break;
         case 'Text':
             color = 'rgba(234,110,82,1)'
+            iconUrl = iconText
           break;
         case 'Emojo':
             color = 'rgba(179,0,182,1)'
+            iconUrl = iconEmojo
           break;
         case 'Image':
             color = 'rgba(59,194,81,1)'
+            iconUrl = iconImage
           break;
         case 'Video':
             color = 'rgba(9,157,253,1)'
+            iconUrl = iconVideo
           break;
         default:
           color = ''
       }
       var graph = new dragGraph(
         randomInt(0, 124),
-        randomInt(2, 10) * 28,
+        randomInt(2, 6) * 28,
         randomInt(10, 40),
         24,
         typeTemp,
         typeTemp,
+        await loadImgProssse(canvas,iconUrl),
         color,
         canvas,
         "rectangle",

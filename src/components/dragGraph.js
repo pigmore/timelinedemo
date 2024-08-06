@@ -13,6 +13,7 @@ export const dragGraph = function (
   h,
   t,
   type,
+  icon,
   fillStyle,
   canvas,
   graphShape,
@@ -24,6 +25,7 @@ export const dragGraph = function (
   this.h = h;
   this.t = t;
   this.type = type;
+  this.icon = icon;
   this.fillStyle = fillStyle || "rgba(255, 255, 255 , 1)";
   this.canvas = canvas;
   this.context = canvas.getContext("2d");
@@ -40,12 +42,13 @@ dragGraph.prototype = {
     this.shapeDrawWithCircle();
     this.context.fill();
     this.context.closePath();
+    this.context.drawImage(this.icon, this.x * window.xScale + 12, this.y + 2);
     this.context.fillStyle = "rgba(255, 255, 255 , 1)";
-    this.context.font = "16px Arial";
+    this.context.font = "14px Arial";
     if (this.w > 3) {
       this.context.fillText(
         fitString(this.context, this.t, this.w * window.xScale - 25),
-        this.x * window.xScale + 15,
+        this.x * window.xScale + 38,
         this.y + 17,
       );
     }

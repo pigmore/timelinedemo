@@ -1,6 +1,17 @@
 export const randomInt = (a, b) => {
   return parseInt(Math.random() * (b - a) + a);
 };
+export function loadImgProssse(_canvas,_url){
+  return new Promise((resolve, reject) => {
+    // let seal = _canvas.createImage()
+    // seal.src = _url
+    var seal = new Image();
+    seal.src = _url;
+    seal.onload = () => {
+      resolve(seal)
+    }
+  })
+}
 export function fitString(ctx, str, maxWidth) {
   var width = ctx.measureText(str).width,
     ellipsis = "...",
