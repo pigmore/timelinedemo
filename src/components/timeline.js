@@ -61,10 +61,10 @@ export function Timeline(props) {
     for (var item of graphs) {
       if (_id === item.id) continue;
       if (_y >= item.y + 20 || _y <= item.y - 20) continue;
-      if (_x >= item.x && _x <= item.x + item.w) {
+      if (_x >= item.x && _x < item.x + item.w) {
         return true;
       }
-      if (_x + _w >= item.x && _x + _w <= item.x + item.w) {
+      if (_x + _w > item.x && _x + _w <= item.x + item.w) {
         return true;
       }
       if (_x > item.x && _x + _w < item.x + item.w) {
@@ -127,7 +127,7 @@ export function Timeline(props) {
     for (var i = 0; i < 20; i++) {
       var graph = new dragGraph(
         randomInt(0, 120),
-        randomInt(0, 10) * 20,
+        randomInt(2, 10) * 20,
         randomInt(10, 40),
         20,
         "dragGraph",
@@ -179,7 +179,12 @@ export function Timeline(props) {
         if (tempGraphArr[tempGraphArr.length - 1]) {
           var shape = tempGraphArr[tempGraphArr.length - 1];
           if (e.offsetX > canvas.width - 35 && window.myscrollX > -2400) {
-            shape.x += 1 / window.xScale;
+            if (window.action === "edge1"){
+              shape.w += 1 / window.xScale;
+            }else{
+              shape.x += 1 / window.xScale;
+            }
+
             window.myscrollX -= 1;
           } else if (e.offsetX < 35 && window.myscrollX < 0) {
             shape.x -= 1 / window.xScale;
@@ -260,7 +265,10 @@ export function Timeline(props) {
 
     const drawGraph = () => {
       // console.log(graphs)
+      canvasCtx.save();
+      canvasCtx.translate(window.myscrollX, 0);
       drawScale(canvasCtx);
+      canvasCtx.restore();
       for (var i = 0; i < graphs.length; i++) {
         graphs[i].paint();
       }
