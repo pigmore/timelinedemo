@@ -1,6 +1,27 @@
+// import {util} from 'fabric'
 export const randomInt = (a, b) => {
   return parseInt(Math.random() * (b - a) + a);
 };
+
+  export function drawCircleIcon(
+    ctx: CanvasRenderingContext2D,
+    left,
+    top,
+    __styleOverride,
+    fabricObject,
+  ) {
+    ctx.save()
+    ctx.translate(left, top)
+    // ctx.rotate(util.degreesToRadians(fabricObject.angle))
+    ctx.beginPath()
+    ctx.arc(0, 0, 8, 0, 2 * Math.PI)
+    ctx.shadowColor = '#333333'
+    ctx.shadowBlur = 3
+    ctx.fillStyle = '#ffffff'
+    ctx.fill()
+    ctx.restore()
+  }
+
 export function loadImgProssse(_canvas, _url) {
   return new Promise((resolve, reject) => {
     // let seal = _canvas.createImage()

@@ -1,13 +1,26 @@
 import { useState, useEffect, memo } from "react";
-import {Canvas,Rect} from 'fabric'
+import {fabric} from 'fabric'
+import{drawCircleIcon} from './util'
 
 
 export function Monitor(props) {
   let monitorCanvas = null
   const initCanvas = () =>{
       // console.log(fabric)
-     monitorCanvas = new Canvas('monitor_canvas');
-     var rect = new Rect({
+     monitorCanvas = new fabric.Canvas('monitor_canvas');
+     fabric.Object.prototype.originX = 'center'
+     fabric.Object.prototype.originY = 'center'
+     fabric.Object.prototype.transparentCorners = false
+     fabric.Object.prototype.cornerColor = '#20bf6b'
+     fabric.Object.prototype.cornerStyle = 'circle'
+     fabric.Object.prototype.borderColor = '#3782F7'
+     fabric.Object.prototype.cornerSize = 16
+     fabric.Object.prototype.borderScaleFactor = 4
+     fabric.Object.prototype.borderOpacityWhenMoving = 0.8
+     console.log(monitorCanvas)
+     // console.log(FabricObject)
+
+     var rect = new fabric.Rect({
         left: 100,
         top: 100,
         fill: 'red',
