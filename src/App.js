@@ -2,6 +2,7 @@ import logo from "./logo.svg";
 import "./App.css";
 import React, { useState, memo, useRef } from "react";
 import { Timelinememo } from "./components/timeline";
+import { Monitormemo } from "./components/monitor";
 import { CallChild, CallChildMemo } from "./components/callChild";
 import { Test, Testmemo } from "./components/testmodule";
 
@@ -46,6 +47,7 @@ function App() {
         scale:{scale}+1
       </button>
 
+      <Monitormemo />
       <Timelinememo redrawTrigger={redraw} />
       {/*
         <button

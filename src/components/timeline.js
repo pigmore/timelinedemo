@@ -303,7 +303,7 @@ export function Timeline(props) {
     canvas.addEventListener(
       "mousewheel",
       function (e) {
-        console.log(e);
+        // console.log(e);
         window.myscrollX = Math.min(
           Math.max(window.myscrollX + e.deltaY, -2400),
           0,
