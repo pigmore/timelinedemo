@@ -39,6 +39,7 @@
     ]
   },
   "devDependencies": {
+    "fabric": "^6.1.0",
     "prettier": "^3.3.3",
     "react-app-singlehtml": "^1.1.0"
   }

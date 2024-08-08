@@ -364,7 +364,7 @@ export function Timeline(props) {
 
   return (
     <div>
-      <canvas id="canvas" className="canvas" width="1500" height="300"></canvas>
+      <canvas id="canvas" className="canvasBase" width="1500" height="300"></canvas>
     </div>
   );
 }

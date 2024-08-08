@@ -10,9 +10,13 @@ body {
   margin: 0;
   padding: 0;
 }
-.canvas {
+.canvasBase {
   margin: 20px;
   background: #222;
+}
+.upper-canvas {
+  margin: 20px;
+  background: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {

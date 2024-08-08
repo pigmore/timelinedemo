@@ -1,26 +1,31 @@
 import { useState, useEffect, memo } from "react";
-import { randomInt, drawScale, loadImgProssse } from "./util";
-import iconEmojo from "./icon/iconEmojo.svg";
-import iconImage from "./icon/iconImage.svg";
-import iconMusic from "./icon/iconMusic.svg";
-import iconText from "./icon/iconText.svg";
-import iconVideo from "./icon/iconVideo.svg";
-import iconVoice from "./icon/iconVoice.svg";
-import iconScript from "./icon/iconScript.svg";
-import { dragGraph } from "./dragGraph";
+import {Canvas,Rect} from 'fabric'
 
 
 export function Monitor(props) {
+  let monitorCanvas = null
+  const initCanvas = () =>{
+      // console.log(fabric)
+     monitorCanvas = new Canvas('monitor_canvas');
+     var rect = new Rect({
+        left: 100,
+        top: 100,
+        fill: 'red',
+        width: 200,
+        height: 200
+      });
 
-
+      monitorCanvas.add(rect);
+      monitorCanvas.renderAll();
+  }
   useEffect(() => {
     async function init() {
-      if (typeof window !== "undefined" || window.initReady !== true) {
-        // initCanvas();
+      if (window.initReady2 !== true) {
+        initCanvas();
       }
     }
     init();
-    // window.initReady = true;
+    window.initReady2 = true;
   }, []);
 
 
@@ -28,7 +33,7 @@ export function Monitor(props) {
 
   return (
     <div>
-      <canvas id="monitor_canvas" className="canvas" width="1600" height="900"></canvas>
+      <canvas id="monitor_canvas" className="canvasBase" width="1600" height="900"></canvas>
     </div>
   );
 }
