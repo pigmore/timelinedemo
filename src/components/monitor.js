@@ -106,7 +106,10 @@ export function Monitor(props) {
   }
   const initCanvas = () =>{
       // console.log(fabric)
-     monitorCanvas = new fabric.Canvas('monitor_canvas');
+     monitorCanvas = new fabric.Canvas('monitor_canvas',{
+       preserveObjectStacking:true
+     });
+     // fabric.preserveObjectStacking = true
      fabric.Object.prototype.originX = 'center'
      fabric.Object.prototype.originY = 'center'
      fabric.Object.prototype.transparentCorners = false
