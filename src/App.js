@@ -1,6 +1,6 @@
 import logo from "./logo.svg";
 import "./App.css";
-import React, { useState, memo, useRef } from "react";
+import React, { useState, memo, useRef,useEffect } from "react";
 import { Timelinememo } from "./components/timeline";
 import { Monitormemo } from "./components/monitor";
 import { CallChild, CallChildMemo } from "./components/callChild";
@@ -17,6 +17,18 @@ function App() {
   const handlemyRefCount = () => {
     myRef.current.callmycount();
   };
+  useEffect(() => {
+    const player = Stream(document.getElementById('stream-player'));
+    player.addEventListener('play', () => {
+      console.log('playing!');
+    });
+    player.play().catch(() => {
+      console.log('playback failed, muting to try again');
+      player.muted = true;
+      player.play();
+    });
+  }, []);
+
   return (
     <div className="App">
       <button
@@ -49,6 +61,21 @@ function App() {
 
       <Monitormemo />
       <Timelinememo redrawTrigger={redraw} />
+      <iframe
+        src="https://customer-<CODE>.cloudflarestream.com/<VIDEO_UID>/iframe"
+        style="border: none"
+        height="720"
+        width="1280"
+        allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+        allowfullscreen="true"
+        id="stream-player"
+      ></iframe>
+
+      <script src="https://embed.cloudflarestream.com/embed/sdk.latest.js"></script>
+
+
+
+
       {/*
         <button
           onClick={() => {
