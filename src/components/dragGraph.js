@@ -41,7 +41,7 @@ dragGraph.prototype = {
     this.context.beginPath();
     this.context.fillStyle = this.fillStyle || "rgba(255, 255, 255 , 1)";
     this.context.strokeStyle = this.strokeStyle || "rgba(255, 255, 255 , 1)";
-    this.context.translate(window.myscrollX, 0);
+    this.context.translate(window.timelineScrollX, 0);
     this.shapeDrawWithCircle();
     this.context.fill();
     this.context.closePath();
@@ -67,14 +67,14 @@ dragGraph.prototype = {
   },
   isMouseInGraph: function (mouse) {
     this.context.save();
-    this.context.translate(window.myscrollX, 0);
+    this.context.translate(window.timelineScrollX, 0);
     // this.context.beginPath();
     this.context.fillStyle = this.fillStyle || "rgba(255, 255, 255 , 1)";
     this.shapeDraw();
     this.context.restore();
     if (this.context.isPointInPath(mouse.x, mouse.y)) {
       if (
-        Math.abs(mouse.x - (this.x * window.xScale + window.myscrollX)) < 10
+        Math.abs(mouse.x - (this.x * window.xScale + window.timelineScrollX)) < 10
       ) {
         return "edge0";
       }
@@ -83,7 +83,7 @@ dragGraph.prototype = {
           mouse.x -
             (this.w * window.xScale +
               this.x * window.xScale +
-              window.myscrollX),
+              window.timelineScrollX),
         ) < 10
       ) {
         return "edge1";
@@ -156,7 +156,7 @@ dragGraph.prototype = {
   drawTheXAttach: function (_x) {
     // console.log('drawTheXAttach',_x)
     this.context.save();
-    this.context.translate(window.myscrollX, 0);
+    this.context.translate(window.timelineScrollX, 0);
     drawLine(
       this.context,
       _x * window.xScale,

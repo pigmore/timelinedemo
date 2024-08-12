@@ -1,5 +1,8 @@
 import { useState, useEffect, memo } from "react";
-import { randomInt, drawScale, loadImgProssse } from "./util";
+import { randomInt,
+  drawScale,
+  drawTimePointer,
+  loadImgProssse } from "./util";
 import iconEmojo from "./icon/iconEmojo.svg";
 import iconImage from "./icon/iconImage.svg";
 import iconMusic from "./icon/iconMusic.svg";
@@ -41,7 +44,7 @@ import { dragGraph } from "./dragGraph";
 })();
 
 export function Timeline(props) {
-  var canvas = null,
+  var canvasDom = null,
     canvasCtx = null,
     graphs = [],
     graphAttr = [],
@@ -125,11 +128,14 @@ export function Timeline(props) {
   const initCanvas = async () => {
     if (window.initReady) return false;
 
-    canvas = document.getElementById("canvas");
-    canvasCtx = canvas.getContext("2d");
+    canvasDom = document.getElementById("timeLineCanvas");
+    canvasCtx = canvasDom.getContext("2d");
     window.initReady = true;
-    window.myscrollX = 0;
+    window.timelineScrollX = 0;
     window.xScale = 10;
+    window.currentFrame = 120;
+    window.videoFps = 60;
+    window.currentTime = 2000;
 
     for (var i = 0; i < 12; i++) {
       var typeTemp = ["Music", "Text", "Emojo", "Image", "Video"][
@@ -174,22 +180,22 @@ export function Timeline(props) {
         24,
         typeTemp,
         typeTemp,
-        await loadImgProssse(canvas, iconUrl),
+        await loadImgProssse(canvasDom, iconUrl),
         color,
         strokeStyle,
-        canvas,
+        canvasDom,
         "rectangle",
       );
       checkIfInsideLoop(graph);
       graphs.push(graph);
     }
 
-    canvas.addEventListener(
+    canvasDom.addEventListener(
       "mousedown",
       function (e) {
         var mouse = {
-          x: e.clientX - canvas.getBoundingClientRect().left,
-          y: e.clientY - canvas.getBoundingClientRect().top,
+          x: e.clientX - canvasDom.getBoundingClientRect().left,
+          y: e.clientY - canvasDom.getBoundingClientRect().top,
         };
         // console.log(mouse.x);
         xArray = [];
@@ -215,27 +221,33 @@ export function Timeline(props) {
       },
       false,
     );
-    canvas.addEventListener(
+    canvasDom.addEventListener(
       "mousemove",
       function (e) {
         var mouse = {
-          x: e.clientX - canvas.getBoundingClientRect().left,
-          y: e.clientY - canvas.getBoundingClientRect().top,
+          x: e.clientX - canvasDom.getBoundingClientRect().left,
+          y: e.clientY - canvasDom.getBoundingClientRect().top,
         };
+        // hoverThePointer
+        if(Math.abs(e.offsetX - window.timelineScrollX - window.currentFrame) < 5){
+          canvasDom.style.cursor="pointer"
+        }else{
+          canvasDom.style.cursor="auto"
+        }
 
         if (tempGraphArr[tempGraphArr.length - 1]) {
           var shape = tempGraphArr[tempGraphArr.length - 1];
-          if (e.offsetX > canvas.width - 35 && window.myscrollX > -2400) {
+          if (e.offsetX > canvasDom.width - 35 && window.timelineScrollX > -2400) {
             if (window.action === "edge1") {
               shape.w += 1 / window.xScale;
             } else {
               shape.x += 1 / window.xScale;
             }
 
-            window.myscrollX -= 1;
-          } else if (e.offsetX < 35 && window.myscrollX < 0) {
+            window.timelineScrollX -= 1;
+          } else if (e.offsetX < 35 && window.timelineScrollX < 0) {
             shape.x -= 1 / window.xScale;
-            window.myscrollX += 1;
+            window.timelineScrollX += 1;
           }
 
           // console.log('mouse.x',mouse.x)
@@ -279,7 +291,7 @@ export function Timeline(props) {
       },
       false,
     );
-    canvas.addEventListener(
+    canvasDom.addEventListener(
       "mouseup",
       function () {
         var shape = tempGraphArr[tempGraphArr.length - 1];
@@ -300,12 +312,12 @@ export function Timeline(props) {
       },
       false,
     );
-    canvas.addEventListener(
+    canvasDom.addEventListener(
       "mousewheel",
       function (e) {
         // console.log(e);
-        window.myscrollX = Math.min(
-          Math.max(window.myscrollX + e.deltaY, -2400),
+        window.timelineScrollX = Math.min(
+          Math.max(window.timelineScrollX + e.deltaY, -2400),
           0,
         );
         graphs[0].erase();
@@ -319,12 +331,16 @@ export function Timeline(props) {
     const drawGraph = () => {
       // console.log(graphs)
       canvasCtx.save();
-      canvasCtx.translate(window.myscrollX, 0);
+      canvasCtx.translate(window.timelineScrollX, 0);
       drawScale(canvasCtx);
       canvasCtx.restore();
       for (var i = 0; i < graphs.length; i++) {
         graphs[i].paint();
       }
+      canvasCtx.save();
+      canvasCtx.translate(window.timelineScrollX, 0);
+      drawTimePointer(canvasCtx,window.currentFrame,canvasDom.height)
+      canvasCtx.restore();
     };
     // const checkIfInside = () => {
     //   // console.log(graphs)
@@ -340,7 +356,7 @@ export function Timeline(props) {
     window.initJsonForCanvas = (items) => {
       // graphs[0].erase();
 
-      canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+      canvasDom.getContext("2d").clearRect(0, 0, canvasDom.width, canvasDom.height);
       graphs = [];
       for (var item of items) {
         var graph = new dragGraph(
@@ -350,7 +366,7 @@ export function Timeline(props) {
           24,
           "dragGraph",
           `rgba(${randomInt(0, 255)}, ${randomInt(0, 255)}, ${randomInt(0, 255)} , 1) `,
-          canvas,
+          canvasDom,
           "rectangle",
         );
         graphs.push(graph);
@@ -364,7 +380,7 @@ export function Timeline(props) {
 
   return (
     <div>
-      <canvas id="canvas" className="canvasBase" width="1500" height="300"></canvas>
+      <canvas id="timeLineCanvas" className="canvasBase" width="1500" height="300"></canvas>
     </div>
   );
 }

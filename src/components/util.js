@@ -88,6 +88,20 @@ export function drawDoubleLine(ctx, a, b, c, d, _strokeStyle) {
   ctx.lineTo(c + 4, d);
   ctx.stroke();
 }
+export function drawTimePointer(ctx,x,h) {
+  drawLine(ctx, x, 0, x, h, '#5297ff', 2);
+  ctx.fillStyle = '#5297ff'
+  ctx.beginPath();
+  ctx.moveTo(x-5, 0);
+  ctx.lineTo(x+5, 0);
+  ctx.lineTo(x+5, 10);
+  ctx.lineTo(x+0, 15);
+  ctx.lineTo(x-5, 10);
+  // ctx.lineTo(x-10, 20);
+  ctx.closePath();
+  // ctx.stroke();
+  ctx.fill();
+}
 export function drawScale(ctx) {
   for (var i = 0; i < 200; i++) {
     if (i % 2 == 0) {
