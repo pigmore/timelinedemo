@@ -42,8 +42,8 @@ function App() {
       </button>
       <button
         onClick={() => {
-          window.timelineXScale = Math.min(scale + 1, 20);
-          setScale((scale) => Math.min(scale + 1, 20));
+          window.timelineXScale = Math.min(scale + 1, 30);
+          setScale((scale) => Math.min(scale + 1, 30));
           // handleRedraw()
           window.redraw_function();
         }}

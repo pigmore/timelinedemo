@@ -104,15 +104,72 @@ export function drawTimePointer(ctx,x,h) {
 }
 export function drawScale(ctx) {
   for (var i = 0; i < 200; i++) {
-    const _x = i * 6 * window.timelineXScale + 20
-    if (i % 2 == 0) {
-      drawLine(ctx, _x, 0, _x, 10, "white", 1);
-      ctx.fillStyle = "rgba(255, 255, 255 , 1)";
-      ctx.font = "12px Arial";
-      ctx.fillText(secondTrans(i), _x - 16, 25);
-    } else {
-      drawLine(ctx, _x, 0, _x, 10, "white", 1);
+    if (window.timelineXScale <= 2 ) {
+      const _x = i * 30 * window.timelineXScale + 20
+
+
+      if (i % 2 == 0) {
+        drawLine(ctx, _x, 0, _x, 10, "white", 1);
+        ctx.fillStyle = "rgba(255, 255, 255 , 1)";
+        ctx.font = "12px Arial";
+        ctx.fillText(secondTrans(i * 5), _x - 16, 25);
+      } else {
+        drawLine(ctx, _x, 0, _x, 7, "white", 1);
+      }
     }
+    else if (window.timelineXScale > 2 && window.timelineXScale <= 5 ) {
+      const _x = i * 6 * window.timelineXScale + 20
+
+
+      if (i % 5 == 0) {
+        drawLine(ctx, _x, 0, _x, 10, "white", 1);
+        ctx.fillStyle = "rgba(255, 255, 255 , 1)";
+        ctx.font = "12px Arial";
+        ctx.fillText(secondTrans(i), _x - 16, 25);
+      } else {
+        drawLine(ctx, _x, 0, _x, 7, "white", 1);
+      }
+    }
+    else if (window.timelineXScale > 5 && window.timelineXScale < 15){
+      const _x = i * 6 * window.timelineXScale + 20
+
+
+      if (i % 2 == 0) {
+        drawLine(ctx, _x, 0, _x, 10, "white", 1);
+        ctx.fillStyle = "rgba(255, 255, 255 , 1)";
+        ctx.font = "12px Arial";
+        ctx.fillText(secondTrans(i), _x - 16, 25);
+      } else {
+        drawLine(ctx, _x, 0, _x, 7, "white", 1);
+      }
+    }
+    else if (window.timelineXScale >= 15 && window.timelineXScale < 25){
+      const _x = i * 3 * window.timelineXScale + 20
+
+
+      if (i % 2 == 0) {
+        drawLine(ctx, _x, 0, _x, 10, "white", 1);
+        ctx.fillStyle = "rgba(255, 255, 255 , 1)";
+        ctx.font = "12px Arial";
+        ctx.fillText(secondTrans(i/2), _x - 16, 25);
+      } else {
+        drawLine(ctx, _x, 0, _x, 7, "white", 1);
+      }
+    }
+    else if (window.timelineXScale >= 25){
+      const _x = i * 1.5 * window.timelineXScale + 20
+
+
+      if (i % 4 == 0) {
+        drawLine(ctx, _x, 0, _x, 10, "white", 1);
+        ctx.fillStyle = "rgba(255, 255, 255 , 1)";
+        ctx.font = "12px Arial";
+        ctx.fillText(secondTrans(i/4), _x - 16, 25);
+      } else {
+        drawLine(ctx, _x, 0, _x, 7, "white", 1);
+      }
+    }
+
   }
 }
 function secondTrans(_s) {
