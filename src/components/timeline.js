@@ -132,7 +132,7 @@ export function Timeline(props) {
     canvasCtx = canvasDom.getContext("2d");
     window.initReady = true;
     window.timelineScrollX = 0;
-    window.xScale = 10;
+    window.timelineXScale = 10;
     window.currentFrame = 120;
     window.videoFps = 60;
     window.currentTime = 2000;
@@ -220,7 +220,7 @@ export function Timeline(props) {
         }
 
 
-        graphs[0].erase();
+        clearCanvas();
         drawGraph();
         // getXArray(graphs)
         e.preventDefault();
@@ -250,14 +250,14 @@ export function Timeline(props) {
           var shape = tempGraphArr[tempGraphArr.length - 1];
           if (e.offsetX > canvasDom.width - 35 && window.timelineScrollX > -2400) {
             if (window.timelineAction === "edge1") {
-              shape.w += 1 / window.xScale;
+              shape.w += 1 / window.timelineXScale;
             } else {
-              shape.x += 1 / window.xScale;
+              shape.x += 1 / window.timelineXScale;
             }
 
             window.timelineScrollX -= 1;
           } else if (e.offsetX < 35 && window.timelineScrollX < 0) {
-            shape.x -= 1 / window.xScale;
+            shape.x -= 1 / window.timelineXScale;
             window.timelineScrollX += 1;
           }
 
@@ -267,27 +267,27 @@ export function Timeline(props) {
 
           if (window.timelineAction === "edge0") {
             shape.w = Math.max(
-              10 / window.xScale,
-              shape.w - e.movementX / window.xScale,
+              10 / window.timelineXScale,
+              shape.w - e.movementX / window.timelineXScale,
             );
             shape.x +=
-              shape.w == 10 / window.xScale ? 0 : e.movementX / window.xScale;
-            shape.erase();
+              shape.w == 10 / window.timelineXScale ? 0 : e.movementX / window.timelineXScale;
+            clearCanvas();
             drawGraph();
           } else if (window.timelineAction === "edge1") {
             shape.w = Math.max(
-              10 / window.xScale,
-              shape.w + e.movementX / window.xScale,
+              10 / window.timelineXScale,
+              shape.w + e.movementX / window.timelineXScale,
             );
 
-            shape.erase();
+            clearCanvas();
             drawGraph();
           } else if (window.timelineAction === "move") {
-            shape.x += e.movementX / window.xScale;
+            shape.x += e.movementX / window.timelineXScale;
             const x = checkIfAttach(shape.x, shape.w);
 
             shape.y += e.movementY;
-            shape.erase();
+            clearCanvas();
             if (x) {
               shape.x = x[0];
             }
@@ -304,7 +304,7 @@ export function Timeline(props) {
     );
     canvasDom.addEventListener(
       "mouseup",
-      function () {
+      function (e) {
         var shape = tempGraphArr[tempGraphArr.length - 1];
 
         if (shape) {
@@ -312,9 +312,15 @@ export function Timeline(props) {
           checkIfInsideLoop(shape);
           shape.y = Math.floor((shape.y + 10) / 28) * 28;
 
-          shape.erase();
+          clearCanvas();
           drawGraph();
         }
+        if (e.offsetY < 30) {
+          window.currentFrame = e.offsetX - window.timelineScrollX
+          clearCanvas();
+          drawGraph();
+        }
+
 
         tempGraphArr = [];
         getXArray(graphs);
@@ -331,7 +337,7 @@ export function Timeline(props) {
           Math.max(window.timelineScrollX + e.deltaY, -2400),
           0,
         );
-        graphs[0].erase();
+        clearCanvas();
         drawGraph();
         getXArray(graphs);
         // console.log(e.window.scrollX)
@@ -363,12 +369,12 @@ export function Timeline(props) {
     //   }
     // };
     window.redraw_function = () => {
-      graphs[0].erase();
+      clearCanvas();
       drawGraph();
     };
 
     window.initJsonForCanvas = (items) => {
-      // graphs[0].erase();
+      // clearCanvas();
 
       canvasCtx.clearRect(0, 0, canvasDom.width, canvasDom.height);
       graphs = [];

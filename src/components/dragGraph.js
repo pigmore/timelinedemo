@@ -48,7 +48,7 @@ dragGraph.prototype = {
     if (this.w > 5) {
       this.context.drawImage(
         this.icon,
-        this.x * window.xScale + 13,
+        this.x * window.timelineXScale + 13,
         this.y + 2,
       );
     }
@@ -57,8 +57,8 @@ dragGraph.prototype = {
       this.context.fillStyle = "rgba(255, 255, 255 , 1)";
       this.context.font = "14px Arial";
       this.context.fillText(
-        fitString(this.context, this.t, this.w * window.xScale - 50),
-        this.x * window.xScale + 38,
+        fitString(this.context, this.t, this.w * window.timelineXScale - 50),
+        this.x * window.timelineXScale + 38,
         this.y + 17,
       );
     }
@@ -74,15 +74,15 @@ dragGraph.prototype = {
     this.context.restore();
     if (this.context.isPointInPath(mouse.x, mouse.y)) {
       if (
-        Math.abs(mouse.x - (this.x * window.xScale + window.timelineScrollX)) < 10
+        Math.abs(mouse.x - (this.x * window.timelineXScale + window.timelineScrollX)) < 10
       ) {
         return "edge0";
       }
       if (
         Math.abs(
           mouse.x -
-            (this.w * window.xScale +
-              this.x * window.xScale +
+            (this.w * window.timelineXScale +
+              this.x * window.timelineXScale +
               window.timelineScrollX),
         ) < 10
       ) {
@@ -102,9 +102,9 @@ dragGraph.prototype = {
     } else {
       drawRoundedRect(
         this.context,
-        this.x * window.xScale,
+        this.x * window.timelineXScale,
         this.y,
-        this.w * window.xScale,
+        this.w * window.timelineXScale,
         this.h,
         4,
       );
@@ -120,26 +120,26 @@ dragGraph.prototype = {
     } else {
       drawRoundedRect(
         this.context,
-        this.x * window.xScale,
+        this.x * window.timelineXScale,
         this.y,
-        this.w * window.xScale,
+        this.w * window.timelineXScale,
         this.h,
         4,
       );
       if (this.w > 1.5) {
         drawDoubleLine(
           this.context,
-          this.x * window.xScale + 5,
+          this.x * window.timelineXScale + 5,
           this.y + 6,
-          this.x * window.xScale + 5,
+          this.x * window.timelineXScale + 5,
           this.y + 18,
           this.color,
         );
         drawDoubleLine(
           this.context,
-          this.x * window.xScale + this.w * window.xScale - 10,
+          this.x * window.timelineXScale + this.w * window.timelineXScale - 10,
           this.y + 6,
-          this.x * window.xScale + this.w * window.xScale - 10,
+          this.x * window.timelineXScale + this.w * window.timelineXScale - 10,
           this.y + 18,
           this.color,
         );
@@ -147,9 +147,9 @@ dragGraph.prototype = {
 
       // fillEdgeCircle(
       //   this.context,
-      //   this.x * window.xScale,
+      //   this.x * window.timelineXScale,
       //   this.y,
-      //   this.w * window.xScale,
+      //   this.w * window.timelineXScale,
       // );
     }
   },
@@ -159,9 +159,9 @@ dragGraph.prototype = {
     this.context.translate(window.timelineScrollX, 0);
     drawLine(
       this.context,
-      _x * window.xScale,
+      _x * window.timelineXScale,
       0,
-      _x * window.xScale,
+      _x * window.timelineXScale,
       this.canvas.height,
     );
     this.context.restore();
