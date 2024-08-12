@@ -32,7 +32,7 @@ function App() {
       </button>
       <button
         onClick={() => {
-          window.xScale = Math.max(scale - 1, 1);
+          window.timelineXScale = Math.max(scale - 1, 1);
           setScale((scale) => Math.max(scale - 1, 1));
           // handleRedraw()
           window.redraw_function();
@@ -42,7 +42,7 @@ function App() {
       </button>
       <button
         onClick={() => {
-          window.xScale = Math.min(scale + 1, 20);
+          window.timelineXScale = Math.min(scale + 1, 20);
           setScale((scale) => Math.min(scale + 1, 20));
           // handleRedraw()
           window.redraw_function();

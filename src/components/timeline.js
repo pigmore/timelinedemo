@@ -199,7 +199,7 @@ export function Timeline(props) {
         };
         // console.log(mouse.x);
         xArray = [];
-        if(Math.abs(e.offsetX - window.timelineScrollX - window.currentFrame) < 5){
+        if(Math.abs(e.offsetX - window.timelineScrollX - window.currentFrame * window.timelineXScale / 10) < 5){
           window.timelineAction = 'timeLinePointerMoving'
         }else{
           graphs.forEach(function (shape) {
@@ -235,14 +235,14 @@ export function Timeline(props) {
           y: e.clientY - canvasDom.getBoundingClientRect().top,
         };
         // hoverThePointer
-        if(Math.abs(e.offsetX - window.timelineScrollX - window.currentFrame) < 5){
+        if(Math.abs(e.offsetX - window.timelineScrollX - window.currentFrame * window.timelineXScale / 10) < 5){
           canvasDom.style.cursor="pointer"
         }else{
           canvasDom.style.cursor="auto"
         }
 
         if (window.timelineAction == 'timeLinePointerMoving') {
-          window.currentFrame += e.movementX
+          window.currentFrame += e.movementX / window.timelineXScale * 10
           clearCanvas();
           drawGraph();
         }
@@ -316,7 +316,7 @@ export function Timeline(props) {
           drawGraph();
         }
         if (e.offsetY < 30) {
-          window.currentFrame = e.offsetX - window.timelineScrollX
+          window.currentFrame = (e.offsetX - window.timelineScrollX) * 10 / window.timelineXScale 
           clearCanvas();
           drawGraph();
         }
@@ -359,7 +359,7 @@ export function Timeline(props) {
       }
       canvasCtx.save();
       canvasCtx.translate(window.timelineScrollX, 0);
-      drawTimePointer(canvasCtx,window.currentFrame,canvasDom.height)
+      drawTimePointer(canvasCtx,window.currentFrame * window.timelineXScale / 10 ,canvasDom.height)
       canvasCtx.restore();
     };
     // const checkIfInside = () => {

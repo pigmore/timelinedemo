@@ -104,7 +104,7 @@ export function drawTimePointer(ctx,x,h) {
 }
 export function drawScale(ctx) {
   for (var i = 0; i < 200; i++) {
-    const _x = i * 60 + 20
+    const _x = i * 6 * window.timelineXScale + 20
     if (i % 2 == 0) {
       drawLine(ctx, _x, 0, _x, 10, "white", 1);
       ctx.fillStyle = "rgba(255, 255, 255 , 1)";
