@@ -199,21 +199,27 @@ export function Timeline(props) {
         };
         // console.log(mouse.x);
         xArray = [];
-        graphs.forEach(function (shape) {
-          var offset = {
-            x: mouse.x - shape.x,
-            y: mouse.y - shape.y,
-          };
-          var action = shape.isMouseInGraph(mouse);
-          if (action) {
-            tempGraphArr.push(shape);
-            window.action = action;
-          } else {
-            xArray.push(shape.x);
-            xArray.push(shape.x + shape.w);
-          }
-          // shape.paint();
-        });
+        if(Math.abs(e.offsetX - window.timelineScrollX - window.currentFrame) < 5){
+          window.timelineAction = 'timeLinePointerMoving'
+        }else{
+          graphs.forEach(function (shape) {
+            var offset = {
+              x: mouse.x - shape.x,
+              y: mouse.y - shape.y,
+            };
+            var timelineAction = shape.isMouseInGraph(mouse);
+            if (timelineAction) {
+              tempGraphArr.push(shape);
+              window.timelineAction = timelineAction;
+            } else {
+              xArray.push(shape.x);
+              xArray.push(shape.x + shape.w);
+            }
+            // shape.paint();
+          });
+        }
+
+
         graphs[0].erase();
         drawGraph();
         // getXArray(graphs)
@@ -235,10 +241,15 @@ export function Timeline(props) {
           canvasDom.style.cursor="auto"
         }
 
-        if (tempGraphArr[tempGraphArr.length - 1]) {
+        if (window.timelineAction == 'timeLinePointerMoving') {
+          window.currentFrame += e.movementX
+          clearCanvas();
+          drawGraph();
+        }
+        else if (tempGraphArr[tempGraphArr.length - 1]) {
           var shape = tempGraphArr[tempGraphArr.length - 1];
           if (e.offsetX > canvasDom.width - 35 && window.timelineScrollX > -2400) {
-            if (window.action === "edge1") {
+            if (window.timelineAction === "edge1") {
               shape.w += 1 / window.xScale;
             } else {
               shape.x += 1 / window.xScale;
@@ -254,7 +265,7 @@ export function Timeline(props) {
           // console.log('shape.w + shape.x',shape.w + shape.x)
           // console.log('mouse.x - (shape.w + shape.x)',mouse.x - (shape.w + shape.x))
 
-          if (window.action === "edge0") {
+          if (window.timelineAction === "edge0") {
             shape.w = Math.max(
               10 / window.xScale,
               shape.w - e.movementX / window.xScale,
@@ -263,7 +274,7 @@ export function Timeline(props) {
               shape.w == 10 / window.xScale ? 0 : e.movementX / window.xScale;
             shape.erase();
             drawGraph();
-          } else if (window.action === "edge1") {
+          } else if (window.timelineAction === "edge1") {
             shape.w = Math.max(
               10 / window.xScale,
               shape.w + e.movementX / window.xScale,
@@ -271,7 +282,7 @@ export function Timeline(props) {
 
             shape.erase();
             drawGraph();
-          } else if (window.action === "move") {
+          } else if (window.timelineAction === "move") {
             shape.x += e.movementX / window.xScale;
             const x = checkIfAttach(shape.x, shape.w);
 
@@ -308,7 +319,7 @@ export function Timeline(props) {
         tempGraphArr = [];
         getXArray(graphs);
         exportJson();
-        window.action = "none";
+        window.timelineAction = "none";
       },
       false,
     );
@@ -328,6 +339,9 @@ export function Timeline(props) {
       false,
     );
 
+    const clearCanvas = () => {
+      canvasCtx.clearRect(0, 0, canvasDom.width, canvasDom.height);
+    }
     const drawGraph = () => {
       // console.log(graphs)
       canvasCtx.save();
@@ -356,7 +370,7 @@ export function Timeline(props) {
     window.initJsonForCanvas = (items) => {
       // graphs[0].erase();
 
-      canvasDom.getContext("2d").clearRect(0, 0, canvasDom.width, canvasDom.height);
+      canvasCtx.clearRect(0, 0, canvasDom.width, canvasDom.height);
       graphs = [];
       for (var item of items) {
         var graph = new dragGraph(
