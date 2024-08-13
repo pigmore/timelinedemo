@@ -11,6 +11,7 @@ import{
 import { monitorGraph } from "./monitorGraph";
 
 export function Monitor(props) {
+  const STROKE_COLOR = '#ff2b5d'
   var canvasDom = null,
     monitorCtx = null,
     monitorGraphs = [],
@@ -39,6 +40,11 @@ export function Monitor(props) {
         });
         console.log('monitorGraphsIn',monitorGraphsIn)
 
+    });
+    canvasDom.addEventListener(
+      "mouseup",
+      function (e) {
+        drawGraphs()
     });
   }
   const initJson = () =>{
@@ -97,6 +103,17 @@ export function Monitor(props) {
     monitorCtx.clearRect(0, 0, canvasDom.width, canvasDom.height);
     for (var i = 0; i < monitorGraphs.length; i++) {
       monitorGraphs[i].paint();
+    }
+
+    if (monitorGraphsIn.length > 0) {
+      monitorCtx.save()
+      monitorCtx.setLineDash([4, 5])
+      monitorCtx.lineWidth = 1
+      monitorCtx.strokeStyle = STROKE_COLOR
+      monitorCtx.translate(monitorGraphsIn[0].centerX0, monitorGraphsIn[0].centerY0)
+      monitorCtx.rotate(monitorGraphsIn[0].thisRotate)
+      monitorCtx.translate(-monitorGraphsIn[0].centerX0, -monitorGraphsIn[0].centerY0)
+      monitorCtx.strokeRect(monitorGraphsIn[0].x, monitorGraphsIn[0].y, monitorGraphsIn[0].w, monitorGraphsIn[0].h)
     }
   };
   const initCanvas = async() =>{

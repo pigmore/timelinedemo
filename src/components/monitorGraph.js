@@ -110,67 +110,80 @@ monitorGraph.prototype = {
     }
     return false;
   },
-  shapeDraw: function () {
-    if (this.graphShape == "circle") {
-      this.context.arc(this.x, this.y, 50, 0, Math.PI * 2);
-    } else if (this.graphShape == "triangle") {
-      this.context.moveTo(this.x + 50, this.y + 50);
-      this.context.lineTo(this.x + 100, this.y + 130);
-      this.context.lineTo(this.x, this.y + 130);
-    } else {
-      drawRoundedRect(
-        this.context,
-        this.x * window.timelineXScale,
-        this.y,
-        this.w * window.timelineXScale,
-        this.h,
-        4,
-      );
-    }
+  _drawBorder:()=> {
+    let p = this.square
+    let ctx = this.ctx
+    this.ctx.save()
+    this.ctx.beginPath()
+    this.ctx.setStrokeStyle('orange')
+    this._draw_line(this.ctx, p[0], p[1])
+    this._draw_line(this.ctx, p[1], p[2])
+    this._draw_line(this.ctx, p[2], p[3])
+    this._draw_line(this.ctx, p[3], p[0])
+    ctx.restore()
   },
-  shapeDrawWithCircle: function () {
-    if (this.graphShape == "circle") {
-      this.context.arc(this.x, this.y, 50, 0, Math.PI * 2);
-    } else if (this.graphShape == "triangle") {
-      this.context.moveTo(this.x + 50, this.y + 50);
-      this.context.lineTo(this.x + 100, this.y + 130);
-      this.context.lineTo(this.x, this.y + 130);
-    } else {
-      drawRoundedRect(
-        this.context,
-        this.x * window.timelineXScale,
-        this.y,
-        this.w * window.timelineXScale,
-        this.h,
-        4,
-      );
-      if (this.w > 1.5) {
-        drawDoubleLine(
-          this.context,
-          this.x * window.timelineXScale + 5,
-          this.y + 6,
-          this.x * window.timelineXScale + 5,
-          this.y + 18,
-          this.color,
-        );
-        drawDoubleLine(
-          this.context,
-          this.x * window.timelineXScale + this.w * window.timelineXScale - 10,
-          this.y + 6,
-          this.x * window.timelineXScale + this.w * window.timelineXScale - 10,
-          this.y + 18,
-          this.color,
-        );
-      }
 
-      // fillEdgeCircle(
-      //   this.context,
-      //   this.x * window.timelineXScale,
-      //   this.y,
-      //   this.w * window.timelineXScale,
-      // );
-    }
-  },
+  // shapeDraw: function () {
+  //   if (this.graphShape == "circle") {
+  //     this.context.arc(this.x, this.y, 50, 0, Math.PI * 2);
+  //   } else if (this.graphShape == "triangle") {
+  //     this.context.moveTo(this.x + 50, this.y + 50);
+  //     this.context.lineTo(this.x + 100, this.y + 130);
+  //     this.context.lineTo(this.x, this.y + 130);
+  //   } else {
+  //     drawRoundedRect(
+  //       this.context,
+  //       this.x * window.timelineXScale,
+  //       this.y,
+  //       this.w * window.timelineXScale,
+  //       this.h,
+  //       4,
+  //     );
+  //   }
+  // },
+  // shapeDrawWithCircle: function () {
+  //   if (this.graphShape == "circle") {
+  //     this.context.arc(this.x, this.y, 50, 0, Math.PI * 2);
+  //   } else if (this.graphShape == "triangle") {
+  //     this.context.moveTo(this.x + 50, this.y + 50);
+  //     this.context.lineTo(this.x + 100, this.y + 130);
+  //     this.context.lineTo(this.x, this.y + 130);
+  //   } else {
+  //     drawRoundedRect(
+  //       this.context,
+  //       this.x * window.timelineXScale,
+  //       this.y,
+  //       this.w * window.timelineXScale,
+  //       this.h,
+  //       4,
+  //     );
+  //     if (this.w > 1.5) {
+  //       drawDoubleLine(
+  //         this.context,
+  //         this.x * window.timelineXScale + 5,
+  //         this.y + 6,
+  //         this.x * window.timelineXScale + 5,
+  //         this.y + 18,
+  //         this.color,
+  //       );
+  //       drawDoubleLine(
+  //         this.context,
+  //         this.x * window.timelineXScale + this.w * window.timelineXScale - 10,
+  //         this.y + 6,
+  //         this.x * window.timelineXScale + this.w * window.timelineXScale - 10,
+  //         this.y + 18,
+  //         this.color,
+  //       );
+  //     }
+  //
+  //     // fillEdgeCircle(
+  //     //   this.context,
+  //     //   this.x * window.timelineXScale,
+  //     //   this.y,
+  //     //   this.w * window.timelineXScale,
+  //     // );
+  //   }
+  // },
   drawTheXAttach: function (_x) {
     // console.log('drawTheXAttach',_x)
     this.context.save();
