@@ -256,7 +256,8 @@ export function Timeline(props) {
             }
 
             window.timelineScrollX -= 1;
-          } else if (e.offsetX < 35 && window.timelineScrollX < 0) {
+          }
+          else if (e.offsetX < 35 && window.timelineScrollX < 0) {
             shape.x -= 1 / window.timelineXScale;
             window.timelineScrollX += 1;
           }

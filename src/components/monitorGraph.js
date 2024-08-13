@@ -46,8 +46,8 @@ export const monitorGraph = function (
     this.x0 = x
     this.y = y
     this.y0 = y
-    this.r = r
-    this.r0 = r
+    this.rotate = r
+    this.rotate0 = r
 
   // 4个顶点坐标
   this.square = [
@@ -63,6 +63,7 @@ export const monitorGraph = function (
   this.canvas = canvas;
   this.ctx = canvas.getContext("2d");
   this.initconfig = initconfig;
+  this.selected = false;
 };
 
 monitorGraph.prototype = {
@@ -109,18 +110,6 @@ monitorGraph.prototype = {
       return "move";
     }
     return false;
-  },
-  _drawBorder:()=> {
-    let p = this.square
-    let ctx = this.ctx
-    this.ctx.save()
-    this.ctx.beginPath()
-    this.ctx.setStrokeStyle('orange')
-    this._draw_line(this.ctx, p[0], p[1])
-    this._draw_line(this.ctx, p[1], p[2])
-    this._draw_line(this.ctx, p[2], p[3])
-    this._draw_line(this.ctx, p[3], p[0])
-    ctx.restore()
   },
 
   // shapeDraw: function () {
@@ -208,6 +197,50 @@ monitorGraph.prototype = {
     );
     this.context.fill();
     this.context.restore();
+  },
+  _rotateSquare: function() {
+    this.square = [
+      this._rotatePoint(
+        this.x,
+        this.y,
+        this.centerX,
+        this.centerY,
+        this.rotate
+      ),
+      this._rotatePoint(
+        this.x + this.w,
+        this.y,
+        this.centerX,
+        this.centerY,
+        this.rotate
+      ),
+      this._rotatePoint(
+        this.x + this.w,
+        this.y + this.h,
+        this.centerX,
+        this.centerY,
+        this.rotate
+      ),
+      this._rotatePoint(
+        this.x,
+        this.y + this.h,
+        this.centerX,
+        this.centerY,
+        this.rotate
+      )
+    ]
+  },
+  _rotatePoint: function(x, y, centerX, centerY, degrees) {
+    // console.log(x, y, centerX, centerY, degrees)
+    let newX =
+      (x - centerX) * Math.cos((degrees * Math.PI) / 180) -
+      (y - centerY) * Math.sin((degrees * Math.PI) / 180) +
+      centerX
+    let newY =
+      (x - centerX) * Math.sin((degrees * Math.PI) / 180) +
+      (y - centerY) * Math.cos((degrees * Math.PI) / 180) +
+      centerY
+    return [newX, newY]
   },
   erase: function () {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);

@@ -17,6 +17,18 @@ export function Monitor(props) {
     monitorGraphs = [],
     monitorGraphsIn = [];
   window.monitorAction = ''
+
+  const drawBorder = (item) => {
+    monitorCtx.save()
+    monitorCtx.setLineDash([4, 5])
+    monitorCtx.lineWidth = 2
+    monitorCtx.strokeStyle = STROKE_COLOR
+    monitorCtx.translate(item.centerX, item.centerY)
+    monitorCtx.rotate(item.rotate)
+    monitorCtx.translate(-item.centerX, -item.centerY)
+    monitorCtx.strokeRect(item.x, item.y, item.w, item.h)
+    monitorCtx.restore()
+  }
   const addEvents = ()=>{
     canvasDom.addEventListener(
       "mousedown",
@@ -38,13 +50,40 @@ export function Monitor(props) {
             window.monitorAction = monitorAction;
           }
         });
-        console.log('monitorGraphsIn',monitorGraphsIn)
+        if (monitorGraphsIn.length > 0 ) {
+          console.log(monitorGraphsIn,'monitorGraphsIn')
+          monitorGraphsIn[monitorGraphsIn.length-1].selected = true
+        }else{
+          monitorGraphs.forEach((item, i) => {
+            item.selected = false
+          });
 
+        }
+        console.log('monitorGraphsIn',monitorGraphsIn)
+        console.log('monitorGraphs',monitorGraphs)
+        drawGraphs()
     });
     canvasDom.addEventListener(
       "mouseup",
       function (e) {
-        drawGraphs()
+        if (monitorGraphsIn[monitorGraphsIn.length - 1]) {
+          const shape = monitorGraphsIn[monitorGraphsIn.length - 1];
+          shape._rotateSquare()
+          monitorGraphsIn = []
+        }
+    });
+    canvasDom.addEventListener(
+      "mousemove",
+      function (e) {
+        if (monitorGraphsIn[monitorGraphsIn.length - 1]) {
+          const shape = monitorGraphsIn[monitorGraphsIn.length - 1];
+          shape.x += e.movementX;
+          shape.y += e.movementY;
+          shape.centerX += e.movementX;
+          shape.centerY += e.movementY;
+          // shape._rotateSquare()
+          drawGraphs();
+        }
     });
   }
   const initJson = () =>{
@@ -104,17 +143,13 @@ export function Monitor(props) {
     for (var i = 0; i < monitorGraphs.length; i++) {
       monitorGraphs[i].paint();
     }
-
-    if (monitorGraphsIn.length > 0) {
-      monitorCtx.save()
-      monitorCtx.setLineDash([4, 5])
-      monitorCtx.lineWidth = 1
-      monitorCtx.strokeStyle = STROKE_COLOR
-      monitorCtx.translate(monitorGraphsIn[0].centerX0, monitorGraphsIn[0].centerY0)
-      monitorCtx.rotate(monitorGraphsIn[0].thisRotate)
-      monitorCtx.translate(-monitorGraphsIn[0].centerX0, -monitorGraphsIn[0].centerY0)
-      monitorCtx.strokeRect(monitorGraphsIn[0].x, monitorGraphsIn[0].y, monitorGraphsIn[0].w, monitorGraphsIn[0].h)
+    const selectedItem = monitorGraphs.filter(item => item.selected == true)
+    console.log(selectedItem,'???')
+    if (selectedItem.length > 0) {
+      console.log('selectedItem???')
+      drawBorder(selectedItem[0])
     }
+
   };
   const initCanvas = async() =>{
     canvasDom = document.getElementById("monitor_canvas");
