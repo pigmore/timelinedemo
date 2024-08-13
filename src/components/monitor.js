@@ -1,27 +1,20 @@
 import { useState, useEffect, memo } from "react";
 import {fabric} from 'fabric'
 import { sample } from "./sample";
-import{drawCircleIcon} from './util'
-
+import{
+  drawCircleIcon,
+  loadImgProssse,
+  loadImgBySharp,
+  randomInt,
+} from './util'
+import { monitorGraph } from "./monitorGraph";
 
 export function Monitor(props) {
-  let monitorCanvas = null
+  var canvasDom = null,
+    monitorCtx = null,
+    monitorGraphs = []
   const addEvents = ()=>{
-    monitorCanvas.on('mouse:wheel', function(opt) {
-      var delta = opt.e.deltaY;
-      var pointer = monitorCanvas.getPointer(opt.e);
-      var zoom = monitorCanvas.getZoom();
-      zoom = zoom + delta/200;
-      if (zoom > 20) zoom = 20;
-      if (zoom < 0.01) zoom = 0.01;
-      monitorCanvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom);
-      opt.e.preventDefault();
-      opt.e.stopPropagation();
-    });
-    monitorCanvas.on('mouse:up', function(options) {
-      console.log(options);
-      console.log(options.e.clientX, options.e.clientY);
-    });
+
   }
   const initJson = () =>{
     var jsonTemp = [];
@@ -64,48 +57,53 @@ export function Monitor(props) {
       if (item.type === "image" || "avatar") {
         (function(item){
           console.log('DataURL: ',item.url);
-          // fabric.Image.fromURL(item.url, function (img) {
-          //     // var img = new fabric.Image(_img)
-          //     img.scaleToWidth(item.width);
-          //     img.scaleToHeight(item.height);
-          //     img.id = item.id
-          //     img.perPixelTargetFind = true
-          //
-          //    img.set({
-          //      left: item.offset_x,
-          //      top: item.offset_y,
-          //    });
-          //
-          //    monitorCanvas.add(img);
-          // },{
-          //     crossOrigin: 'Anonymous'
-          // });
 
-          fabric.util.loadImage(item.url, function (_img) {
-              var img = new fabric.Image(_img)
-              img.scaleToWidth(item.width);
-              img.scaleToHeight(item.height);
-              img.id = item.id
-              // img.perPixelTargetFind = true
 
-             img.set({
-               left: item.offset_x,
-               top: item.offset_y,
-             });
-
-             monitorCanvas.add(img);
-          });
-
-      })(item)
+        })(item)
 
          // monitorCanvas.renderAll();
 
       }
     }
-    console.log(monitorCanvas)
+    // console.log(monitorCanvas)
   }
-  const initCanvas = () =>{
-    
+  const drawGraphs = () => {
+    // console.log(timelineGraphs)
+    monitorCtx.clearRect(0, 0, canvasDom.width, canvasDom.height);
+    for (var i = 0; i < monitorGraphs.length; i++) {
+      monitorGraphs[i].paint();
+    }
+  };
+  const initCanvas = async() =>{
+    canvasDom = document.getElementById("monitor_canvas");
+    monitorCtx = canvasDom.getContext("2d");
+    for (var i = 0; i < 1; i++) {
+      // var typeTemp = ["Music", "Text", "Emojo", "Image", "Video"][
+      //   randomInt(0, 5)
+      // ];
+      var typeTemp = ["Image", "Image", "Image", "Image", "Image"][
+        randomInt(0, 5)
+      ];
+      var iconUrl = "https://static.website-files.org/assets/avatar/avatar/thumbnail/1716457024475-tristan_cloth1_20240522.webp";
+
+      var graph = new monitorGraph(
+        randomInt(0, 500),
+        randomInt(0, 500),
+        randomInt(10, 500),
+        randomInt(10, 500),
+        randomInt(0, 3),
+        typeTemp,
+        typeTemp,
+        // await loadImgProssse(canvasDom, iconUrl),
+        await loadImgBySharp(canvasDom, iconUrl),
+        canvasDom
+      );
+      // checkIfInsideLoop(graph);
+      console.log(graph)
+      monitorGraphs.push(graph);
+
+    }
+    drawGraphs()
       // initJson()
       // addEvents()
   }
@@ -113,12 +111,12 @@ export function Monitor(props) {
 
   useEffect(() => {
     async function init() {
-      if (window.initReady2 !== true) {
+      if (window.initMonitorReady !== true) {
         initCanvas();
       }
     }
     init();
-    window.initReady2 = true;
+    window.initMonitorReady = true;
   }, []);
 
 

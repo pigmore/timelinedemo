@@ -23,6 +23,8 @@ function App() {
 
   return (
     <div className="App">
+      <Monitormemo />
+
       <button
         onClick={() => {
           setCount((count) => count + 1);
@@ -51,7 +53,7 @@ function App() {
         scale:{scale}+1
       </button>
 
-      <Monitormemo />
+
       <Timelinememo redrawTrigger={redraw} />
 
       {

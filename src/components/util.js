@@ -1,4 +1,6 @@
-// import {util} from 'fabric'
+import axios from 'axios'
+import sharp from 'sharp'
+
 export const randomInt = (a, b) => {
   return parseInt(Math.random() * (b - a) + a);
 };
@@ -22,6 +24,14 @@ export const randomInt = (a, b) => {
     ctx.restore()
   }
 
+export async function loadImgBySharp(_canvas, _url) {
+  // axios for remote images- maybe fs for local images?
+  const imageResponse = await axios.get(_url, {
+          responseType: 'arraybuffer',
+        });
+
+  return await sharp(imageResponse.data).toFormat('png').toBuffer();
+}
 export function loadImgProssse(_canvas, _url) {
   return new Promise((resolve, reject) => {
     // let seal = _canvas.createImage()

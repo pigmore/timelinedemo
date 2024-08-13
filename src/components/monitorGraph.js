@@ -11,59 +11,77 @@ export const monitorGraph = function (
   y,
   w,
   h,
-  t,
+  r,
+  text,
   type,
-  icon,
-  fillStyle,
-  strokeStyle,
+  imageLoadedSrc,
   canvas,
-  graphShape,
+  initconfig = {
+    fontSize:0
+  }
 ) {
   this.id = uuid();
-  this.x = x;
-  this.y = y;
-  this.w = w;
-  this.h = h;
-  this.t = t;
-  this.type = type;
-  this.icon = icon;
-  this.fillStyle = fillStyle || "rgba(255, 255, 255 , 1)";
-  this.strokeStyle = strokeStyle || "rgba(255, 255, 255 , 1)";
   this.canvas = canvas;
-  this.context = canvas.getContext("2d");
-  this.canvasPos = canvas.getBoundingClientRect();
-  this.graphShape = graphShape;
+  this.ctx = canvas.getContext("2d");
+  if (type === 'Text') {
+    this.ctx.setFontSize(initconfig.fontSize || 16)
+    const textWidth = this.ctx.measureText(text).width
+    const textHeight = initconfig.fontSize + 10
+    this.centerX = x + textWidth / 2
+    this.centerY = y + textHeight / 2
+    this.w = textWidth
+    this.h = textHeight
+  } else {
+    this.centerX = x + w / 2
+    this.centerX0 = x + w / 2
+    this.centerY = y + h / 2
+    this.centerY0 = y + h / 2
+    this.w = w
+    this.w0 = w
+    this.h = h
+    this.h0 = h
+  }
+    this.x = x
+    this.x0 = x
+    this.y = y
+    this.y0 = y
+    this.r = r
+    this.r0 = r
+
+  // 4个顶点坐标
+  this.square = [
+    [this.x, this.y],
+    [this.x + this.w, this.y],
+    [this.x + this.w, this.y + this.h],
+    [this.x, this.y + this.h]
+  ]
+
+  this.text = text;
+  this.type = type;
+  this.imageLoadedSrc = imageLoadedSrc;
+  this.canvas = canvas;
+  this.ctx = canvas.getContext("2d");
+  this.initconfig = initconfig;
 };
 
 monitorGraph.prototype = {
   paint: function () {
-    this.context.save();
-    this.context.beginPath();
-    this.context.fillStyle = this.fillStyle || "rgba(255, 255, 255 , 1)";
-    this.context.strokeStyle = this.strokeStyle || "rgba(255, 255, 255 , 1)";
-    this.context.translate(window.timelineScrollX, 0);
-    this.shapeDrawWithCircle();
-    this.context.fill();
-    this.context.closePath();
-    if (this.w > 5) {
-      this.context.drawImage(
-        this.icon,
-        this.x * window.timelineXScale + 13,
-        this.y + 2,
-      );
+    this.ctx.save();
+
+    // 旋转元素
+    this.ctx.translate(this.centerX, this.centerY)
+    this.ctx.rotate((this.rotate * Math.PI) / 180)
+    switch (this.type) {
+      case 'Image':
+        this.ctx.translate(-this.centerX, -this.centerY)
+        this.ctx.drawImage(this.seal, this.x, this.y, this.w, this.h)
+        break;
+      default:
+
     }
 
-    if (this.w > 7) {
-      this.context.fillStyle = "rgba(255, 255, 255 , 1)";
-      this.context.font = "14px Arial";
-      this.context.fillText(
-        fitString(this.context, this.t, this.w * window.timelineXScale - 50),
-        this.x * window.timelineXScale + 38,
-        this.y + 17,
-      );
-    }
 
-    this.context.restore();
+    this.ctx.restore();
   },
   isMouseInGraph: function (mouse) {
     this.context.save();

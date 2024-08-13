@@ -45,8 +45,8 @@ import { timelineGraph } from "./timelineGraph";
 
 export function Timeline(props) {
   var canvasDom = null,
-    canvasCtx = null,
-    graphs = [],
+    timelineCtx = null,
+    timelineGraphs = [],
     graphAttr = [],
     xArray = [],
     tempGraphArr = [];
@@ -68,7 +68,7 @@ export function Timeline(props) {
     }
   };
   const checkIfInside = (_x, _w, _y, _id) => {
-    for (var item of graphs) {
+    for (var item of timelineGraphs) {
       if (_id === item.id) continue;
       if (_y >= item.y + 28 || _y <= item.y - 28) continue;
       if (_x >= item.x && _x < item.x + item.w) {
@@ -89,7 +89,7 @@ export function Timeline(props) {
 
   const exportJson = () => {
     let result = [];
-    for (var item of graphs) {
+    for (var item of timelineGraphs) {
       var temp = {
         x: (item.x * 100).toFixed(),
         y: (item.y / 28).toFixed(),
@@ -119,8 +119,8 @@ export function Timeline(props) {
     return false;
   };
 
-  const getXArray = (_graphs) => {
-    for (var item of _graphs) {
+  const getXArray = (_timelineGraphs) => {
+    for (var item of _timelineGraphs) {
       xArray.push(item.x);
       xArray.push(item.x + item.w);
     }
@@ -129,7 +129,7 @@ export function Timeline(props) {
     if (window.initReady) return false;
 
     canvasDom = document.getElementById("timeLineCanvas");
-    canvasCtx = canvasDom.getContext("2d");
+    timelineCtx = canvasDom.getContext("2d");
     window.initReady = true;
     window.timelineScrollX = 0;
     window.timelineXScale = 10;
@@ -187,9 +187,9 @@ export function Timeline(props) {
         "rectangle",
       );
       checkIfInsideLoop(graph);
-      graphs.push(graph);
+      timelineGraphs.push(graph);
     }
-
+    // addevents()
     canvasDom.addEventListener(
       "mousedown",
       function (e) {
@@ -202,7 +202,7 @@ export function Timeline(props) {
         if(Math.abs(e.offsetX - window.timelineScrollX - window.currentFrame * window.timelineXScale / 10) < 5){
           window.timelineAction = 'timeLinePointerMoving'
         }else{
-          graphs.forEach(function (shape) {
+          timelineGraphs.forEach(function (shape) {
             var offset = {
               x: mouse.x - shape.x,
               y: mouse.y - shape.y,
@@ -222,7 +222,7 @@ export function Timeline(props) {
 
         clearCanvas();
         drawGraph();
-        // getXArray(graphs)
+        // getXArray(timelineGraphs)
         e.preventDefault();
       },
       false,
@@ -316,14 +316,14 @@ export function Timeline(props) {
           drawGraph();
         }
         if (e.offsetY < 30) {
-          window.currentFrame = (e.offsetX - window.timelineScrollX) * 10 / window.timelineXScale 
+          window.currentFrame = (e.offsetX - window.timelineScrollX) * 10 / window.timelineXScale
           clearCanvas();
           drawGraph();
         }
 
 
         tempGraphArr = [];
-        getXArray(graphs);
+        getXArray(timelineGraphs);
         exportJson();
         window.timelineAction = "none";
       },
@@ -332,6 +332,7 @@ export function Timeline(props) {
     canvasDom.addEventListener(
       "mousewheel",
       function (e) {
+        e.preventDefault();
         // console.log(e);
         window.timelineScrollX = Math.min(
           Math.max(window.timelineScrollX + e.deltaY, -2400),
@@ -339,33 +340,33 @@ export function Timeline(props) {
         );
         clearCanvas();
         drawGraph();
-        getXArray(graphs);
+        getXArray(timelineGraphs);
         // console.log(e.window.scrollX)
       },
       false,
     );
 
     const clearCanvas = () => {
-      canvasCtx.clearRect(0, 0, canvasDom.width, canvasDom.height);
+      timelineCtx.clearRect(0, 0, canvasDom.width, canvasDom.height);
     }
     const drawGraph = () => {
-      // console.log(graphs)
-      canvasCtx.save();
-      canvasCtx.translate(window.timelineScrollX, 0);
-      drawScale(canvasCtx);
-      canvasCtx.restore();
-      for (var i = 0; i < graphs.length; i++) {
-        graphs[i].paint();
+      // console.log(timelineGraphs)
+      timelineCtx.save();
+      timelineCtx.translate(window.timelineScrollX, 0);
+      drawScale(timelineCtx);
+      timelineCtx.restore();
+      for (var i = 0; i < timelineGraphs.length; i++) {
+        timelineGraphs[i].paint();
       }
-      canvasCtx.save();
-      canvasCtx.translate(window.timelineScrollX, 0);
-      drawTimePointer(canvasCtx,window.currentFrame * window.timelineXScale / 10 ,canvasDom.height)
-      canvasCtx.restore();
+      timelineCtx.save();
+      timelineCtx.translate(window.timelineScrollX, 0);
+      drawTimePointer(timelineCtx,window.currentFrame * window.timelineXScale / 10 ,canvasDom.height)
+      timelineCtx.restore();
     };
     // const checkIfInside = () => {
-    //   // console.log(graphs)
-    //   for (var i = 0; i < graphs.length; i++) {
-    //     checkIfInside(graphs[i].x,graphs[i].w,graphs[i].y);
+    //   // console.log(timelineGraphs)
+    //   for (var i = 0; i < timelineGraphs.length; i++) {
+    //     checkIfInside(timelineGraphs[i].x,timelineGraphs[i].w,timelineGraphs[i].y);
     //   }
     // };
     window.redraw_function = () => {
@@ -376,8 +377,8 @@ export function Timeline(props) {
     window.initJsonForCanvas = (items) => {
       // clearCanvas();
 
-      canvasCtx.clearRect(0, 0, canvasDom.width, canvasDom.height);
-      graphs = [];
+      timelineCtx.clearRect(0, 0, canvasDom.width, canvasDom.height);
+      timelineGraphs = [];
       for (var item of items) {
         var graph = new timelineGraph(
           item.x / 100,
@@ -389,7 +390,7 @@ export function Timeline(props) {
           canvasDom,
           "rectangle",
         );
-        graphs.push(graph);
+        timelineGraphs.push(graph);
       }
 
       drawGraph();
