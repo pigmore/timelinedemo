@@ -3,6 +3,7 @@ import {
   fitString,
   drawRoundedRect,
   drawLine,
+  drawRect,
   drawDoubleLine,
   fillEdgeCircle,
 } from "./util.js";
@@ -79,33 +80,32 @@ monitorGraph.prototype = {
       default:
 
     }
-
-
     this.ctx.restore();
   },
+
   isMouseInGraph: function (mouse) {
-    this.context.save();
-    this.context.translate(window.timelineScrollX, 0);
+    this.ctx.save();
+    // this.ctx.translate(window.timelineScrollX, 0);
     // this.context.beginPath();
-    this.context.fillStyle = this.fillStyle || "rgba(255, 255, 255 , 1)";
-    this.shapeDraw();
-    this.context.restore();
-    if (this.context.isPointInPath(mouse.x, mouse.y)) {
-      if (
-        Math.abs(mouse.x - (this.x * window.timelineXScale + window.timelineScrollX)) < 10
-      ) {
-        return "edge0";
-      }
-      if (
-        Math.abs(
-          mouse.x -
-            (this.w * window.timelineXScale +
-              this.x * window.timelineXScale +
-              window.timelineScrollX),
-        ) < 10
-      ) {
-        return "edge1";
-      }
+    // this.context.fillStyle = this.fillStyle || "rgba(255, 255, 255 , 1)";
+    drawRect(this.ctx,this.square);
+    this.ctx.restore();
+    if (this.ctx.isPointInPath(mouse.x, mouse.y)) {
+      // if (
+      //   Math.abs(mouse.x - (this.x * window.timelineXScale + window.timelineScrollX)) < 10
+      // ) {
+      //   return "edge0";
+      // }
+      // if (
+      //   Math.abs(
+      //     mouse.x -
+      //       (this.w * window.timelineXScale +
+      //         this.x * window.timelineXScale +
+      //         window.timelineScrollX),
+      //   ) < 10
+      // ) {
+      //   return "edge1";
+      // }
       return "move";
     }
     return false;

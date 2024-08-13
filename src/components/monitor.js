@@ -13,9 +13,33 @@ import { monitorGraph } from "./monitorGraph";
 export function Monitor(props) {
   var canvasDom = null,
     monitorCtx = null,
-    monitorGraphs = []
+    monitorGraphs = [],
+    monitorGraphsIn = [];
+  window.monitorAction = ''
   const addEvents = ()=>{
+    canvasDom.addEventListener(
+      "mousedown",
+      function (e) {
+        console.log(e)
+        var mouse = {
+          x: e.clientX - canvasDom.getBoundingClientRect().left,
+          y: e.clientY - canvasDom.getBoundingClientRect().top,
+        };
+        monitorGraphsIn=[]
+        monitorGraphs.forEach(function (shape) {
+          var offset = {
+            x: mouse.x - shape.x,
+            y: mouse.y - shape.y,
+          };
+          var monitorAction = shape.isMouseInGraph(mouse);
+          if (monitorAction) {
+            monitorGraphsIn.push(shape);
+            window.monitorAction = monitorAction;
+          }
+        });
+        console.log('monitorGraphsIn',monitorGraphsIn)
 
+    });
   }
   const initJson = () =>{
     var jsonTemp = [];
@@ -106,7 +130,7 @@ export function Monitor(props) {
     }
     drawGraphs()
       // initJson()
-      // addEvents()
+    addEvents()
   }
 
 

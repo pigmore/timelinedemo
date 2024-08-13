@@ -98,9 +98,11 @@ export function drawDoubleLine(ctx, a, b, c, d, _strokeStyle) {
   ctx.moveTo(a, b);
   ctx.lineTo(c, d);
   ctx.stroke();
+  ctx.closePath();
   ctx.beginPath();
   ctx.moveTo(a + 4, b);
   ctx.lineTo(c + 4, d);
+  ctx.closePath();
   ctx.stroke();
 }
 export function drawTimePointer(ctx,x,h) {
@@ -197,6 +199,19 @@ export function drawLine(ctx, a, b, c, d, _color = "purple", _lineWidth = 1) {
   ctx.moveTo(a, b);
   ctx.lineTo(c, d);
   ctx.stroke();
+}
+export function drawRect(ctx, _square) {
+  const p = _square
+  ctx.beginPath();
+  ctx.moveTo(p[0][0], p[0][1]);
+  ctx.lineTo(p[1][0], p[1][1]);
+  ctx.lineTo(p[2][0], p[2][1]);
+  ctx.lineTo(p[3][0], p[3][1]);
+  ctx.closePath();
+  // ctx.stroke();
+  // ctx.fill();
+
+  return this;
 }
 export function drawRoundedRect(ctx, x, y, w, h, r) {
   if (w < 2 * r) r = Math.abs(w / 2);
