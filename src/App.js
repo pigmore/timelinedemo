@@ -54,11 +54,11 @@ function App() {
       </button>
 
 
-      <Timelinememo redrawTrigger={redraw} />
+
 
       {
         /*
-
+        <Timelinememo redrawTrigger={redraw} />
         <video controls id = "myStreamingVideo"></video>
 
         <iframe

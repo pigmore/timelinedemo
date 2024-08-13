@@ -4,8 +4,9 @@ import { sample } from "./sample";
 import{
   drawCircleIcon,
   loadImgProssse,
-  loadImgBySharp,
+  loadImgByDom,
   randomInt,
+  uuid,
 } from './util'
 import { monitorGraph } from "./monitorGraph";
 
@@ -95,7 +96,7 @@ export function Monitor(props) {
         typeTemp,
         typeTemp,
         // await loadImgProssse(canvasDom, iconUrl),
-        await loadImgBySharp(canvasDom, iconUrl),
+        await loadImgProssse(uuid(), iconUrl),
         canvasDom
       );
       // checkIfInsideLoop(graph);

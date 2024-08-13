@@ -74,7 +74,7 @@ monitorGraph.prototype = {
     switch (this.type) {
       case 'Image':
         this.ctx.translate(-this.centerX, -this.centerY)
-        this.ctx.drawImage(this.seal, this.x, this.y, this.w, this.h)
+        this.ctx.drawImage(this.imageLoadedSrc, this.x, this.y, this.w, this.h)
         break;
       default:
 
