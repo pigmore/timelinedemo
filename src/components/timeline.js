@@ -10,7 +10,7 @@ import iconText from "./icon/iconText.svg";
 import iconVideo from "./icon/iconVideo.svg";
 import iconVoice from "./icon/iconVoice.svg";
 import iconScript from "./icon/iconScript.svg";
-import { dragGraph } from "./dragGraph";
+import { timelineGraph } from "./timelineGraph";
 (function () {
   var table = {};
   window.canvasEventDriver = {};
@@ -173,7 +173,7 @@ export function Timeline(props) {
         default:
           color = "";
       }
-      var graph = new dragGraph(
+      var graph = new timelineGraph(
         randomInt(0, 124),
         randomInt(2, 6) * 28,
         randomInt(10, 40),
@@ -379,12 +379,12 @@ export function Timeline(props) {
       canvasCtx.clearRect(0, 0, canvasDom.width, canvasDom.height);
       graphs = [];
       for (var item of items) {
-        var graph = new dragGraph(
+        var graph = new timelineGraph(
           item.x / 100,
           item.y * 28,
           item.w / 100,
           24,
-          "dragGraph",
+          "timelineGraph",
           `rgba(${randomInt(0, 255)}, ${randomInt(0, 255)}, ${randomInt(0, 255)} , 1) `,
           canvasDom,
           "rectangle",

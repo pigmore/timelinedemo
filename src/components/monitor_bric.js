@@ -105,9 +105,26 @@ export function Monitor(props) {
     console.log(monitorCanvas)
   }
   const initCanvas = () =>{
-    
-      // initJson()
-      // addEvents()
+      // console.log(fabric)
+     monitorCanvas = new fabric.Canvas('monitor_canvas',{
+       preserveObjectStacking:true
+     });
+     // fabric.preserveObjectStacking = true
+     fabric.Object.prototype.originX = 'center'
+     fabric.Object.prototype.originY = 'center'
+     fabric.Object.prototype.transparentCorners = false
+     fabric.Object.prototype.cornerColor = '#20bf6b'
+     fabric.Object.prototype.cornerStyle = 'circle'
+     fabric.Object.prototype.borderColor = '#3782F7'
+     fabric.Object.prototype.cornerSize = 12
+     fabric.Object.prototype.borderScaleFactor = 0
+     fabric.Object.prototype.borderOpacityWhenMoving = 0.8
+     console.log(monitorCanvas)
+     // console.log(FabricObject)
+
+      monitorCanvas.renderAll();
+      initJson()
+      addEvents()
   }
 
 

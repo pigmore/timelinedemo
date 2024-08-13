@@ -51,12 +51,12 @@ function App() {
         scale:{scale}+1
       </button>
 
-
+      <Monitormemo />
       <Timelinememo redrawTrigger={redraw} />
 
       {
         /*
-        <Monitormemo />
+
         <video controls id = "myStreamingVideo"></video>
 
         <iframe

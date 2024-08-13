@@ -6,7 +6,7 @@ import {
   useImperativeHandle,
 } from "react";
 import { randomInt } from "./util";
-import { dragGraph } from "./dragGraph";
+import { timelineGraph } from "./timelineGraph";
 
 export const CallChild = forwardRef((props, ref) => {
   let mycount = 1;

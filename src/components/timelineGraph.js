@@ -6,7 +6,7 @@ import {
   drawDoubleLine,
   fillEdgeCircle,
 } from "./util.js";
-export const dragGraph = function (
+export const timelineGraph = function (
   x,
   y,
   w,
@@ -35,7 +35,7 @@ export const dragGraph = function (
   this.graphShape = graphShape;
 };
 
-dragGraph.prototype = {
+timelineGraph.prototype = {
   paint: function () {
     this.context.save();
     this.context.beginPath();

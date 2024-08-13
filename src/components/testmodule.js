@@ -7,7 +7,7 @@ import {
 } from "react";
 import { randomInt } from "./util";
 import { sample } from "./sample";
-import { dragGraph } from "./dragGraph";
+import { timelineGraph } from "./timelineGraph";
 
 export const Test = forwardRef((props, ref) => {
   let mycount = 1;
@@ -45,7 +45,7 @@ export const Test = forwardRef((props, ref) => {
   const handleInitJson = () => {
     var json = [];
     console.log(inputJson);
-    // new dragGraph(
+    // new timelineGraph(
     //   randomInt(0, 1200), //x
     //   randomInt(0, 280), //y
     //   randomInt(10, 40), //w
