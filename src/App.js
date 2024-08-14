@@ -23,12 +23,12 @@ function App() {
 
   return (
     <div className="App">
-
+      <Monitormemo />
 
       <button
         onClick={async () => {
           setCount((count) => count + 1);
-          await window.addeLEMENT_function()
+          await window.addElement_function()
         }}
       >
         {count}+1
@@ -60,7 +60,7 @@ function App() {
 
       {
         /*
-        <Monitormemo />
+
         <video controls id = "myStreamingVideo"></video>
 
         <iframe

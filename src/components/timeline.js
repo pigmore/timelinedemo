@@ -377,7 +377,7 @@ export function Timeline(props) {
       clearCanvas();
       drawGraph();
     };
-    window.addeLEMENT_function = async() => {
+    window.addElement_function = async() => {
       await addElement();
       clearCanvas();
       drawGraph();

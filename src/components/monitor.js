@@ -24,7 +24,7 @@ export function Monitor(props) {
     monitorCtx.lineWidth = 2
     monitorCtx.strokeStyle = STROKE_COLOR
     monitorCtx.translate(item.centerX, item.centerY)
-    monitorCtx.rotate(item.rotate)
+    monitorCtx.rotate((item.rotate * Math.PI) / 180)
     monitorCtx.translate(-item.centerX, -item.centerY)
     monitorCtx.strokeRect(item.x, item.y, item.w, item.h)
     monitorCtx.restore()
@@ -168,7 +168,7 @@ export function Monitor(props) {
         randomInt(0, 500),
         randomInt(10, 500),
         randomInt(10, 500),
-        randomInt(0, 3),
+        randomInt(0, 360),
         typeTemp,
         typeTemp,
         // await loadImgProssse(canvasDom, iconUrl),
