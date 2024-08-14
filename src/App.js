@@ -23,7 +23,7 @@ function App() {
 
   return (
     <div className="App">
-      <Monitormemo />
+
 
       <button
         onClick={async () => {
@@ -60,7 +60,7 @@ function App() {
 
       {
         /*
-
+        <Monitormemo />
         <video controls id = "myStreamingVideo"></video>
 
         <iframe
