@@ -84,6 +84,18 @@ monitorGraph.prototype = {
     this.ctx.restore();
   },
 
+  isinCorner: function (mouse) {
+    if (
+      Math.abs(mouse.x - this.square[0][0]) < 8 && Math.abs(mouse.y - this.square[0][1]) < 8
+      || Math.abs(mouse.x - this.square[1][0]) < 8 && Math.abs(mouse.y - this.square[1][1]) < 8
+      || Math.abs(mouse.x - this.square[2][0]) < 8 && Math.abs(mouse.y - this.square[2][1]) < 8
+      || Math.abs(mouse.x - this.square[3][0]) < 8 && Math.abs(mouse.y - this.square[3][1]) < 8
+
+    ) {
+      return true
+    }
+    return false
+  },
   isMouseInGraph: function (mouse) {
     this.ctx.save();
     // this.ctx.translate(window.timelineScrollX, 0);
@@ -91,24 +103,14 @@ monitorGraph.prototype = {
     // this.context.fillStyle = this.fillStyle || "rgba(255, 255, 255 , 1)";
     drawRect(this.ctx,this.square);
     this.ctx.restore();
+    if (this.isinCorner(mouse)){
+      return "scale"
+    }
     if (this.ctx.isPointInPath(mouse.x, mouse.y)) {
-      // if (
-      //   Math.abs(mouse.x - (this.x * window.timelineXScale + window.timelineScrollX)) < 10
-      // ) {
-      //   return "edge0";
-      // }
-      // if (
-      //   Math.abs(
-      //     mouse.x -
-      //       (this.w * window.timelineXScale +
-      //         this.x * window.timelineXScale +
-      //         window.timelineScrollX),
-      //   ) < 10
-      // ) {
-      //   return "edge1";
-      // }
+
       return "move";
     }
+
     return false;
   },
 
