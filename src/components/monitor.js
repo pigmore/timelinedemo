@@ -46,6 +46,10 @@ export function Monitor(props) {
 
 
         monitorGraphsIn=[]
+        monitorGraphs.forEach((item, i) => {
+          item.selected = false
+        });
+        selectedItem = []
         monitorGraphs.forEach(function (shape) {
           var offset = {
             x: mouseDownX - shape.x,
@@ -63,11 +67,6 @@ export function Monitor(props) {
         if (monitorGraphsIn.length > 0 ) {
           console.log(monitorGraphsIn,'monitorGraphsIn')
           monitorGraphsIn[monitorGraphsIn.length-1].selected = true
-        }else{
-          monitorGraphs.forEach((item, i) => {
-            item.selected = false
-          });
-          selectedItem = []
         }
         console.log('monitorGraphsIn',monitorGraphsIn)
         console.log('monitorGraphs',monitorGraphs)
@@ -145,6 +144,7 @@ export function Monitor(props) {
                   type: elementsItem.type,
                   url: elementsItem.url,
                   id: elementsItem.id,
+                  angle: elementsItem.angle,
                   scale_x: elementsItem.scale_x,
                   scale_y: elementsItem.scale_y,
                   width: elementsItem.width,
@@ -172,9 +172,24 @@ export function Monitor(props) {
 
     for (var item of jsonTemp) {
       if (item.type === "image" || "avatar") {
-        (function(item){
+        (async function(item){
           console.log('DataURL: ',item.url);
-
+          var graph = new monitorGraph(
+            item.offset_x,
+            item.offset_y,
+            item.width,
+            item.height,
+            item.angle,
+            item.scale_x,
+            item.type,
+            item.type,
+            // await loadImgProssse(canvasDom, iconUrl),
+            await loadImgProssse(uuid(), item.url),
+            canvasDom
+          );
+          // checkIfInsideLoop(graph);
+          console.log(graph)
+          monitorGraphs.push(graph);
 
         })(item)
 
@@ -206,10 +221,10 @@ export function Monitor(props) {
     canvasDom = document.getElementById("monitor_canvas");
     monitorCtx = canvasDom.getContext("2d");
     for (var i = 0; i < 1; i++) {
-      // var typeTemp = ["Music", "Text", "Emojo", "Image", "Video"][
+      // var typeTemp = ["Music", "Text", "Emojo", "image", "Video"][
       //   randomInt(0, 5)
       // ];
-      var typeTemp = ["Image", "Image", "Image", "Image", "Image"][
+      var typeTemp = ["image", "image", "image", "image", "image"][
         randomInt(0, 5)
       ];
       var iconUrl = "https://static.website-files.org/assets/avatar/avatar/thumbnail/1716457024475-tristan_cloth1_20240522.webp";
@@ -233,7 +248,7 @@ export function Monitor(props) {
 
     }
     drawGraphs()
-      // initJson()
+      initJson()
     addEvents()
   }
 

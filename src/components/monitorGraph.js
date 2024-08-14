@@ -76,7 +76,7 @@ monitorGraph.prototype = {
     this.ctx.translate(this.centerX, this.centerY)
     this.ctx.rotate((this.rotate * Math.PI) / 180)
     switch (this.type) {
-      case 'Image':
+      case 'image' || 'avatar':
         this.ctx.translate(-this.centerX, -this.centerY)
         this.ctx.drawImage(this.imageLoadedSrc, this.x, this.y, this.w, this.h)
         break;
@@ -244,7 +244,7 @@ monitorGraph.prototype = {
     console.log(diffXBefore,'diffXBefore')
     console.log(diffXAfter,'diffXAfter')
     const resize_rito = Math.min(diffXAfter/diffXBefore,diffYAfter/diffYBefore)
-    if (this.type === 'Image') {
+    if (this.type === 'image' || this.type === 'avatar') {
       // let resize_rito = lineB / lineA
       let new_w = currentGraph.w * resize_rito
       let new_h = currentGraph.h * resize_rito
