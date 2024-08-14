@@ -7,7 +7,7 @@ import { CallChild, CallChildMemo } from "./components/callChild";
 import { Test, Testmemo } from "./components/testmodule";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(12);
   const [redraw, setRedraw] = useState(0);
   const [scale, setScale] = useState(10);
   const myRef = useRef();
@@ -26,11 +26,13 @@ function App() {
       <Monitormemo />
 
       <button
-        onClick={() => {
+        onClick={async () => {
           setCount((count) => count + 1);
+          await window.addeLEMENT_function()
         }}
       >
         {count}+1
+
       </button>
       <button
         onClick={() => {

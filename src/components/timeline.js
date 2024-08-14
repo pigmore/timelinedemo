@@ -125,6 +125,58 @@ export function Timeline(props) {
       xArray.push(item.x + item.w);
     }
   };
+  const addElement= async() =>{
+    var typeTemp = ["Music", "Text", "Emojo", "Image", "Video"][
+      randomInt(0, 5)
+    ];
+    var color = "";
+    var strokeStyle = "";
+    var iconUrl = "";
+    switch (typeTemp) {
+      case "Music":
+        color = "rgba(140,26,255,0.6)";
+        strokeStyle = "rgba(140,26,255,1)";
+        iconUrl = iconMusic;
+        break;
+      case "Text":
+        color = "rgba(255,114,26,0.6)";
+        strokeStyle = "rgba(255,114,26,1)";
+        iconUrl = iconText;
+        break;
+      case "Emojo":
+        color = "rgba(242,73,143,0.6)";
+        strokeStyle = "rgba(242,73,143,1)";
+        iconUrl = iconEmojo;
+        break;
+      case "Image":
+        color = "rgba(0,217,109,0.6)";
+        strokeStyle = "rgba(0,217,109,1)";
+        iconUrl = iconImage;
+        break;
+      case "Video":
+        color = "rgba(0,170,255,0.6)";
+        strokeStyle = "rgba(0,170,255,1)";
+        iconUrl = iconVideo;
+        break;
+      default:
+        color = "";
+    }
+    var graph = new timelineGraph(
+      randomInt(0, 124),
+      randomInt(2, 6) * 28,
+      randomInt(10, 40),
+      24,
+      typeTemp,
+      typeTemp,
+      await loadImgProssse(canvasDom, iconUrl),
+      color,
+      strokeStyle,
+      canvasDom,
+      "rectangle",
+    );
+    checkIfInsideLoop(graph);
+    timelineGraphs.push(graph);
+  }
   const initCanvas = async () => {
     if (window.initReady) return false;
 
@@ -138,56 +190,7 @@ export function Timeline(props) {
     window.currentTime = 2000;
 
     for (var i = 0; i < 12; i++) {
-      var typeTemp = ["Music", "Text", "Emojo", "Image", "Video"][
-        randomInt(0, 5)
-      ];
-      var color = "";
-      var strokeStyle = "";
-      var iconUrl = "";
-      switch (typeTemp) {
-        case "Music":
-          color = "rgba(140,26,255,0.6)";
-          strokeStyle = "rgba(140,26,255,1)";
-          iconUrl = iconMusic;
-          break;
-        case "Text":
-          color = "rgba(255,114,26,0.6)";
-          strokeStyle = "rgba(255,114,26,1)";
-          iconUrl = iconText;
-          break;
-        case "Emojo":
-          color = "rgba(242,73,143,0.6)";
-          strokeStyle = "rgba(242,73,143,1)";
-          iconUrl = iconEmojo;
-          break;
-        case "Image":
-          color = "rgba(0,217,109,0.6)";
-          strokeStyle = "rgba(0,217,109,1)";
-          iconUrl = iconImage;
-          break;
-        case "Video":
-          color = "rgba(0,170,255,0.6)";
-          strokeStyle = "rgba(0,170,255,1)";
-          iconUrl = iconVideo;
-          break;
-        default:
-          color = "";
-      }
-      var graph = new timelineGraph(
-        randomInt(0, 124),
-        randomInt(2, 6) * 28,
-        randomInt(10, 40),
-        24,
-        typeTemp,
-        typeTemp,
-        await loadImgProssse(canvasDom, iconUrl),
-        color,
-        strokeStyle,
-        canvasDom,
-        "rectangle",
-      );
-      checkIfInsideLoop(graph);
-      timelineGraphs.push(graph);
+      await addElement()
     }
     // addevents()
     canvasDom.addEventListener(
@@ -371,6 +374,11 @@ export function Timeline(props) {
     //   }
     // };
     window.redraw_function = () => {
+      clearCanvas();
+      drawGraph();
+    };
+    window.addeLEMENT_function = async() => {
+      await addElement();
       clearCanvas();
       drawGraph();
     };
