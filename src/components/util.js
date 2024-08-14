@@ -6,6 +6,7 @@ export const drawEdgePoint = (ctx, x, y, w,h) => {
   drawCircleIcon(ctx, x+w, y)
   drawCircleIcon(ctx, x+w, y+h)
   drawCircleIcon(ctx, x, y+h)
+  drawCircleIcon(ctx, x+ w/2, y-30)
 }
 export const randomInt = (a, b) => {
   return parseInt(Math.random() * (b - a) + a);

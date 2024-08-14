@@ -86,6 +86,16 @@ monitorGraph.prototype = {
     this.ctx.restore();
   },
 
+  isinRotate: function (x,y) {
+    if (
+      Math.abs(x - ((this.square[1][0] - this.square[0][0]) / 2 + this.square[0][0] + Math.sin((this.rotate * Math.PI) / 180) * 30)) < 8
+      && Math.abs(y - ((this.square[1][1] - this.square[0][1]) / 2 + this.square[0][1] - Math.cos((this.rotate * Math.PI) / 180) * 30)) < 8
+
+    ) {
+      return true
+    }
+    return false
+  },
   isinCorner: function (x,y) {
     if (
       Math.abs(x - this.square[0][0]) < 8 && Math.abs(y - this.square[0][1]) < 8
@@ -107,6 +117,9 @@ monitorGraph.prototype = {
     this.ctx.restore();
     if (this.isinCorner(mouse.x, mouse.y)){
       return "scale"
+    }
+    if (this.isinRotate(mouse.x, mouse.y)){
+      return "rotate"
     }
     if (this.ctx.isPointInPath(mouse.x, mouse.y)) {
 

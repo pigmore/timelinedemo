@@ -86,11 +86,13 @@ export function Monitor(props) {
     canvasDom.addEventListener(
       "mousemove",
       function (e) {
-        if(
-          selectedItem.length > 0 && selectedItem[0].isinCorner(e.offsetX,e.offsetY)){
-          canvasDom.style.cursor="pointer"
-        }else{
-          canvasDom.style.cursor="auto"
+        if(selectedItem.length > 0 ){
+            if(selectedItem[0].isinCorner(e.offsetX,e.offsetY) || selectedItem[0].isinRotate(e.offsetX,e.offsetY)){
+              canvasDom.style.cursor="pointer"
+            }
+          else{
+            canvasDom.style.cursor="auto"
+          }
         }
         if (monitorGraphsIn[monitorGraphsIn.length - 1]) {
           const shape = monitorGraphsIn[monitorGraphsIn.length - 1];
