@@ -112,7 +112,8 @@ export function Monitor(props) {
               e.offsetY,
               currentGraph
             )
-
+              drawGraphs();
+              break;
             case 'rotate':
               shape.rotateAction(
                 mouseDownX,
@@ -121,10 +122,10 @@ export function Monitor(props) {
                 e.offsetY,
                 currentGraph
               )
+              drawGraphs();
+              break;
             // console.log(shape.x,'shape.x')
             // console.log(shape.y,'shape.y')
-            drawGraphs();
-              break;
             default:
 
           }
