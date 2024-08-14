@@ -199,6 +199,21 @@ monitorGraph.prototype = {
       centerY
     return [newX, newY]
   },
+  rotateAction(px, py, x, y, currentGraph) {
+    const diffXBefore = px - this.centerX
+    const diffYBefore = py - this.centerY
+    const diffXAfter = x - this.centerX
+    const diffYAfter = y - this.centerY
+
+    const angleBefore = (Math.atan2(diffYBefore, diffXBefore) / Math.PI) * 180
+    const angleAfter = (Math.atan2(diffYAfter, diffXAfter) / Math.PI) * 180
+
+    this.rotate = currentGraph.rotate + angleAfter - angleBefore
+    if (Math.abs(this.rotate % 360) < 3) {
+      this.rotate = 0.0
+    }
+  },
+
   transform(px, py, x, y, currentGraph) {
     // 获取选择区域的宽度高度
     if (this.type === 'text') {

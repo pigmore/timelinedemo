@@ -112,8 +112,16 @@ export function Monitor(props) {
               e.offsetX,
               e.offsetY,
               currentGraph
-
             )
+
+            case 'rotate':
+              shape.rotateAction(
+                mouseDownX,
+                mouseDownY,
+                e.offsetX,
+                e.offsetY,
+                currentGraph
+              )
             // console.log(shape.x,'shape.x')
             // console.log(shape.y,'shape.y')
             drawGraphs();
