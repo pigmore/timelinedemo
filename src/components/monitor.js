@@ -44,7 +44,7 @@ export function Monitor(props) {
         mouseDownX = e.clientX - canvasDom.getBoundingClientRect().left
         mouseDownY = e.clientY - canvasDom.getBoundingClientRect().top
 
-
+        monitorAction = ''
         monitorGraphsIn=[]
         monitorGraphs.forEach((item, i) => {
           item.selected = false
@@ -60,8 +60,6 @@ export function Monitor(props) {
             monitorGraphsIn.push(shape);
             monitorAction = _monitorActiontemp;
             currentGraph = cloneDeep(shape)
-          }else{
-            monitorAction = ''
           }
         });
         if (monitorGraphsIn.length > 0 ) {
@@ -95,12 +93,14 @@ export function Monitor(props) {
         }
         if (monitorGraphsIn[monitorGraphsIn.length - 1]) {
           const shape = monitorGraphsIn[monitorGraphsIn.length - 1];
+          console.log(monitorAction,'monitorAction')
           switch (monitorAction) {
             case 'move':
             shape.x += e.movementX;
             shape.y += e.movementY;
             shape.centerX += e.movementX;
             shape.centerY += e.movementY;
+            console.log(shape,'move')
             // shape._rotateSquare()
             drawGraphs();
               break;
@@ -175,8 +175,8 @@ export function Monitor(props) {
         (async function(item){
           console.log('DataURL: ',item.url);
           var graph = new monitorGraph(
-            item.offset_x,
-            item.offset_y,
+            item.offset_x - item.width/2,
+            item.offset_y - item.height/2,
             item.width,
             item.height,
             item.angle,
@@ -190,7 +190,7 @@ export function Monitor(props) {
           // checkIfInsideLoop(graph);
           console.log(graph)
           monitorGraphs.push(graph);
-
+          drawGraphs()
         })(item)
 
          // monitorCanvas.renderAll();

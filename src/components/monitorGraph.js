@@ -76,7 +76,11 @@ monitorGraph.prototype = {
     this.ctx.translate(this.centerX, this.centerY)
     this.ctx.rotate((this.rotate * Math.PI) / 180)
     switch (this.type) {
-      case 'image' || 'avatar':
+      case 'image':
+        this.ctx.translate(-this.centerX, -this.centerY)
+        this.ctx.drawImage(this.imageLoadedSrc, this.x, this.y, this.w, this.h)
+        break;
+      case 'avatar':
         this.ctx.translate(-this.centerX, -this.centerY)
         this.ctx.drawImage(this.imageLoadedSrc, this.x, this.y, this.w, this.h)
         break;
@@ -115,14 +119,17 @@ monitorGraph.prototype = {
     // this.context.fillStyle = this.fillStyle || "rgba(255, 255, 255 , 1)";
     drawRect(this.ctx,this.square);
     this.ctx.restore();
+    console.log('isMouseInGraph')
     if (this.isinCorner(mouse.x, mouse.y)){
+      console.log('scale')
       return "scale"
     }
     if (this.isinRotate(mouse.x, mouse.y)){
+      console.log('rotate')
       return "rotate"
     }
     if (this.ctx.isPointInPath(mouse.x, mouse.y)) {
-
+      console.log('move')
       return "move";
     }
 
