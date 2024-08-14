@@ -16,6 +16,7 @@ export function Monitor(props) {
   var canvasDom = null,
     monitorCtx = null,
     monitorGraphs = [],
+    selectedItem = [],
     monitorGraphsIn = [];
   window.monitorAction = ''
 
@@ -59,7 +60,7 @@ export function Monitor(props) {
           monitorGraphs.forEach((item, i) => {
             item.selected = false
           });
-
+          selectedItem = []
         }
         console.log('monitorGraphsIn',monitorGraphsIn)
         console.log('monitorGraphs',monitorGraphs)
@@ -71,14 +72,28 @@ export function Monitor(props) {
         if (monitorGraphsIn[monitorGraphsIn.length - 1]) {
           const shape = monitorGraphsIn[monitorGraphsIn.length - 1];
           shape._rotateSquare()
+
           monitorGraphsIn = []
         }
     });
     canvasDom.addEventListener(
       "mousemove",
       function (e) {
+        if(
+          selectedItem.length > 0 &&(
+          Math.abs(e.offsetX - selectedItem[0].square[0][0]) < 5 && Math.abs(e.offsetY - selectedItem[0].square[0][1]) < 5
+          || Math.abs(e.offsetX - selectedItem[0].square[1][0]) < 5 && Math.abs(e.offsetY - selectedItem[0].square[1][1]) < 5
+          || Math.abs(e.offsetX - selectedItem[0].square[2][0]) < 5 && Math.abs(e.offsetY - selectedItem[0].square[2][1]) < 5
+          || Math.abs(e.offsetX - selectedItem[0].square[3][0]) < 5 && Math.abs(e.offsetY - selectedItem[0].square[3][1]) < 5
+
+        )){
+          canvasDom.style.cursor="pointer"
+        }else{
+          canvasDom.style.cursor="auto"
+        }
         if (monitorGraphsIn[monitorGraphsIn.length - 1]) {
           const shape = monitorGraphsIn[monitorGraphsIn.length - 1];
+
           shape.x += e.movementX;
           shape.y += e.movementY;
           shape.centerX += e.movementX;
@@ -145,11 +160,15 @@ export function Monitor(props) {
     for (var i = 0; i < monitorGraphs.length; i++) {
       monitorGraphs[i].paint();
     }
-    const selectedItem = monitorGraphs.filter(item => item.selected == true)
-    console.log(selectedItem,'???')
+
+
     if (selectedItem.length > 0) {
-      console.log('selectedItem???')
       drawBorder(selectedItem[0])
+    }else{
+      selectedItem = monitorGraphs.filter(item => item.selected == true)
+      if (selectedItem.length > 0) {
+        drawBorder(selectedItem[0])
+      }
     }
 
   };

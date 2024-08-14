@@ -21,6 +21,7 @@ export const randomInt = (a, b) => {
     // ctx.rotate(util.degreesToRadians(fabricObject.angle))
     ctx.beginPath()
     ctx.arc(0, 0, 8, 0, 2 * Math.PI)
+    ctx.closePath()
     ctx.shadowColor = '#333333'
     ctx.shadowBlur = 3
     ctx.fillStyle = '#ffffff'
