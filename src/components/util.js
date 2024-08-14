@@ -1,6 +1,12 @@
 // import axios from 'axios'
 // import sharp from 'sharp'
 
+export const drawEdgePoint = (ctx, x, y, w,h) => {
+  drawCircleIcon(ctx, x, y)
+  drawCircleIcon(ctx, x+w, y)
+  drawCircleIcon(ctx, x+w, y+h)
+  drawCircleIcon(ctx, x, y+h)
+}
 export const randomInt = (a, b) => {
   return parseInt(Math.random() * (b - a) + a);
 };
@@ -8,9 +14,7 @@ export const randomInt = (a, b) => {
   export function drawCircleIcon(
     ctx: CanvasRenderingContext2D,
     left,
-    top,
-    __styleOverride,
-    fabricObject,
+    top
   ) {
     ctx.save()
     ctx.translate(left, top)

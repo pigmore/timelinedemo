@@ -5,6 +5,7 @@ import{
   drawCircleIcon,
   loadImgProssse,
   loadImgByDom,
+  drawEdgePoint,
   randomInt,
   uuid,
 } from './util'
@@ -27,6 +28,7 @@ export function Monitor(props) {
     monitorCtx.rotate((item.rotate * Math.PI) / 180)
     monitorCtx.translate(-item.centerX, -item.centerY)
     monitorCtx.strokeRect(item.x, item.y, item.w, item.h)
+    drawEdgePoint(monitorCtx,item.x, item.y, item.w, item.h)
     monitorCtx.restore()
   }
   const addEvents = ()=>{
