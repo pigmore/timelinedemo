@@ -13,6 +13,7 @@ export const monitorGraph = function (
   w,
   h,
   r,
+  s,
   text,
   type,
   imageLoadedSrc,
@@ -46,6 +47,7 @@ export const monitorGraph = function (
     this.x0 = x
     this.y = y
     this.y0 = y
+    this.scale = s
     this.rotate = r
     this.rotate0 = r
 
@@ -84,12 +86,12 @@ monitorGraph.prototype = {
     this.ctx.restore();
   },
 
-  isinCorner: function (mouse) {
+  isinCorner: function (x,y) {
     if (
-      Math.abs(mouse.x - this.square[0][0]) < 8 && Math.abs(mouse.y - this.square[0][1]) < 8
-      || Math.abs(mouse.x - this.square[1][0]) < 8 && Math.abs(mouse.y - this.square[1][1]) < 8
-      || Math.abs(mouse.x - this.square[2][0]) < 8 && Math.abs(mouse.y - this.square[2][1]) < 8
-      || Math.abs(mouse.x - this.square[3][0]) < 8 && Math.abs(mouse.y - this.square[3][1]) < 8
+      Math.abs(x - this.square[0][0]) < 8 && Math.abs(y - this.square[0][1]) < 8
+      || Math.abs(x - this.square[1][0]) < 8 && Math.abs(y - this.square[1][1]) < 8
+      || Math.abs(x - this.square[2][0]) < 8 && Math.abs(y - this.square[2][1]) < 8
+      || Math.abs(x - this.square[3][0]) < 8 && Math.abs(y - this.square[3][1]) < 8
 
     ) {
       return true
@@ -103,7 +105,7 @@ monitorGraph.prototype = {
     // this.context.fillStyle = this.fillStyle || "rgba(255, 255, 255 , 1)";
     drawRect(this.ctx,this.square);
     this.ctx.restore();
-    if (this.isinCorner(mouse)){
+    if (this.isinCorner(mouse.x, mouse.y)){
       return "scale"
     }
     if (this.ctx.isPointInPath(mouse.x, mouse.y)) {
@@ -114,67 +116,7 @@ monitorGraph.prototype = {
     return false;
   },
 
-  // shapeDraw: function () {
-  //   if (this.graphShape == "circle") {
-  //     this.context.arc(this.x, this.y, 50, 0, Math.PI * 2);
-  //   } else if (this.graphShape == "triangle") {
-  //     this.context.moveTo(this.x + 50, this.y + 50);
-  //     this.context.lineTo(this.x + 100, this.y + 130);
-  //     this.context.lineTo(this.x, this.y + 130);
-  //   } else {
-  //     drawRoundedRect(
-  //       this.context,
-  //       this.x * window.timelineXScale,
-  //       this.y,
-  //       this.w * window.timelineXScale,
-  //       this.h,
-  //       4,
-  //     );
-  //   }
-  // },
-  // shapeDrawWithCircle: function () {
-  //   if (this.graphShape == "circle") {
-  //     this.context.arc(this.x, this.y, 50, 0, Math.PI * 2);
-  //   } else if (this.graphShape == "triangle") {
-  //     this.context.moveTo(this.x + 50, this.y + 50);
-  //     this.context.lineTo(this.x + 100, this.y + 130);
-  //     this.context.lineTo(this.x, this.y + 130);
-  //   } else {
-  //     drawRoundedRect(
-  //       this.context,
-  //       this.x * window.timelineXScale,
-  //       this.y,
-  //       this.w * window.timelineXScale,
-  //       this.h,
-  //       4,
-  //     );
-  //     if (this.w > 1.5) {
-  //       drawDoubleLine(
-  //         this.context,
-  //         this.x * window.timelineXScale + 5,
-  //         this.y + 6,
-  //         this.x * window.timelineXScale + 5,
-  //         this.y + 18,
-  //         this.color,
-  //       );
-  //       drawDoubleLine(
-  //         this.context,
-  //         this.x * window.timelineXScale + this.w * window.timelineXScale - 10,
-  //         this.y + 6,
-  //         this.x * window.timelineXScale + this.w * window.timelineXScale - 10,
-  //         this.y + 18,
-  //         this.color,
-  //       );
-  //     }
-  //
-  //     // fillEdgeCircle(
-  //     //   this.context,
-  //     //   this.x * window.timelineXScale,
-  //     //   this.y,
-  //     //   this.w * window.timelineXScale,
-  //     // );
-  //   }
-  // },
+
   drawTheXAttach: function (_x) {
     // console.log('drawTheXAttach',_x)
     this.context.save();
@@ -243,6 +185,78 @@ monitorGraph.prototype = {
       (y - centerY) * Math.cos((degrees * Math.PI) / 180) +
       centerY
     return [newX, newY]
+  },
+  transform(px, py, x, y, currentGraph) {
+    // 获取选择区域的宽度高度
+    if (this.type === 'text') {
+      this.ctx.setFontSize(this.fontSize)
+      const textWidth = this.ctx.measureText(this.text).width
+      const textHeight = this.fontSize + 10
+      this.w = textWidth
+      this.h = textHeight
+      // 字体区域中心点不变，左上角位移
+      this.x = this.centerX - textWidth / 2
+      this.y = this.centerY - textHeight / 2
+    }
+
+    const diffXBefore = Math.abs(px - this.centerX)
+    const diffYBefore = Math.abs(py - this.centerY)
+    const diffXAfter = Math.abs(x - this.centerX)
+    const diffYAfter = Math.abs(y - this.centerY)
+
+    const angleBefore = (Math.atan2(diffYBefore, diffXBefore) / Math.PI) * 180
+    const angleAfter = (Math.atan2(diffYAfter, diffXAfter) / Math.PI) * 180
+
+    const lineA = Math.sqrt(
+      Math.pow(this.centerX - px, 2) + Math.pow(this.centerY - py, 2)
+    )
+    const lineB = Math.sqrt(
+      Math.pow(this.centerX - x, 2) + Math.pow(this.centerY - y, 2)
+    )
+    console.log(diffXBefore,'diffXBefore')
+    console.log(diffXAfter,'diffXAfter')
+    const resize_rito = Math.min(diffXAfter/diffXBefore,diffYAfter/diffYBefore)
+    if (this.type === 'Image') {
+      // let resize_rito = lineB / lineA
+      let new_w = currentGraph.w * resize_rito
+      let new_h = currentGraph.h * resize_rito
+      let new_s = currentGraph.s * resize_rito
+
+      // if (this.w < this.h && new_w < this.MIN_WIDTH) {
+      //   new_w = this.MIN_WIDTH
+      //   new_h = (this.MIN_WIDTH * this.h) / this.w
+      //   new_s = this.MIN_WIDTH / this.w * this.scale
+      // } else if (this.h < this.w && new_h < this.MIN_WIDTH) {
+      //   new_h = this.MIN_WIDTH
+      //   new_w = (this.MIN_WIDTH * this.w) / this.h
+      //   new_s = this.MIN_WIDTH / this.w * this.scale
+      // }
+      // this.x = this.x - (new_w - this.w) / 2
+      // this.y = this.y -(new_h - this.y) / 2
+      this.w = new_w
+      this.h = new_h
+      this.scale = new_s
+      this.x = this.centerX - new_w / 2
+      this.y = this.centerY - new_h / 2
+      // this.centerX = this.x + this.w / 2
+      // this.centerY = this.y + this.h / 2
+
+    }
+    // else if (this.type === 'text') {
+    //   const fontSize = currentGraph.fontSize * ((lineB - lineA) / lineA + 1)
+    //   this.fontSize =
+    //     fontSize <= this.MIN_FONTSIZE ? this.MIN_FONTSIZE : fontSize
+    //
+    //   // 旋转位移后重新计算坐标
+    //   this.ctx.setFontSize(this.fontSize)
+    //   const textWidth = this.ctx.measureText(this.text).width
+    //   const textHeight = this.fontSize + 10
+    //   this.w = textWidth
+    //   this.h = textHeight
+    //   // 字体区域中心点不变，左上角位移
+    //   this.x = this.centerX - textWidth / 2
+    //   this.y = this.centerY - textHeight / 2
+    // }
   },
   erase: function () {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);

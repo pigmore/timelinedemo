@@ -1,5 +1,6 @@
 import { useState, useEffect, memo } from "react";
 import {fabric} from 'fabric'
+import {cloneDeep} from 'lodash'
 import { sample } from "./sample";
 import{
   drawCircleIcon,
@@ -17,8 +18,11 @@ export function Monitor(props) {
     monitorCtx = null,
     monitorGraphs = [],
     selectedItem = [],
-    monitorGraphsIn = [];
-  window.monitorAction = ''
+    monitorGraphsIn = [],
+    mouseDownX = 0,
+    mouseDownY = 0,
+    currentGraph = {},
+    monitorAction = '';
 
   const drawBorder = (item) => {
     monitorCtx.save()
@@ -37,20 +41,23 @@ export function Monitor(props) {
       "mousedown",
       function (e) {
         console.log(e)
-        var mouse = {
-          x: e.clientX - canvasDom.getBoundingClientRect().left,
-          y: e.clientY - canvasDom.getBoundingClientRect().top,
-        };
+        mouseDownX = e.clientX - canvasDom.getBoundingClientRect().left
+        mouseDownY = e.clientY - canvasDom.getBoundingClientRect().top
+
+
         monitorGraphsIn=[]
         monitorGraphs.forEach(function (shape) {
           var offset = {
-            x: mouse.x - shape.x,
-            y: mouse.y - shape.y,
+            x: mouseDownX - shape.x,
+            y: mouseDownY - shape.y,
           };
-          var monitorAction = shape.isMouseInGraph(mouse);
-          if (monitorAction) {
+          var _monitorActiontemp = shape.isMouseInGraph({x:mouseDownX,y:mouseDownY});
+          if (_monitorActiontemp) {
             monitorGraphsIn.push(shape);
-            window.monitorAction = monitorAction;
+            monitorAction = _monitorActiontemp;
+            currentGraph = cloneDeep(shape)
+          }else{
+            monitorAction = ''
           }
         });
         if (monitorGraphsIn.length > 0 ) {
@@ -80,26 +87,39 @@ export function Monitor(props) {
       "mousemove",
       function (e) {
         if(
-          selectedItem.length > 0 &&(
-          Math.abs(e.offsetX - selectedItem[0].square[0][0]) < 5 && Math.abs(e.offsetY - selectedItem[0].square[0][1]) < 5
-          || Math.abs(e.offsetX - selectedItem[0].square[1][0]) < 5 && Math.abs(e.offsetY - selectedItem[0].square[1][1]) < 5
-          || Math.abs(e.offsetX - selectedItem[0].square[2][0]) < 5 && Math.abs(e.offsetY - selectedItem[0].square[2][1]) < 5
-          || Math.abs(e.offsetX - selectedItem[0].square[3][0]) < 5 && Math.abs(e.offsetY - selectedItem[0].square[3][1]) < 5
-
-        )){
+          selectedItem.length > 0 && selectedItem[0].isinCorner(e.offsetX,e.offsetY)){
           canvasDom.style.cursor="pointer"
         }else{
           canvasDom.style.cursor="auto"
         }
         if (monitorGraphsIn[monitorGraphsIn.length - 1]) {
           const shape = monitorGraphsIn[monitorGraphsIn.length - 1];
+          switch (monitorAction) {
+            case 'move':
+            shape.x += e.movementX;
+            shape.y += e.movementY;
+            shape.centerX += e.movementX;
+            shape.centerY += e.movementY;
+            // shape._rotateSquare()
+            drawGraphs();
+              break;
+            case 'scale':
+            shape.transform(
+              mouseDownX,
+              mouseDownY,
+              e.offsetX,
+              e.offsetY,
+              currentGraph
 
-          shape.x += e.movementX;
-          shape.y += e.movementY;
-          shape.centerX += e.movementX;
-          shape.centerY += e.movementY;
-          // shape._rotateSquare()
-          drawGraphs();
+            )
+            // console.log(shape.x,'shape.x')
+            // console.log(shape.y,'shape.y')
+            drawGraphs();
+              break;
+            default:
+
+          }
+
         }
     });
   }
@@ -190,6 +210,7 @@ export function Monitor(props) {
         randomInt(10, 500),
         randomInt(10, 500),
         randomInt(0, 360),
+        randomInt(0.5, 1),
         typeTemp,
         typeTemp,
         // await loadImgProssse(canvasDom, iconUrl),
