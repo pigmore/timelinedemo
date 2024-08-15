@@ -63,6 +63,19 @@ export function Timeline(props) {
     init();
     window.initReady = true;
   }, []);
+  const checkIfInsideMoveing = (_shape,mouseX,needtoPiant = true) => {
+    const _x = checkIfInsidemoving(_shape.x, _shape.w, _shape.y, _shape.id,mouseX)
+    console.log(_x)
+    if (_x>=0) {
+      if (needtoPiant) {
+        _shape.drawVirtuRect(_x)
+      }else{
+        _shape.x = _x
+      }
+      console.log(_shape.y);
+      // checkIfInsideLoop(_shape);
+    }
+  };
   const checkIfInsideLoop = (_shape) => {
     if (checkIfInside(_shape.x, _shape.w, _shape.y, _shape.id)) {
       _shape.y += 28;
@@ -88,6 +101,34 @@ export function Timeline(props) {
       }
     }
     return false;
+  };
+  const checkIfInsidemoving = (_x, _w, _y, _id,_mousex) => {
+    var inside = false
+    for (var item of timelineGraphs) {
+      if (_id === item.id) continue;
+      if (Math.floor((_y + 10) / 28) * 28 != item.y) continue;
+      if (_x >= item.x && _x < item.x + item.w) {
+        inside = true
+      }
+      else if (_x + _w > item.x && _x + _w <= item.x + item.w) {
+        inside = true
+      }
+      else if (_x > item.x && _x + _w < item.x + item.w) {
+        inside = true
+      }
+      else if (_x < item.x && _x + _w > item.x + item.w) {
+        inside = true
+      }
+      if (inside) {
+        if (_mousex / window.timelineXScale > item.x + item.w / 2){
+          return item.x + item.w
+        }else if (item.x - _w > 0){
+          return item.x - _w
+        }
+        return 0
+      }
+    }
+    return -1;
   };
 
   const exportJson = () => {
@@ -301,6 +342,9 @@ export function Timeline(props) {
               shape.x = x[0];
             }
             shape.drawTheLineonHover();
+            checkIfInsideMoveing(shape,e.offsetX)
+
+
             drawGraph();
             if (x) {
               shape.drawTheXAttach(x[1] ? shape.x + shape.w : shape.x);
@@ -318,6 +362,7 @@ export function Timeline(props) {
 
         if (shape) {
           shape.y = Math.floor((shape.y + 10) / 28) * 28;
+          checkIfInsideMoveing(shape,e.offsetX,false)
           checkIfInsideLoop(shape);
           shape.y = Math.floor((shape.y + 10) / 28) * 28;
 
@@ -393,7 +438,7 @@ export function Timeline(props) {
 
     }
     const drawGraph = () => {
-      console.log(timelineGraphs)
+      // console.log(timelineGraphs)
       timelineCtx.save();
       timelineCtx.translate(window.timelineScrollX, 0);
       drawScale(timelineCtx);

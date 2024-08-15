@@ -188,6 +188,21 @@ timelineGraph.prototype = {
     this.context.fill();
     this.context.restore();
   },
+  drawVirtuRect: function (_x) {
+    this.context.save();
+    this.context.fillStyle = this.fillStyle;
+    this.context.globalAlpha = 0.5
+    drawRoundedRect(
+      this.context,
+      _x * window.timelineXScale,
+      Math.floor((this.y + 10) / 28) * 28,
+      this.w * window.timelineXScale,
+      this.h,
+      4
+    );
+    this.context.fill();
+    this.context.restore();
+  },
   erase: function () {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
   },
