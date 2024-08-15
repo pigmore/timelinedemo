@@ -55,7 +55,7 @@ timelineGraph.prototype = {
 
     this.context.fill();
     this.context.closePath();
-    if (this.w > 5) {
+    if (this.w / 10 * window.timelineXScale > 5) {
       this.context.drawImage(
         this.icon,
         this.x * window.timelineXScale + 13,
@@ -63,7 +63,7 @@ timelineGraph.prototype = {
       );
     }
 
-    if (this.w > 7) {
+    if (this.w / 10 * window.timelineXScale > 7) {
       this.context.fillStyle = "rgba(255, 255, 255 , 1)";
       this.context.font = "14px Arial";
       this.context.fillText(
