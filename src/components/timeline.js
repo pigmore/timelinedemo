@@ -64,6 +64,7 @@ export function Timeline(props) {
     }
     init();
     window.initReady = true;
+    return ()=>{removeEvents()}
   }, []);
   const checkIfInsideMoveing = (_shape, mouseX, needtoPiant = true) => {
     const _x = checkIfInsidemoving(
