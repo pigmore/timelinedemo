@@ -33,6 +33,7 @@ export const timelineGraph = function (
   this.context = canvas.getContext("2d");
   this.canvasPos = canvas.getBoundingClientRect();
   this.graphShape = graphShape;
+  this.selected = false
 };
 
 timelineGraph.prototype = {
@@ -42,7 +43,15 @@ timelineGraph.prototype = {
     this.context.fillStyle = this.fillStyle || "rgba(255, 255, 255 , 1)";
     this.context.strokeStyle = this.strokeStyle || "rgba(255, 255, 255 , 1)";
     this.context.translate(window.timelineScrollX, 0);
+
     this.shapeDrawWithCircle();
+    if (this.selected == true) {
+      this.context.strokeStyle = 'rgba(255, 255, 255 , 1)'
+      this.context.fillStyle = 'rgba(255, 255, 255 , 0)'
+      this.context.globalCompositeOperation = "lighter"
+      this.shapeDraw();
+    }
+
     this.context.fill();
     this.context.closePath();
     if (this.w > 5) {

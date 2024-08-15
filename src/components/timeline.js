@@ -206,12 +206,14 @@ export function Timeline(props) {
           window.timelineAction = 'timeLinePointerMoving'
         }else{
           timelineGraphs.forEach(function (shape) {
+            shape.selected = false;
             var offset = {
               x: mouse.x - shape.x,
               y: mouse.y - shape.y,
             };
             var timelineAction = shape.isMouseInGraph(mouse);
             if (timelineAction) {
+              shape.selected = true;
               tempGraphArr.push(shape);
               window.timelineAction = timelineAction;
             } else {
