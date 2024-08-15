@@ -2,6 +2,8 @@ import { useState, useEffect, memo } from "react";
 import { randomInt,
   drawScale,
   drawTimePointer,
+  clone,
+  uuid,
   loadImgProssse } from "./util";
 import {cloneDeep} from 'lodash'
 import iconEmojo from "./icon/iconEmojo.svg";
@@ -362,7 +364,20 @@ export function Timeline(props) {
       timelineGraphs.forEach((item, i) => {
         if (item.selected) {
 
-          _item = cloneDeep(item)
+          _item = new timelineGraph(
+            item.x,
+            item.y,
+            item.w,
+            24,
+            item.t,
+            item.type,
+            item.icon,
+            item.fillStyle,
+            item.strokeStyle,
+            canvasDom,
+            "rectangle",
+          );
+          _item.id = uuid();
           _item.x = (window.currentFrame / 10)
           _item.w -= (window.currentFrame / 10) - item.x
           _index = i
@@ -370,12 +385,15 @@ export function Timeline(props) {
 
         }
       });
-      timelineGraphs.splice(i,0,_item)
-      clearCanvas()
-      drawGraph()
+      if (_index>=0) {
+        timelineGraphs.splice(_index,0,_item)
+        clearCanvas()
+        drawGraph()
+      }
+
     }
     const drawGraph = () => {
-      // console.log(timelineGraphs)
+      console.log(timelineGraphs)
       timelineCtx.save();
       timelineCtx.translate(window.timelineScrollX, 0);
       drawScale(timelineCtx);
