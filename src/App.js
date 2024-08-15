@@ -26,6 +26,13 @@ function App() {
       <Monitormemo />
 
       <button
+        onClick={ () => {
+           window.timelineCut_function()
+        }}
+      >
+        cut
+      </button>
+      <button
         onClick={async () => {
           setCount((count) => count + 1);
           await window.addElement_function()

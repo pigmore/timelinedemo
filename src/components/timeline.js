@@ -3,6 +3,7 @@ import { randomInt,
   drawScale,
   drawTimePointer,
   loadImgProssse } from "./util";
+import {cloneDeep} from 'lodash'
 import iconEmojo from "./icon/iconEmojo.svg";
 import iconImage from "./icon/iconImage.svg";
 import iconMusic from "./icon/iconMusic.svg";
@@ -355,6 +356,24 @@ export function Timeline(props) {
     const clearCanvas = () => {
       timelineCtx.clearRect(0, 0, canvasDom.width, canvasDom.height);
     }
+    const timelineCut = () => {
+      var _index = -1
+      var _item = {}
+      timelineGraphs.forEach((item, i) => {
+        if (item.selected) {
+
+          _item = cloneDeep(item)
+          _item.x = (window.currentFrame / 10)
+          _item.w -= (window.currentFrame / 10) - item.x
+          _index = i
+          item.w = (window.currentFrame / 10) - item.x
+
+        }
+      });
+      timelineGraphs.splice(i,0,_item)
+      clearCanvas()
+      drawGraph()
+    }
     const drawGraph = () => {
       // console.log(timelineGraphs)
       timelineCtx.save();
@@ -375,6 +394,9 @@ export function Timeline(props) {
     //     checkIfInside(timelineGraphs[i].x,timelineGraphs[i].w,timelineGraphs[i].y);
     //   }
     // };
+    window.timelineCut_function = () => {
+      timelineCut()
+    }
     window.redraw_function = () => {
       clearCanvas();
       drawGraph();

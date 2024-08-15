@@ -46,6 +46,7 @@ timelineGraph.prototype = {
 
     this.shapeDrawWithCircle();
     if (this.selected == true) {
+      this.context.strokeWidth = 2
       this.context.strokeStyle = 'rgba(255, 255, 255 , 1)'
       this.context.fillStyle = 'rgba(255, 255, 255 , 0)'
       this.context.globalCompositeOperation = "lighter"
