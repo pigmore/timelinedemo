@@ -1,6 +1,6 @@
 import logo from "./logo.svg";
 import "./App.css";
-import React, { useState, memo, useRef,useEffect } from "react";
+import React, { useState, memo, useRef, useEffect } from "react";
 import { Timelinememo } from "./components/timeline";
 import { Monitormemo } from "./components/monitor";
 import { CallChild, CallChildMemo } from "./components/callChild";
@@ -17,17 +17,13 @@ function App() {
   const handlemyRefCount = () => {
     myRef.current.callmycount();
   };
-  useEffect(() => {
-
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <div className="App">
-
-
       <button
-        onClick={ () => {
-           window.timelineCut_function()
+        onClick={() => {
+          window.timelineCut_function();
         }}
       >
         cut
@@ -35,11 +31,10 @@ function App() {
       <button
         onClick={async () => {
           setCount((count) => count + 1);
-          await window.addElement_function()
+          await window.addElement_function();
         }}
       >
         {count}+1
-
       </button>
       <button
         onClick={() => {
@@ -64,9 +59,7 @@ function App() {
 
       <Timelinememo redrawTrigger={redraw} />
 
-
-      {
-        /*
+      {/*
         <Monitormemo />
         <video controls id = "myStreamingVideo"></video>
 
@@ -78,13 +71,7 @@ function App() {
           allowFullScreen={true}
           id="stream-player"
         ></iframe>
-        */
-      }
-
-
-
-
-
+        */}
 
       {/*
         <button

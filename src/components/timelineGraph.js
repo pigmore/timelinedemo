@@ -33,7 +33,7 @@ export const timelineGraph = function (
   this.context = canvas.getContext("2d");
   this.canvasPos = canvas.getBoundingClientRect();
   this.graphShape = graphShape;
-  this.selected = false
+  this.selected = false;
 };
 
 timelineGraph.prototype = {
@@ -46,16 +46,16 @@ timelineGraph.prototype = {
 
     this.shapeDrawWithCircle();
     if (this.selected == true) {
-      this.context.strokeWidth = 2
-      this.context.strokeStyle = 'rgba(255, 255, 255 , 1)'
-      this.context.fillStyle = 'rgba(255, 255, 255 , 0)'
-      this.context.globalCompositeOperation = "lighter"
+      this.context.strokeWidth = 2;
+      this.context.strokeStyle = "rgba(255, 255, 255 , 1)";
+      this.context.fillStyle = "rgba(255, 255, 255 , 0)";
+      this.context.globalCompositeOperation = "lighter";
       this.shapeDraw();
     }
 
     this.context.fill();
     this.context.closePath();
-    if (this.w / 10 * window.timelineXScale > 5) {
+    if ((this.w / 10) * window.timelineXScale > 5) {
       this.context.drawImage(
         this.icon,
         this.x * window.timelineXScale + 13,
@@ -63,7 +63,7 @@ timelineGraph.prototype = {
       );
     }
 
-    if (this.w / 10 * window.timelineXScale > 7) {
+    if ((this.w / 10) * window.timelineXScale > 7) {
       this.context.fillStyle = "rgba(255, 255, 255 , 1)";
       this.context.font = "14px Arial";
       this.context.fillText(
@@ -84,7 +84,9 @@ timelineGraph.prototype = {
     this.context.restore();
     if (this.context.isPointInPath(mouse.x, mouse.y)) {
       if (
-        Math.abs(mouse.x - (this.x * window.timelineXScale + window.timelineScrollX)) < 10
+        Math.abs(
+          mouse.x - (this.x * window.timelineXScale + window.timelineScrollX),
+        ) < 10
       ) {
         return "edge0";
       }
@@ -191,14 +193,14 @@ timelineGraph.prototype = {
   drawVirtuRect: function (_x) {
     this.context.save();
     this.context.fillStyle = this.fillStyle;
-    this.context.globalAlpha = 0.5
+    this.context.globalAlpha = 0.5;
     drawRoundedRect(
       this.context,
       _x * window.timelineXScale,
       Math.floor((this.y + 10) / 28) * 28,
       this.w * window.timelineXScale,
       this.h,
-      4
+      4,
     );
     this.context.fill();
     this.context.restore();

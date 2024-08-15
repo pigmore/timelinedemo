@@ -12,34 +12,30 @@ export function clone(instance) {
   );
 }
 
-export const drawEdgePoint = (ctx, x, y, w,h) => {
-  drawCircleIcon(ctx, x, y)
-  drawCircleIcon(ctx, x+w, y)
-  drawCircleIcon(ctx, x+w, y+h)
-  drawCircleIcon(ctx, x, y+h)
-  drawCircleIcon(ctx, x+ w/2, y-30)
-}
+export const drawEdgePoint = (ctx, x, y, w, h) => {
+  drawCircleIcon(ctx, x, y);
+  drawCircleIcon(ctx, x + w, y);
+  drawCircleIcon(ctx, x + w, y + h);
+  drawCircleIcon(ctx, x, y + h);
+  drawCircleIcon(ctx, x + w / 2, y - 30);
+};
 export const randomInt = (a, b) => {
   return parseInt(Math.random() * (b - a) + a);
 };
 
-  export function drawCircleIcon(
-    ctx: CanvasRenderingContext2D,
-    left,
-    top
-  ) {
-    ctx.save()
-    ctx.translate(left, top)
-    // ctx.rotate(util.degreesToRadians(fabricObject.angle))
-    ctx.beginPath()
-    ctx.arc(0, 0, 8, 0, 2 * Math.PI)
-    ctx.closePath()
-    ctx.shadowColor = '#333333'
-    ctx.shadowBlur = 3
-    ctx.fillStyle = '#ffffff'
-    ctx.fill()
-    ctx.restore()
-  }
+export function drawCircleIcon(ctx, left, top) {
+  ctx.save();
+  ctx.translate(left, top);
+  // ctx.rotate(util.degreesToRadians(fabricObject.angle))
+  ctx.beginPath();
+  ctx.arc(0, 0, 8, 0, 2 * Math.PI);
+  ctx.closePath();
+  ctx.shadowColor = "#333333";
+  ctx.shadowBlur = 3;
+  ctx.fillStyle = "#ffffff";
+  ctx.fill();
+  ctx.restore();
+}
 
 export function loadImgProssse(_canvas, _url) {
   return new Promise((resolve, reject) => {
@@ -54,10 +50,10 @@ export function loadImgProssse(_canvas, _url) {
 }
 export function loadImgByDom(_id, _url) {
   return new Promise((resolve, reject) => {
-    let seal = document.createElement("img")
+    let seal = document.createElement("img");
     seal.setAttribute("id", _id);
-    seal.src = _url
-    document.body.appendChild(seal)
+    seal.src = _url;
+    document.body.appendChild(seal);
     // var seal = new Image();
     // seal.src = _url;
     seal.onload = () => {
@@ -122,15 +118,15 @@ export function drawDoubleLine(ctx, a, b, c, d, _strokeStyle) {
   ctx.closePath();
   ctx.stroke();
 }
-export function drawTimePointer(ctx,x,h) {
-  drawLine(ctx, x, 0, x, h, '#5297ff', 2);
-  ctx.fillStyle = '#5297ff'
+export function drawTimePointer(ctx, x, h) {
+  drawLine(ctx, x, 0, x, h, "#5297ff", 2);
+  ctx.fillStyle = "#5297ff";
   ctx.beginPath();
-  ctx.moveTo(x-5, 0);
-  ctx.lineTo(x+5, 0);
-  ctx.lineTo(x+5, 10);
-  ctx.lineTo(x+0, 15);
-  ctx.lineTo(x-5, 10);
+  ctx.moveTo(x - 5, 0);
+  ctx.lineTo(x + 5, 0);
+  ctx.lineTo(x + 5, 10);
+  ctx.lineTo(x + 0, 15);
+  ctx.lineTo(x - 5, 10);
   // ctx.lineTo(x-10, 20);
   ctx.closePath();
   // ctx.stroke();
@@ -138,9 +134,8 @@ export function drawTimePointer(ctx,x,h) {
 }
 export function drawScale(ctx) {
   for (var i = 0; i < 200; i++) {
-    if (window.timelineXScale <= 2 ) {
-      const _x = i * 30 * window.timelineXScale + 20
-
+    if (window.timelineXScale <= 2) {
+      const _x = i * 30 * window.timelineXScale + 20;
 
       if (i % 2 == 0) {
         drawLine(ctx, _x, 0, _x, 10, "white", 1);
@@ -150,10 +145,8 @@ export function drawScale(ctx) {
       } else {
         drawLine(ctx, _x, 0, _x, 7, "white", 1);
       }
-    }
-    else if (window.timelineXScale > 2 && window.timelineXScale <= 5 ) {
-      const _x = i * 6 * window.timelineXScale + 20
-
+    } else if (window.timelineXScale > 2 && window.timelineXScale <= 5) {
+      const _x = i * 6 * window.timelineXScale + 20;
 
       if (i % 5 == 0) {
         drawLine(ctx, _x, 0, _x, 10, "white", 1);
@@ -163,10 +156,8 @@ export function drawScale(ctx) {
       } else {
         drawLine(ctx, _x, 0, _x, 7, "white", 1);
       }
-    }
-    else if (window.timelineXScale > 5 && window.timelineXScale < 15){
-      const _x = i * 6 * window.timelineXScale + 20
-
+    } else if (window.timelineXScale > 5 && window.timelineXScale < 15) {
+      const _x = i * 6 * window.timelineXScale + 20;
 
       if (i % 2 == 0) {
         drawLine(ctx, _x, 0, _x, 10, "white", 1);
@@ -176,34 +167,29 @@ export function drawScale(ctx) {
       } else {
         drawLine(ctx, _x, 0, _x, 7, "white", 1);
       }
-    }
-    else if (window.timelineXScale >= 15 && window.timelineXScale < 25){
-      const _x = i * 3 * window.timelineXScale + 20
-
+    } else if (window.timelineXScale >= 15 && window.timelineXScale < 25) {
+      const _x = i * 3 * window.timelineXScale + 20;
 
       if (i % 2 == 0) {
         drawLine(ctx, _x, 0, _x, 10, "white", 1);
         ctx.fillStyle = "rgba(255, 255, 255 , 1)";
         ctx.font = "12px Arial";
-        ctx.fillText(secondTrans(i/2), _x - 16, 25);
+        ctx.fillText(secondTrans(i / 2), _x - 16, 25);
       } else {
         drawLine(ctx, _x, 0, _x, 7, "white", 1);
       }
-    }
-    else if (window.timelineXScale >= 25){
-      const _x = i * 1.5 * window.timelineXScale + 20
-
+    } else if (window.timelineXScale >= 25) {
+      const _x = i * 1.5 * window.timelineXScale + 20;
 
       if (i % 4 == 0) {
         drawLine(ctx, _x, 0, _x, 10, "white", 1);
         ctx.fillStyle = "rgba(255, 255, 255 , 1)";
         ctx.font = "12px Arial";
-        ctx.fillText(secondTrans(i/4), _x - 16, 25);
+        ctx.fillText(secondTrans(i / 4), _x - 16, 25);
       } else {
         drawLine(ctx, _x, 0, _x, 7, "white", 1);
       }
     }
-
   }
 }
 function secondTrans(_s) {
@@ -218,7 +204,7 @@ export function drawLine(ctx, a, b, c, d, _color = "purple", _lineWidth = 1) {
   ctx.stroke();
 }
 export function drawRect(ctx, _square) {
-  const p = _square
+  const p = _square;
   ctx.beginPath();
   ctx.moveTo(p[0][0], p[0][1]);
   ctx.lineTo(p[1][0], p[1][1]);

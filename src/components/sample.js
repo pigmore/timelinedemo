@@ -551,5 +551,5 @@ export const sample = {
     },
   ],
   duration: 19.722375,
-  draftId: false
+  draftId: false,
 };

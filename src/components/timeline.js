@@ -1,11 +1,13 @@
 import { useState, useEffect, memo } from "react";
-import { randomInt,
+import {
+  randomInt,
   drawScale,
   drawTimePointer,
   clone,
   uuid,
-  loadImgProssse } from "./util";
-import {cloneDeep} from 'lodash'
+  loadImgProssse,
+} from "./util";
+import { cloneDeep } from "lodash";
 import iconEmojo from "./icon/iconEmojo.svg";
 import iconImage from "./icon/iconImage.svg";
 import iconMusic from "./icon/iconMusic.svg";
@@ -63,14 +65,20 @@ export function Timeline(props) {
     init();
     window.initReady = true;
   }, []);
-  const checkIfInsideMoveing = (_shape,mouseX,needtoPiant = true) => {
-    const _x = checkIfInsidemoving(_shape.x, _shape.w, _shape.y, _shape.id,mouseX)
-    console.log(_x)
-    if (_x>=0) {
+  const checkIfInsideMoveing = (_shape, mouseX, needtoPiant = true) => {
+    const _x = checkIfInsidemoving(
+      _shape.x,
+      _shape.w,
+      _shape.y,
+      _shape.id,
+      mouseX,
+    );
+    console.log(_x);
+    if (_x >= 0) {
       if (needtoPiant) {
-        _shape.drawVirtuRect(_x)
-      }else{
-        _shape.x = _x
+        _shape.drawVirtuRect(_x);
+      } else {
+        _shape.x = _x;
       }
       console.log(_shape.y);
       // checkIfInsideLoop(_shape);
@@ -102,53 +110,30 @@ export function Timeline(props) {
     }
     return false;
   };
-  const checkIfInsidemoving = (_x, _w, _y, _id,_mousex) => {
-    var inside = false
+  const checkIfInsidemoving = (_x, _w, _y, _id, _mousex) => {
+    var inside = false;
     for (var item of timelineGraphs) {
       if (_id === item.id) continue;
       if (Math.floor((_y + 10) / 28) * 28 != item.y) continue;
       if (_x >= item.x && _x < item.x + item.w) {
-        inside = true
-      }
-      else if (_x + _w > item.x && _x + _w <= item.x + item.w) {
-        inside = true
-      }
-      else if (_x > item.x && _x + _w < item.x + item.w) {
-        inside = true
-      }
-      else if (_x < item.x && _x + _w > item.x + item.w) {
-        inside = true
+        inside = true;
+      } else if (_x + _w > item.x && _x + _w <= item.x + item.w) {
+        inside = true;
+      } else if (_x > item.x && _x + _w < item.x + item.w) {
+        inside = true;
+      } else if (_x < item.x && _x + _w > item.x + item.w) {
+        inside = true;
       }
       if (inside) {
-        if (_mousex / window.timelineXScale > item.x + item.w / 2){
-          return item.x + item.w
-        }else if (item.x - _w > 0){
-          return item.x - _w
+        if (_mousex / window.timelineXScale > item.x + item.w / 2) {
+          return item.x + item.w;
+        } else if (item.x - _w > 0) {
+          return item.x - _w;
         }
-        return 0
+        return 0;
       }
     }
     return -1;
-  };
-
-  const exportJson = () => {
-    let result = [];
-    for (var item of timelineGraphs) {
-      var temp = {
-        x: (item.x * 100).toFixed(),
-        y: (item.y / 28).toFixed(),
-        w: (item.w * 100).toFixed(),
-      };
-
-      result.push(temp);
-    }
-    window.mapJson = result;
-    window.canvasEventDriver.pop("update", result);
-    // window.canvasCallBack(result)
-    // let event = new Event("hello", {bubbles: true}); // (2)
-    // canvas.dispatchEvent(event);
-
-    return result;
   };
   const checkIfAttach = (_x, _w) => {
     for (var item of xArray) {
@@ -169,7 +154,38 @@ export function Timeline(props) {
       xArray.push(item.x + item.w);
     }
   };
-  const addElement= async() =>{
+  const timelineCut = () => {
+    var _index = -1;
+    var _item = {};
+    timelineGraphs.forEach((item, i) => {
+      if (item.selected) {
+        _item = new timelineGraph(
+          item.x,
+          item.y,
+          item.w,
+          24,
+          item.t,
+          item.type,
+          item.icon,
+          item.fillStyle,
+          item.strokeStyle,
+          canvasDom,
+          "rectangle",
+        );
+        _item.id = uuid();
+        _item.x = window.currentFrame / 10;
+        _item.w -= window.currentFrame / 10 - item.x;
+        _index = i;
+        item.w = window.currentFrame / 10 - item.x;
+      }
+    });
+    if (_index >= 0) {
+      timelineGraphs.splice(_index, 0, _item);
+      clearCanvas();
+      drawGraph();
+    }
+  };
+  const addElement = async () => {
     var typeTemp = ["Music", "Text", "Emojo", "Image", "Video"][
       randomInt(0, 5)
     ];
@@ -220,7 +236,265 @@ export function Timeline(props) {
     );
     checkIfInsideLoop(graph);
     timelineGraphs.push(graph);
-  }
+  };
+
+  const clearCanvas = () => {
+    timelineCtx.clearRect(0, 0, canvasDom.width, canvasDom.height);
+  };
+  const drawGraph = () => {
+    // console.log(timelineGraphs)
+    timelineCtx.save();
+    timelineCtx.translate(window.timelineScrollX, 0);
+    drawScale(timelineCtx);
+    timelineCtx.restore();
+    for (var i = 0; i < timelineGraphs.length; i++) {
+      timelineGraphs[i].paint();
+    }
+    timelineCtx.save();
+    timelineCtx.translate(window.timelineScrollX, 0);
+    drawTimePointer(
+      timelineCtx,
+      (window.currentFrame * window.timelineXScale) / 10,
+      canvasDom.height,
+    );
+    timelineCtx.restore();
+  };
+  const exportJson = () => {
+    let result = [];
+    for (var item of timelineGraphs) {
+      var temp = {
+        x: (item.x * 100).toFixed(),
+        y: (item.y / 28).toFixed(),
+        w: (item.w * 100).toFixed(),
+      };
+
+      result.push(temp);
+    }
+    window.mapJson = result;
+    window.canvasEventDriver.pop("update", result);
+    // window.canvasCallBack(result)
+    // let event = new Event("hello", {bubbles: true}); // (2)
+    // canvas.dispatchEvent(event);
+
+    return result;
+  };
+  let eventFunctions = {};
+  eventFunctions.mousedown = (e) => {
+    var mouse = {
+      x: e.offsetX,
+      y: e.offsetY,
+    };
+    // console.log(mouse.x);
+    xArray = [];
+    if (
+      Math.abs(
+        e.offsetX -
+          window.timelineScrollX -
+          (window.currentFrame * window.timelineXScale) / 10,
+      ) < 5
+    ) {
+      window.timelineAction = "timeLinePointerMoving";
+    } else {
+      timelineGraphs.forEach(function (shape) {
+        shape.selected = false;
+        var offset = {
+          x: mouse.x - shape.x,
+          y: mouse.y - shape.y,
+        };
+        var timelineAction = shape.isMouseInGraph(mouse);
+        if (timelineAction) {
+          shape.selected = true;
+          tempGraphArr.push(shape);
+          window.timelineAction = timelineAction;
+        } else {
+          xArray.push(shape.x);
+          xArray.push(shape.x + shape.w);
+        }
+        // shape.paint();
+      });
+    }
+    clearCanvas();
+    drawGraph();
+    // getXArray(timelineGraphs)
+    e.preventDefault();
+  };
+  eventFunctions.mousemove = (e) => {
+    var mouse = {
+      x: e.clientX - canvasDom.getBoundingClientRect().left,
+      y: e.clientY - canvasDom.getBoundingClientRect().top,
+    };
+    // hoverThePointer
+    if (
+      Math.abs(
+        e.offsetX -
+          window.timelineScrollX -
+          (window.currentFrame * window.timelineXScale) / 10,
+      ) < 5
+    ) {
+      canvasDom.style.cursor = "pointer";
+    } else {
+      canvasDom.style.cursor = "auto";
+    }
+
+    if (window.timelineAction == "timeLinePointerMoving") {
+      window.currentFrame += (e.movementX / window.timelineXScale) * 10;
+      clearCanvas();
+      drawGraph();
+    } else if (tempGraphArr[tempGraphArr.length - 1]) {
+      var shape = tempGraphArr[tempGraphArr.length - 1];
+      if (e.offsetX > canvasDom.width - 35 && window.timelineScrollX > -2400) {
+        if (window.timelineAction === "edge1") {
+          shape.w += 1 / window.timelineXScale;
+        } else {
+          shape.x += 1 / window.timelineXScale;
+        }
+
+        window.timelineScrollX -= 1;
+      } else if (e.offsetX < 35 && window.timelineScrollX < 0) {
+        shape.x -= 1 / window.timelineXScale;
+        window.timelineScrollX += 1;
+      }
+
+      // console.log('mouse.x',mouse.x)
+      // console.log('shape.w + shape.x',shape.w + shape.x)
+      // console.log('mouse.x - (shape.w + shape.x)',mouse.x - (shape.w + shape.x))
+
+      if (window.timelineAction === "edge0") {
+        shape.w = Math.max(
+          10 / window.timelineXScale,
+          shape.w - e.movementX / window.timelineXScale,
+        );
+        shape.x +=
+          shape.w == 10 / window.timelineXScale
+            ? 0
+            : e.movementX / window.timelineXScale;
+        clearCanvas();
+        drawGraph();
+      } else if (window.timelineAction === "edge1") {
+        shape.w = Math.max(
+          10 / window.timelineXScale,
+          shape.w + e.movementX / window.timelineXScale,
+        );
+
+        clearCanvas();
+        drawGraph();
+      } else if (window.timelineAction === "move") {
+        shape.x += e.movementX / window.timelineXScale;
+        const x = checkIfAttach(shape.x, shape.w);
+
+        shape.y += e.movementY;
+        clearCanvas();
+        if (x) {
+          shape.x = x[0];
+        }
+        shape.drawTheLineonHover();
+        checkIfInsideMoveing(shape, e.offsetX);
+
+        drawGraph();
+        if (x) {
+          shape.drawTheXAttach(x[1] ? shape.x + shape.w : shape.x);
+        }
+      }
+      exportJson();
+    }
+  };
+  eventFunctions.mouseup = (e) => {
+    var shape = tempGraphArr[tempGraphArr.length - 1];
+
+    if (shape) {
+      shape.y = Math.floor((shape.y + 10) / 28) * 28;
+      checkIfInsideMoveing(shape, e.offsetX, false);
+      checkIfInsideLoop(shape);
+      shape.y = Math.floor((shape.y + 10) / 28) * 28;
+
+      clearCanvas();
+      drawGraph();
+    }
+    if (e.offsetY < 30) {
+      window.currentFrame =
+        ((e.offsetX - window.timelineScrollX) * 10) / window.timelineXScale;
+      clearCanvas();
+      drawGraph();
+    }
+
+    tempGraphArr = [];
+    getXArray(timelineGraphs);
+    exportJson();
+    window.timelineAction = "none";
+  };
+  eventFunctions.mousewheel = (e) => {
+    e.preventDefault();
+    // console.log(e);
+    window.timelineScrollX = Math.min(
+      Math.max(window.timelineScrollX + e.deltaY, -2400),
+      0,
+    );
+    clearCanvas();
+    drawGraph();
+    getXArray(timelineGraphs);
+    // console.log(e.window.scrollX)
+  };
+
+  const addevents = () => {
+    canvasDom.addEventListener(
+      "mousedown",
+      (e) => {
+        eventFunctions.mousedown(e);
+      },
+      false,
+    );
+    canvasDom.addEventListener(
+      "mousemove",
+      (e) => {
+        eventFunctions.mousemove(e);
+      },
+      false,
+    );
+    canvasDom.addEventListener(
+      "mouseup",
+      (e) => {
+        eventFunctions.mouseup(e);
+      },
+      false,
+    );
+    canvasDom.addEventListener(
+      "mousewheel",
+      (e) => {
+        eventFunctions.mousewheel(e);
+      },
+      false,
+    );
+  };
+  const removeEvents = () => {
+    canvasDom.removeEventListener(
+      "mousedown",
+      (e) => {
+        eventFunctions.mousedown(e);
+      },
+      false,
+    );
+    canvasDom.removeEventListener(
+      "mousemove",
+      (e) => {
+        eventFunctions.mousemove(e);
+      },
+      false,
+    );
+    canvasDom.removeEventListener(
+      "mouseup",
+      (e) => {
+        eventFunctions.mouseup(e);
+      },
+      false,
+    );
+    canvasDom.removeEventListener(
+      "mousewheel",
+      (e) => {
+        eventFunctions.mousewheel(e);
+      },
+      false,
+    );
+  };
   const initCanvas = async () => {
     if (window.initReady) return false;
 
@@ -232,244 +506,18 @@ export function Timeline(props) {
     window.currentFrame = 120;
     window.videoFps = 60;
     window.currentTime = 2000;
-
-    for (var i = 0; i < 12; i++) {
-      await addElement()
-    }
-    // addevents()
-    canvasDom.addEventListener(
-      "mousedown",
-      function (e) {
-        var mouse = {
-          x: e.clientX - canvasDom.getBoundingClientRect().left,
-          y: e.clientY - canvasDom.getBoundingClientRect().top,
-        };
-        // console.log(mouse.x);
-        xArray = [];
-        if(Math.abs(e.offsetX - window.timelineScrollX - window.currentFrame * window.timelineXScale / 10) < 5){
-          window.timelineAction = 'timeLinePointerMoving'
-        }else{
-          timelineGraphs.forEach(function (shape) {
-            shape.selected = false;
-            var offset = {
-              x: mouse.x - shape.x,
-              y: mouse.y - shape.y,
-            };
-            var timelineAction = shape.isMouseInGraph(mouse);
-            if (timelineAction) {
-              shape.selected = true;
-              tempGraphArr.push(shape);
-              window.timelineAction = timelineAction;
-            } else {
-              xArray.push(shape.x);
-              xArray.push(shape.x + shape.w);
-            }
-            // shape.paint();
-          });
-        }
-
-
-        clearCanvas();
-        drawGraph();
-        // getXArray(timelineGraphs)
-        e.preventDefault();
-      },
-      false,
-    );
-    canvasDom.addEventListener(
-      "mousemove",
-      function (e) {
-        var mouse = {
-          x: e.clientX - canvasDom.getBoundingClientRect().left,
-          y: e.clientY - canvasDom.getBoundingClientRect().top,
-        };
-        // hoverThePointer
-        if(Math.abs(e.offsetX - window.timelineScrollX - window.currentFrame * window.timelineXScale / 10) < 5){
-          canvasDom.style.cursor="pointer"
-        }else{
-          canvasDom.style.cursor="auto"
-        }
-
-        if (window.timelineAction == 'timeLinePointerMoving') {
-          window.currentFrame += e.movementX / window.timelineXScale * 10
-          clearCanvas();
-          drawGraph();
-        }
-        else if (tempGraphArr[tempGraphArr.length - 1]) {
-          var shape = tempGraphArr[tempGraphArr.length - 1];
-          if (e.offsetX > canvasDom.width - 35 && window.timelineScrollX > -2400) {
-            if (window.timelineAction === "edge1") {
-              shape.w += 1 / window.timelineXScale;
-            } else {
-              shape.x += 1 / window.timelineXScale;
-            }
-
-            window.timelineScrollX -= 1;
-          }
-          else if (e.offsetX < 35 && window.timelineScrollX < 0) {
-            shape.x -= 1 / window.timelineXScale;
-            window.timelineScrollX += 1;
-          }
-
-          // console.log('mouse.x',mouse.x)
-          // console.log('shape.w + shape.x',shape.w + shape.x)
-          // console.log('mouse.x - (shape.w + shape.x)',mouse.x - (shape.w + shape.x))
-
-          if (window.timelineAction === "edge0") {
-            shape.w = Math.max(
-              10 / window.timelineXScale,
-              shape.w - e.movementX / window.timelineXScale,
-            );
-            shape.x +=
-              shape.w == 10 / window.timelineXScale ? 0 : e.movementX / window.timelineXScale;
-            clearCanvas();
-            drawGraph();
-          } else if (window.timelineAction === "edge1") {
-            shape.w = Math.max(
-              10 / window.timelineXScale,
-              shape.w + e.movementX / window.timelineXScale,
-            );
-
-            clearCanvas();
-            drawGraph();
-          } else if (window.timelineAction === "move") {
-            shape.x += e.movementX / window.timelineXScale;
-            const x = checkIfAttach(shape.x, shape.w);
-
-            shape.y += e.movementY;
-            clearCanvas();
-            if (x) {
-              shape.x = x[0];
-            }
-            shape.drawTheLineonHover();
-            checkIfInsideMoveing(shape,e.offsetX)
-
-
-            drawGraph();
-            if (x) {
-              shape.drawTheXAttach(x[1] ? shape.x + shape.w : shape.x);
-            }
-          }
-          exportJson();
-        }
-      },
-      false,
-    );
-    canvasDom.addEventListener(
-      "mouseup",
-      function (e) {
-        var shape = tempGraphArr[tempGraphArr.length - 1];
-
-        if (shape) {
-          shape.y = Math.floor((shape.y + 10) / 28) * 28;
-          checkIfInsideMoveing(shape,e.offsetX,false)
-          checkIfInsideLoop(shape);
-          shape.y = Math.floor((shape.y + 10) / 28) * 28;
-
-          clearCanvas();
-          drawGraph();
-        }
-        if (e.offsetY < 30) {
-          window.currentFrame = (e.offsetX - window.timelineScrollX) * 10 / window.timelineXScale
-          clearCanvas();
-          drawGraph();
-        }
-
-
-        tempGraphArr = [];
-        getXArray(timelineGraphs);
-        exportJson();
-        window.timelineAction = "none";
-      },
-      false,
-    );
-    canvasDom.addEventListener(
-      "mousewheel",
-      function (e) {
-        e.preventDefault();
-        // console.log(e);
-        window.timelineScrollX = Math.min(
-          Math.max(window.timelineScrollX + e.deltaY, -2400),
-          0,
-        );
-        clearCanvas();
-        drawGraph();
-        getXArray(timelineGraphs);
-        // console.log(e.window.scrollX)
-      },
-      false,
-    );
-
-    const clearCanvas = () => {
-      timelineCtx.clearRect(0, 0, canvasDom.width, canvasDom.height);
-    }
-    const timelineCut = () => {
-      var _index = -1
-      var _item = {}
-      timelineGraphs.forEach((item, i) => {
-        if (item.selected) {
-
-          _item = new timelineGraph(
-            item.x,
-            item.y,
-            item.w,
-            24,
-            item.t,
-            item.type,
-            item.icon,
-            item.fillStyle,
-            item.strokeStyle,
-            canvasDom,
-            "rectangle",
-          );
-          _item.id = uuid();
-          _item.x = (window.currentFrame / 10)
-          _item.w -= (window.currentFrame / 10) - item.x
-          _index = i
-          item.w = (window.currentFrame / 10) - item.x
-
-        }
-      });
-      if (_index>=0) {
-        timelineGraphs.splice(_index,0,_item)
-        clearCanvas()
-        drawGraph()
-      }
-
-    }
-    const drawGraph = () => {
-      // console.log(timelineGraphs)
-      timelineCtx.save();
-      timelineCtx.translate(window.timelineScrollX, 0);
-      drawScale(timelineCtx);
-      timelineCtx.restore();
-      for (var i = 0; i < timelineGraphs.length; i++) {
-        timelineGraphs[i].paint();
-      }
-      timelineCtx.save();
-      timelineCtx.translate(window.timelineScrollX, 0);
-      drawTimePointer(timelineCtx,window.currentFrame * window.timelineXScale / 10 ,canvasDom.height)
-      timelineCtx.restore();
-    };
-    // const checkIfInside = () => {
-    //   // console.log(timelineGraphs)
-    //   for (var i = 0; i < timelineGraphs.length; i++) {
-    //     checkIfInside(timelineGraphs[i].x,timelineGraphs[i].w,timelineGraphs[i].y);
-    //   }
-    // };
     window.timelineCut_function = () => {
-      timelineCut()
-    }
+      timelineCut();
+    };
     window.redraw_function = () => {
       clearCanvas();
       drawGraph();
     };
-    window.addElement_function = async() => {
+    window.addElement_function = async () => {
       await addElement();
       clearCanvas();
       drawGraph();
     };
-
     window.initJsonForCanvas = (items) => {
       // clearCanvas();
 
@@ -492,12 +540,21 @@ export function Timeline(props) {
       drawGraph();
     };
 
+    for (var i = 0; i < 12; i++) {
+      await addElement();
+    }
+    addevents();
     drawGraph();
   };
 
   return (
     <div>
-      <canvas id="timeLineCanvas" className="canvasBase" width="1500" height="300"></canvas>
+      <canvas
+        id="timeLineCanvas"
+        className="canvasBase"
+        width="1500"
+        height="300"
+      ></canvas>
     </div>
   );
 }

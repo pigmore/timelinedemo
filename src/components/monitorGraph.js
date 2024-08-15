@@ -19,45 +19,45 @@ export const monitorGraph = function (
   imageLoadedSrc,
   canvas,
   initconfig = {
-    fontSize:0
-  }
+    fontSize: 0,
+  },
 ) {
   this.id = uuid();
   this.canvas = canvas;
   this.ctx = canvas.getContext("2d");
-  if (type === 'Text') {
-    this.ctx.setFontSize(initconfig.fontSize || 16)
-    const textWidth = this.ctx.measureText(text).width
-    const textHeight = initconfig.fontSize + 10
-    this.centerX = x + textWidth / 2
-    this.centerY = y + textHeight / 2
-    this.w = textWidth
-    this.h = textHeight
+  if (type === "Text") {
+    this.ctx.setFontSize(initconfig.fontSize || 16);
+    const textWidth = this.ctx.measureText(text).width;
+    const textHeight = initconfig.fontSize + 10;
+    this.centerX = x + textWidth / 2;
+    this.centerY = y + textHeight / 2;
+    this.w = textWidth;
+    this.h = textHeight;
   } else {
-    this.centerX = x + w / 2
-    this.centerX0 = x + w / 2
-    this.centerY = y + h / 2
-    this.centerY0 = y + h / 2
-    this.w = w
-    this.w0 = w
-    this.h = h
-    this.h0 = h
+    this.centerX = x + w / 2;
+    this.centerX0 = x + w / 2;
+    this.centerY = y + h / 2;
+    this.centerY0 = y + h / 2;
+    this.w = w;
+    this.w0 = w;
+    this.h = h;
+    this.h0 = h;
   }
-    this.x = x
-    this.x0 = x
-    this.y = y
-    this.y0 = y
-    this.scale = s
-    this.rotate = r
-    this.rotate0 = r
+  this.x = x;
+  this.x0 = x;
+  this.y = y;
+  this.y0 = y;
+  this.scale = s;
+  this.rotate = r;
+  this.rotate0 = r;
 
   // 4个顶点坐标
   this.square = [
     [this.x, this.y],
     [this.x + this.w, this.y],
     [this.x + this.w, this.y + this.h],
-    [this.x, this.y + this.h]
-  ]
+    [this.x, this.y + this.h],
+  ];
 
   this.text = text;
   this.type = type;
@@ -73,69 +73,79 @@ monitorGraph.prototype = {
     this.ctx.save();
 
     // 旋转元素
-    this.ctx.translate(this.centerX, this.centerY)
-    this.ctx.rotate((this.rotate * Math.PI) / 180)
+    this.ctx.translate(this.centerX, this.centerY);
+    this.ctx.rotate((this.rotate * Math.PI) / 180);
     switch (this.type) {
-      case 'image':
-        this.ctx.translate(-this.centerX, -this.centerY)
-        this.ctx.drawImage(this.imageLoadedSrc, this.x, this.y, this.w, this.h)
+      case "image":
+        this.ctx.translate(-this.centerX, -this.centerY);
+        this.ctx.drawImage(this.imageLoadedSrc, this.x, this.y, this.w, this.h);
         break;
-      case 'avatar':
-        this.ctx.translate(-this.centerX, -this.centerY)
-        this.ctx.drawImage(this.imageLoadedSrc, this.x, this.y, this.w, this.h)
+      case "avatar":
+        this.ctx.translate(-this.centerX, -this.centerY);
+        this.ctx.drawImage(this.imageLoadedSrc, this.x, this.y, this.w, this.h);
         break;
       default:
-
     }
     this.ctx.restore();
   },
 
-  isinRotate: function (x,y) {
+  isinRotate: function (x, y) {
     if (
-      Math.abs(x - ((this.square[1][0] - this.square[0][0]) / 2 + this.square[0][0] + Math.sin((this.rotate * Math.PI) / 180) * 30)) < 8
-      && Math.abs(y - ((this.square[1][1] - this.square[0][1]) / 2 + this.square[0][1] - Math.cos((this.rotate * Math.PI) / 180) * 30)) < 8
-
+      Math.abs(
+        x -
+          ((this.square[1][0] - this.square[0][0]) / 2 +
+            this.square[0][0] +
+            Math.sin((this.rotate * Math.PI) / 180) * 30),
+      ) < 8 &&
+      Math.abs(
+        y -
+          ((this.square[1][1] - this.square[0][1]) / 2 +
+            this.square[0][1] -
+            Math.cos((this.rotate * Math.PI) / 180) * 30),
+      ) < 8
     ) {
-      return true
+      return true;
     }
-    return false
+    return false;
   },
-  isinCorner: function (x,y) {
+  isinCorner: function (x, y) {
     if (
-      Math.abs(x - this.square[0][0]) < 8 && Math.abs(y - this.square[0][1]) < 8
-      || Math.abs(x - this.square[1][0]) < 8 && Math.abs(y - this.square[1][1]) < 8
-      || Math.abs(x - this.square[2][0]) < 8 && Math.abs(y - this.square[2][1]) < 8
-      || Math.abs(x - this.square[3][0]) < 8 && Math.abs(y - this.square[3][1]) < 8
-
+      (Math.abs(x - this.square[0][0]) < 8 &&
+        Math.abs(y - this.square[0][1]) < 8) ||
+      (Math.abs(x - this.square[1][0]) < 8 &&
+        Math.abs(y - this.square[1][1]) < 8) ||
+      (Math.abs(x - this.square[2][0]) < 8 &&
+        Math.abs(y - this.square[2][1]) < 8) ||
+      (Math.abs(x - this.square[3][0]) < 8 &&
+        Math.abs(y - this.square[3][1]) < 8)
     ) {
-      return true
+      return true;
     }
-    return false
+    return false;
   },
   isMouseInGraph: function (mouse) {
     this.ctx.save();
     // this.ctx.translate(window.timelineScrollX, 0);
     // this.context.beginPath();
     // this.context.fillStyle = this.fillStyle || "rgba(255, 255, 255 , 1)";
-    drawRect(this.ctx,this.square);
+    drawRect(this.ctx, this.square);
     this.ctx.restore();
-    console.log('isMouseInGraph')
-    if (this.isinCorner(mouse.x, mouse.y)){
-      console.log('scale')
-      return "scale"
+    console.log("isMouseInGraph");
+    if (this.isinCorner(mouse.x, mouse.y)) {
+      console.log("scale");
+      return "scale";
     }
-    if (this.isinRotate(mouse.x, mouse.y)){
-      console.log('rotate')
-      return "rotate"
+    if (this.isinRotate(mouse.x, mouse.y)) {
+      console.log("rotate");
+      return "rotate";
     }
     if (this.ctx.isPointInPath(mouse.x, mouse.y)) {
-      console.log('move')
+      console.log("move");
       return "move";
     }
 
     return false;
   },
-
 
   drawTheXAttach: function (_x) {
     // console.log('drawTheXAttach',_x)
@@ -162,100 +172,103 @@ monitorGraph.prototype = {
     this.context.fill();
     this.context.restore();
   },
-  _rotateSquare: function() {
+  _rotateSquare: function () {
     this.square = [
       this._rotatePoint(
         this.x,
         this.y,
         this.centerX,
         this.centerY,
-        this.rotate
+        this.rotate,
       ),
       this._rotatePoint(
         this.x + this.w,
         this.y,
         this.centerX,
         this.centerY,
-        this.rotate
+        this.rotate,
       ),
       this._rotatePoint(
         this.x + this.w,
         this.y + this.h,
         this.centerX,
         this.centerY,
-        this.rotate
+        this.rotate,
       ),
       this._rotatePoint(
         this.x,
         this.y + this.h,
         this.centerX,
         this.centerY,
-        this.rotate
-      )
-    ]
+        this.rotate,
+      ),
+    ];
   },
-  _rotatePoint: function(x, y, centerX, centerY, degrees) {
+  _rotatePoint: function (x, y, centerX, centerY, degrees) {
     // console.log(x, y, centerX, centerY, degrees)
     let newX =
       (x - centerX) * Math.cos((degrees * Math.PI) / 180) -
       (y - centerY) * Math.sin((degrees * Math.PI) / 180) +
-      centerX
+      centerX;
     let newY =
       (x - centerX) * Math.sin((degrees * Math.PI) / 180) +
       (y - centerY) * Math.cos((degrees * Math.PI) / 180) +
-      centerY
-    return [newX, newY]
+      centerY;
+    return [newX, newY];
   },
   rotateAction(px, py, x, y, currentGraph) {
-    const diffXBefore = px - this.centerX
-    const diffYBefore = py - this.centerY
-    const diffXAfter = x - this.centerX
-    const diffYAfter = y - this.centerY
+    const diffXBefore = px - this.centerX;
+    const diffYBefore = py - this.centerY;
+    const diffXAfter = x - this.centerX;
+    const diffYAfter = y - this.centerY;
 
-    const angleBefore = (Math.atan2(diffYBefore, diffXBefore) / Math.PI) * 180
-    const angleAfter = (Math.atan2(diffYAfter, diffXAfter) / Math.PI) * 180
+    const angleBefore = (Math.atan2(diffYBefore, diffXBefore) / Math.PI) * 180;
+    const angleAfter = (Math.atan2(diffYAfter, diffXAfter) / Math.PI) * 180;
 
-    this.rotate = currentGraph.rotate + angleAfter - angleBefore
+    this.rotate = currentGraph.rotate + angleAfter - angleBefore;
     if (Math.abs(this.rotate % 360) < 3) {
-      this.rotate = 0.0
+      this.rotate = 0.0;
     }
   },
 
   transform(px, py, x, y, currentGraph) {
     // 获取选择区域的宽度高度
-    if (this.type === 'text') {
-      this.ctx.setFontSize(this.fontSize)
-      const textWidth = this.ctx.measureText(this.text).width
-      const textHeight = this.fontSize + 10
-      this.w = textWidth
-      this.h = textHeight
+    if (this.type === "text") {
+      this.ctx.setFontSize(this.fontSize);
+      const textWidth = this.ctx.measureText(this.text).width;
+      const textHeight = this.fontSize + 10;
+      this.w = textWidth;
+      this.h = textHeight;
       // 字体区域中心点不变，左上角位移
-      this.x = this.centerX - textWidth / 2
-      this.y = this.centerY - textHeight / 2
+      this.x = this.centerX - textWidth / 2;
+      this.y = this.centerY - textHeight / 2;
     }
 
-    const diffXBefore = Math.abs(px - this.centerX)
-    const diffYBefore = Math.abs(py - this.centerY)
-    const diffXAfter = Math.abs(x - this.centerX)
-    const diffYAfter = Math.abs(y - this.centerY)
+    const diffXBefore = Math.abs(px - this.centerX);
+    const diffYBefore = Math.abs(py - this.centerY);
+    const diffXAfter = Math.abs(x - this.centerX);
+    const diffYAfter = Math.abs(y - this.centerY);
 
-    const angleBefore = (Math.atan2(diffYBefore, diffXBefore) / Math.PI) * 180
-    const angleAfter = (Math.atan2(diffYAfter, diffXAfter) / Math.PI) * 180
+    const angleBefore = (Math.atan2(diffYBefore, diffXBefore) / Math.PI) * 180;
+    const angleAfter = (Math.atan2(diffYAfter, diffXAfter) / Math.PI) * 180;
 
     const lineA = Math.sqrt(
-      Math.pow(this.centerX - px, 2) + Math.pow(this.centerY - py, 2)
-    )
+      Math.pow(this.centerX - px, 2) + Math.pow(this.centerY - py, 2),
+    );
     const lineB = Math.sqrt(
-      Math.pow(this.centerX - x, 2) + Math.pow(this.centerY - y, 2)
-    )
-    console.log(diffXBefore,'diffXBefore')
-    console.log(diffXAfter,'diffXAfter')
-    const resize_rito = Math.min(diffXAfter/diffXBefore,diffYAfter/diffYBefore)
-    if (this.type === 'image' || this.type === 'avatar') {
+      Math.pow(this.centerX - x, 2) + Math.pow(this.centerY - y, 2),
+    );
+    console.log(diffXBefore, "diffXBefore");
+    console.log(diffXAfter, "diffXAfter");
+    const resize_rito = Math.min(
+      diffXAfter / diffXBefore,
+      diffYAfter / diffYBefore,
+    );
+    if (this.type === "image" || this.type === "avatar") {
       // let resize_rito = lineB / lineA
-      let new_w = currentGraph.w * resize_rito
-      let new_h = currentGraph.h * resize_rito
-      let new_s = currentGraph.s * resize_rito
+      let new_w = currentGraph.w * resize_rito;
+      let new_h = currentGraph.h * resize_rito;
+      let new_s = currentGraph.s * resize_rito;
 
       // if (this.w < this.h && new_w < this.MIN_WIDTH) {
       //   new_w = this.MIN_WIDTH
@@ -268,14 +281,13 @@ monitorGraph.prototype = {
       // }
       // this.x = this.x - (new_w - this.w) / 2
       // this.y = this.y -(new_h - this.y) / 2
-      this.w = new_w
-      this.h = new_h
-      this.scale = new_s
-      this.x = this.centerX - new_w / 2
-      this.y = this.centerY - new_h / 2
+      this.w = new_w;
+      this.h = new_h;
+      this.scale = new_s;
+      this.x = this.centerX - new_w / 2;
+      this.y = this.centerY - new_h / 2;
       // this.centerX = this.x + this.w / 2
       // this.centerY = this.y + this.h / 2
-
     }
     // else if (this.type === 'text') {
     //   const fontSize = currentGraph.fontSize * ((lineB - lineA) / lineA + 1)

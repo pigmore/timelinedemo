@@ -1,19 +1,19 @@
 import { useState, useEffect, memo } from "react";
-import {fabric} from 'fabric'
-import {cloneDeep} from 'lodash'
+import { fabric } from "fabric";
+import { cloneDeep } from "lodash";
 import { sample } from "./sample";
-import{
+import {
   drawCircleIcon,
   loadImgProssse,
   loadImgByDom,
   drawEdgePoint,
   randomInt,
   uuid,
-} from './util'
+} from "./util";
 import { monitorGraph } from "./monitorGraph";
 
 export function Monitor(props) {
-  const STROKE_COLOR = '#ff2b5d'
+  const STROKE_COLOR = "#ff2b5d";
   var canvasDom = null,
     monitorCtx = null,
     monitorGraphs = [],
@@ -22,118 +22,115 @@ export function Monitor(props) {
     mouseDownX = 0,
     mouseDownY = 0,
     currentGraph = {},
-    monitorAction = '';
+    monitorAction = "";
 
   const drawBorder = (item) => {
-    monitorCtx.save()
-    monitorCtx.setLineDash([4, 5])
-    monitorCtx.lineWidth = 2
-    monitorCtx.strokeStyle = STROKE_COLOR
-    monitorCtx.translate(item.centerX, item.centerY)
-    monitorCtx.rotate((item.rotate * Math.PI) / 180)
-    monitorCtx.translate(-item.centerX, -item.centerY)
-    monitorCtx.strokeRect(item.x, item.y, item.w, item.h)
-    drawEdgePoint(monitorCtx,item.x, item.y, item.w, item.h)
-    monitorCtx.restore()
-  }
-  const addEvents = ()=>{
-    canvasDom.addEventListener(
-      "mousedown",
-      function (e) {
-        console.log(e)
-        mouseDownX = e.clientX - canvasDom.getBoundingClientRect().left
-        mouseDownY = e.clientY - canvasDom.getBoundingClientRect().top
+    monitorCtx.save();
+    monitorCtx.setLineDash([4, 5]);
+    monitorCtx.lineWidth = 2;
+    monitorCtx.strokeStyle = STROKE_COLOR;
+    monitorCtx.translate(item.centerX, item.centerY);
+    monitorCtx.rotate((item.rotate * Math.PI) / 180);
+    monitorCtx.translate(-item.centerX, -item.centerY);
+    monitorCtx.strokeRect(item.x, item.y, item.w, item.h);
+    drawEdgePoint(monitorCtx, item.x, item.y, item.w, item.h);
+    monitorCtx.restore();
+  };
+  const addEvents = () => {
+    canvasDom.addEventListener("mousedown", function (e) {
+      console.log(e);
+      mouseDownX = e.clientX - canvasDom.getBoundingClientRect().left;
+      mouseDownY = e.clientY - canvasDom.getBoundingClientRect().top;
 
-        monitorAction = ''
-        monitorGraphsIn=[]
-        monitorGraphs.forEach((item, i) => {
-          item.selected = false
+      monitorAction = "";
+      monitorGraphsIn = [];
+      monitorGraphs.forEach((item, i) => {
+        item.selected = false;
+      });
+      selectedItem = [];
+      monitorGraphs.forEach(function (shape) {
+        var offset = {
+          x: mouseDownX - shape.x,
+          y: mouseDownY - shape.y,
+        };
+        var _monitorActiontemp = shape.isMouseInGraph({
+          x: mouseDownX,
+          y: mouseDownY,
         });
-        selectedItem = []
-        monitorGraphs.forEach(function (shape) {
-          var offset = {
-            x: mouseDownX - shape.x,
-            y: mouseDownY - shape.y,
-          };
-          var _monitorActiontemp = shape.isMouseInGraph({x:mouseDownX,y:mouseDownY});
-          if (_monitorActiontemp) {
-            monitorGraphsIn.push(shape);
-            monitorAction = _monitorActiontemp;
-            currentGraph = cloneDeep(shape)
-          }
-        });
-        if (monitorGraphsIn.length > 0 ) {
-          console.log(monitorGraphsIn,'monitorGraphsIn')
-          monitorGraphsIn[monitorGraphsIn.length-1].selected = true
+        if (_monitorActiontemp) {
+          monitorGraphsIn.push(shape);
+          monitorAction = _monitorActiontemp;
+          currentGraph = cloneDeep(shape);
         }
-        console.log('monitorGraphsIn',monitorGraphsIn)
-        console.log('monitorGraphs',monitorGraphs)
-        drawGraphs()
+      });
+      if (monitorGraphsIn.length > 0) {
+        console.log(monitorGraphsIn, "monitorGraphsIn");
+        monitorGraphsIn[monitorGraphsIn.length - 1].selected = true;
+      }
+      console.log("monitorGraphsIn", monitorGraphsIn);
+      console.log("monitorGraphs", monitorGraphs);
+      drawGraphs();
     });
-    canvasDom.addEventListener(
-      "mouseup",
-      function (e) {
-        if (monitorGraphsIn[monitorGraphsIn.length - 1]) {
-          const shape = monitorGraphsIn[monitorGraphsIn.length - 1];
-          shape._rotateSquare()
+    canvasDom.addEventListener("mouseup", function (e) {
+      if (monitorGraphsIn[monitorGraphsIn.length - 1]) {
+        const shape = monitorGraphsIn[monitorGraphsIn.length - 1];
+        shape._rotateSquare();
 
-          monitorGraphsIn = []
-        }
+        monitorGraphsIn = [];
+      }
     });
-    canvasDom.addEventListener(
-      "mousemove",
-      function (e) {
-        if(selectedItem.length > 0 ){
-            if(selectedItem[0].isinCorner(e.offsetX,e.offsetY) || selectedItem[0].isinRotate(e.offsetX,e.offsetY)){
-              canvasDom.style.cursor="pointer"
-            }
-          else{
-            canvasDom.style.cursor="auto"
-          }
+    canvasDom.addEventListener("mousemove", function (e) {
+      if (selectedItem.length > 0) {
+        if (
+          selectedItem[0].isinCorner(e.offsetX, e.offsetY) ||
+          selectedItem[0].isinRotate(e.offsetX, e.offsetY)
+        ) {
+          canvasDom.style.cursor = "pointer";
+        } else {
+          canvasDom.style.cursor = "auto";
         }
-        if (monitorGraphsIn[monitorGraphsIn.length - 1]) {
-          const shape = monitorGraphsIn[monitorGraphsIn.length - 1];
-          console.log(monitorAction,'monitorAction')
-          switch (monitorAction) {
-            case 'move':
+      }
+      if (monitorGraphsIn[monitorGraphsIn.length - 1]) {
+        const shape = monitorGraphsIn[monitorGraphsIn.length - 1];
+        console.log(monitorAction, "monitorAction");
+        switch (monitorAction) {
+          case "move":
             shape.x += e.movementX;
             shape.y += e.movementY;
             shape.centerX += e.movementX;
             shape.centerY += e.movementY;
-            console.log(shape,'move')
+            console.log(shape, "move");
             // shape._rotateSquare()
             drawGraphs();
-              break;
-            case 'scale':
+            break;
+          case "scale":
             shape.transform(
               mouseDownX,
               mouseDownY,
               e.offsetX,
               e.offsetY,
-              currentGraph
-            )
-              drawGraphs();
-              break;
-            case 'rotate':
-              shape.rotateAction(
-                mouseDownX,
-                mouseDownY,
-                e.offsetX,
-                e.offsetY,
-                currentGraph
-              )
-              drawGraphs();
-              break;
-            // console.log(shape.x,'shape.x')
-            // console.log(shape.y,'shape.y')
-            default:
-
-          }
-
+              currentGraph,
+            );
+            drawGraphs();
+            break;
+          case "rotate":
+            shape.rotateAction(
+              mouseDownX,
+              mouseDownY,
+              e.offsetX,
+              e.offsetY,
+              currentGraph,
+            );
+            drawGraphs();
+            break;
+          // console.log(shape.x,'shape.x')
+          // console.log(shape.y,'shape.y')
+          default:
         }
+      }
     });
-  }
-  const initJson = () =>{
+  };
+  const initJson = () => {
     var jsonTemp = [];
     for (var item of sample.data) {
       for (var variable in item) {
@@ -160,24 +157,21 @@ export function Monitor(props) {
               }
               break;
             default:
-
           }
         }
       }
     }
-    console.log(jsonTemp)
+    console.log(jsonTemp);
     jsonTemp.sort((a, b) => a.layer_number - b.layer_number);
-    console.log(jsonTemp)
-
-
+    console.log(jsonTemp);
 
     for (var item of jsonTemp) {
       if (item.type === "image" || "avatar") {
-        (async function(item){
-          console.log('DataURL: ',item.url);
+        (async function (item) {
+          console.log("DataURL: ", item.url);
           var graph = new monitorGraph(
-            item.offset_x - item.width/2,
-            item.offset_y - item.height/2,
+            item.offset_x - item.width / 2,
+            item.offset_y - item.height / 2,
             item.width,
             item.height,
             item.angle,
@@ -186,20 +180,19 @@ export function Monitor(props) {
             item.type,
             // await loadImgProssse(canvasDom, iconUrl),
             await loadImgProssse(uuid(), item.url),
-            canvasDom
+            canvasDom,
           );
           // checkIfInsideLoop(graph);
-          console.log(graph)
+          console.log(graph);
           monitorGraphs.push(graph);
-          drawGraphs()
-        })(item)
+          drawGraphs();
+        })(item);
 
-         // monitorCanvas.renderAll();
-
+        // monitorCanvas.renderAll();
       }
     }
     // console.log(monitorCanvas)
-  }
+  };
   const drawGraphs = () => {
     // console.log(timelineGraphs)
     monitorCtx.clearRect(0, 0, canvasDom.width, canvasDom.height);
@@ -207,18 +200,16 @@ export function Monitor(props) {
       monitorGraphs[i].paint();
     }
 
-
     if (selectedItem.length > 0) {
-      drawBorder(selectedItem[0])
-    }else{
-      selectedItem = monitorGraphs.filter(item => item.selected == true)
+      drawBorder(selectedItem[0]);
+    } else {
+      selectedItem = monitorGraphs.filter((item) => item.selected == true);
       if (selectedItem.length > 0) {
-        drawBorder(selectedItem[0])
+        drawBorder(selectedItem[0]);
       }
     }
-
   };
-  const initCanvas = async() =>{
+  const initCanvas = async () => {
     canvasDom = document.getElementById("monitor_canvas");
     monitorCtx = canvasDom.getContext("2d");
     for (var i = 0; i < 1; i++) {
@@ -228,7 +219,8 @@ export function Monitor(props) {
       var typeTemp = ["image", "image", "image", "image", "image"][
         randomInt(0, 5)
       ];
-      var iconUrl = "https://static.website-files.org/assets/avatar/avatar/thumbnail/1716457024475-tristan_cloth1_20240522.webp";
+      var iconUrl =
+        "https://static.website-files.org/assets/avatar/avatar/thumbnail/1716457024475-tristan_cloth1_20240522.webp";
 
       var graph = new monitorGraph(
         randomInt(0, 500),
@@ -241,18 +233,16 @@ export function Monitor(props) {
         typeTemp,
         // await loadImgProssse(canvasDom, iconUrl),
         await loadImgProssse(uuid(), iconUrl),
-        canvasDom
+        canvasDom,
       );
       // checkIfInsideLoop(graph);
-      console.log(graph)
+      console.log(graph);
       monitorGraphs.push(graph);
-
     }
-    drawGraphs()
-      initJson()
-    addEvents()
-  }
-
+    drawGraphs();
+    initJson();
+    addEvents();
+  };
 
   useEffect(() => {
     async function init() {
@@ -264,12 +254,14 @@ export function Monitor(props) {
     window.initMonitorReady = true;
   }, []);
 
-
-
-
   return (
     <div>
-      <canvas id="monitor_canvas" className="canvasBase" width="1600" height="900"></canvas>
+      <canvas
+        id="monitor_canvas"
+        className="canvasBase"
+        width="1600"
+        height="900"
+      ></canvas>
     </div>
   );
 }
