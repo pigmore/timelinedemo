@@ -159,7 +159,7 @@ export function Timeline(props) {
     var _index = -1;
     var _item = {};
     timelineGraphs.forEach((item, i) => {
-      if (item.selected) {
+      if (item.selected &&  ( item.x < window.currentFrame / 10 &&  item.x + item.w > window.currentFrame / 10)) {
         _item = new timelineGraph(
           item.x,
           item.y,
