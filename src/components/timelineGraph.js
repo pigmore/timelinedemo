@@ -169,12 +169,15 @@ timelineGraph.prototype = {
     // console.log('drawTheXAttach',_x)
     this.context.save();
     this.context.translate(window.timelineScrollX, 0);
+    this.context.setLineDash([4, 5]);
+    // this.context.strokeStyle = "rgba(255, 255, 255, 1)";
     drawLine(
       this.context,
       _x * window.timelineXScale,
       0,
       _x * window.timelineXScale,
       this.canvas.height,
+      "rgba(255, 255, 255, 1)",
     );
     this.context.restore();
   },
