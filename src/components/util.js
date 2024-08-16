@@ -92,6 +92,7 @@ export function fillCircle(ctx, x, y, radius) {
   ctx.beginPath();
   ctx.arc(x, y, radius, 0, Math.PI * 2, false);
   ctx.fill();
+  ctx.stroke();
   return this;
 }
 export function fillEdgeCircle(ctx, x, y, w) {

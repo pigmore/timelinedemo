@@ -3,6 +3,7 @@ import "./App.css";
 import React, { useState, memo, useRef, useEffect } from "react";
 import { Timelinememo } from "./components/timeline";
 import { Monitormemo } from "./components/monitor";
+import { ColorPickermemo } from "./components/colorPicker";
 import { CallChild, CallChildMemo } from "./components/callChild";
 import { Test, Testmemo } from "./components/testmodule";
 
@@ -58,6 +59,7 @@ function App() {
       </button>
 
       <Timelinememo redrawTrigger={redraw} />
+      <ColorPickermemo />
 
       {/*
         <Monitormemo />
