@@ -61,9 +61,18 @@ export function ColorPicker(props) {
       "mousemove",
       (e) => {
         // console.log(e.offsetX,e.offsetY);
+        if (
+          e.offsetX < 10 ||
+          e.offsetX > 266 ||
+          e.offsetY > 266 ||
+          e.offsetY < 10
+
+        ){
+          return
+        }
         colorPickerCtx.clearRect(0, 0, canvasDom.width, canvasDom.height);
         draw_color_square(120,colorPickerCtx)
-        let color =  hsv_to_hsl(120,(( e.offsetX -10)  / 256),((266 - e.offsetY + 10) / 256))
+        let color =  hsv_to_hsl(120,(( e.offsetX -10)  / 255),((266 - e.offsetY ) / 255))
         console.log(color[0],color[1],color[2])
         colorPickerCtx.fillStyle = "hsla(" + 120 + "," + color[1]* 100 + "%," + color[2]* 100 + "%,1)"
         // colorPickerCtx.fillStyle = "hsla(" + 120 + "," + (( e.offsetX -10) * 100 / 256) + "%," + 50 + "%,1)"
