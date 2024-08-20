@@ -85,7 +85,14 @@ monitorGraph.prototype = {
         this.ctx.fillStyle = "rgba(255, 255, 255 , 1)";
         this.ctx.font = `${this.initconfig.fontSize}px ${this.initconfig.fontFamily}`;
         this.ctx.textAlign = 'center';
+        this.ctx.strokeStyle = this.initconfig.stroke;
+        this.ctx.strokeWidth = this.initconfig.strokeWidth;
         this.ctx.fillText(
+          this.initconfig.text,
+          0,
+          this.initconfig.fontSize / 3,
+        );
+        this.ctx.strokeText(
           this.initconfig.text,
           0,
           this.initconfig.fontSize / 3,
