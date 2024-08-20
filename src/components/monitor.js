@@ -8,6 +8,7 @@ import {
   loadImgByDom,
   drawEdgePoint,
   randomInt,
+  loadTextProssse,
   uuid,
 } from "./util";
 import { monitorGraph } from "./monitorGraph";
@@ -192,26 +193,29 @@ export function Monitor(props) {
         // monitorCanvas.renderAll();
       }
       else if (item.type === "textbox") {
-        const textinit = sample.data[0].objects.filter((_item) => _item.id == item.id)
-        var graph = new monitorGraph(
-          item.offset_x - item.width / 2,
-          item.offset_y - item.height / 2,
-          item.width,
-          item.height,
-          item.angle,
-          item.scale_x,
-          item.text,
-          item.type,
-          // await loadImgProssse(canvasDom, iconUrl),
-          null,
-          canvasDom,
-          textinit[0]
-        );
-        // checkIfInsideLoop(graph);
-        console.log(graph);
-        monitorGraphs.push(graph);
-        drawGraphs();
-        console.log(monitorGraphs,'???');
+        (async function (item) {
+          const textinit = sample.data[0].objects.filter((_item) => _item.id == item.id)
+          await loadTextProssse(textinit[0].fontFamily,textinit[0].data.fontURL)
+          var graph = new monitorGraph(
+            item.offset_x - item.width / 2,
+            item.offset_y - item.height / 2,
+            item.width,
+            item.height,
+            item.angle,
+            item.scale_x,
+            item.text,
+            item.type,
+            // await loadImgProssse(canvasDom, iconUrl),
+            null,
+            canvasDom,
+            textinit[0]
+          );
+          // checkIfInsideLoop(graph);
+          console.log(graph);
+          monitorGraphs.push(graph);
+          drawGraphs();
+          console.log(monitorGraphs,'???');
+        })(item);
       }
 
     }

@@ -37,6 +37,19 @@ export function drawCircleIcon(ctx, left, top) {
   ctx.restore();
 }
 
+export function loadTextProssse(textName, _url) {
+  console.log(_url)
+  return new Promise((resolve, reject) => {
+
+    let f = new FontFace(textName, `url(${_url})`);
+
+    f.load().then(() => {
+      resolve();
+    });
+
+  });
+}
+
 export function loadImgProssse(_canvas, _url) {
   return new Promise((resolve, reject) => {
     // let seal = _canvas.createImage()

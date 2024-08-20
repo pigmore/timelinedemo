@@ -30,7 +30,7 @@ export const monitorGraph = function (
     // this.ctx.setFontSize(initconfig.fontSize || 16);
     var fontArgs = this.ctx.font.split(' ');
     var newSize = `${this.initconfig.fontSize}px`;
-    this.ctx.font = newSize + ' ' + fontArgs[fontArgs.length - 1];
+    this.ctx.font = newSize + ' ' + this.initconfig.fontFamily;
     const textWidth = this.ctx.measureText(text).width;
     const textHeight = this.initconfig.fontSize + 10;
     // debugger;
@@ -83,11 +83,12 @@ monitorGraph.prototype = {
     switch (this.type) {
       case 'textbox':
         this.ctx.fillStyle = "rgba(255, 255, 255 , 1)";
-        this.ctx.font = "14px Arial";
+        this.ctx.font = `${this.initconfig.fontSize}px ${this.initconfig.fontFamily}`;
+        this.ctx.textAlign = 'center';
         this.ctx.fillText(
           this.initconfig.text,
-          this.x,
-          this.y,
+          0,
+          this.initconfig.fontSize / 3,
         );
         break;
       case "image":
