@@ -20,8 +20,16 @@ function App() {
   };
   useEffect(() => {}, []);
 
+  async function loadFile(accept) {
+    const [fileHandle] = await window.showOpenFilePicker({
+      types: [{ accept }],
+    });
+    return (await fileHandle.getFile());
+  }
+
   return (
     <div className="App">
+      <Monitormemo />
       <button
         onClick={() => {
           window.timelineCut_function();
@@ -57,12 +65,37 @@ function App() {
       >
         scale:{scale}+1
       </button>
+      <button
+        onClick={async() => {
+          const file = await loadFile({ 'video/*': ['.mp4', '.mov'] });
+          console.log(file)
+          const stream = file.stream()
+          console.log(stream)
+          window.videoTest.src = stream
+          const reader = stream.getReader()
+          console.log(reader)
+          let buffer = [];
+          while (1) {
+              const { value, done } = await reader.read();
+              if (done) {
+                  const blob = new Blob(buffer);
+                  const blobUrl = URL.createObjectURL(blob);
+                  window.videoTest.src = blobUrl;
+                  break;
+              }
+              buffer.push(value);
+              console.log('??')
+          }
+        }}
+      >
+        input Video
+      </button>
 
       <Timelinememo redrawTrigger={redraw} />
-      <ColorPickermemo />
+      <video src="" id='videoTest' controls={true}></video>
 
       {/*
-        <Monitormemo />
+        <ColorPickermemo />
         <video controls id = "myStreamingVideo"></video>
 
         <iframe

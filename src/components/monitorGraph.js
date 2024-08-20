@@ -22,13 +22,18 @@ export const monitorGraph = function (
     fontSize: 0,
   },
 ) {
+  this.initconfig = initconfig;
   this.id = uuid();
   this.canvas = canvas;
   this.ctx = canvas.getContext("2d");
-  if (type === "Text") {
-    this.ctx.setFontSize(initconfig.fontSize || 16);
+  if (type === "textbox") {
+    // this.ctx.setFontSize(initconfig.fontSize || 16);
+    var fontArgs = this.ctx.font.split(' ');
+    var newSize = `${this.initconfig.fontSize}px`;
+    this.ctx.font = newSize + ' ' + fontArgs[fontArgs.length - 1];
     const textWidth = this.ctx.measureText(text).width;
-    const textHeight = initconfig.fontSize + 10;
+    const textHeight = this.initconfig.fontSize + 10;
+    // debugger;
     this.centerX = x + textWidth / 2;
     this.centerY = y + textHeight / 2;
     this.w = textWidth;
@@ -64,7 +69,7 @@ export const monitorGraph = function (
   this.imageLoadedSrc = imageLoadedSrc;
   this.canvas = canvas;
   this.ctx = canvas.getContext("2d");
-  this.initconfig = initconfig;
+
   this.selected = false;
 };
 
@@ -76,10 +81,19 @@ monitorGraph.prototype = {
     this.ctx.translate(this.centerX, this.centerY);
     this.ctx.rotate((this.rotate * Math.PI) / 180);
     switch (this.type) {
-      case "image":
-        this.ctx.translate(-this.centerX, -this.centerY);
-        this.ctx.drawImage(this.imageLoadedSrc, this.x, this.y, this.w, this.h);
+      case 'textbox':
+        this.ctx.fillStyle = "rgba(255, 255, 255 , 1)";
+        this.ctx.font = "14px Arial";
+        this.ctx.fillText(
+          this.initconfig.text,
+          this.x,
+          this.y,
+        );
         break;
+      case "image":
+        // this.ctx.translate(-this.centerX, -this.centerY);
+        // this.ctx.drawImage(this.imageLoadedSrc, this.x, this.y, this.w, this.h);
+        // break;
       case "avatar":
         this.ctx.translate(-this.centerX, -this.centerY);
         this.ctx.drawImage(this.imageLoadedSrc, this.x, this.y, this.w, this.h);
