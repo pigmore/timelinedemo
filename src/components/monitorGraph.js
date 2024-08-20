@@ -5,6 +5,7 @@ import {
   drawLine,
   drawRect,
   drawDoubleLine,
+  drawFoucsLine,
   fillEdgeCircle,
 } from "./util.js";
 export const monitorGraph = function (
@@ -33,6 +34,7 @@ export const monitorGraph = function (
     this.ctx.font = newSize + ' ' + this.initconfig.fontFamily;
     const textWidth = this.ctx.measureText(this.initconfig.text).width;
     const textHeight = this.initconfig.fontSize + 10;
+    this.text = this.initconfig.text
     // debugger;
     this.centerX = x + textWidth / 2;
     this.centerY = y + textHeight / 2;
@@ -71,6 +73,9 @@ export const monitorGraph = function (
   this.ctx = canvas.getContext("2d");
 
   this.selected = false;
+  this.focused = false;
+  this.drawCount = 0;
+  this.focusIndex = 0;
 };
 
 monitorGraph.prototype = {
@@ -82,21 +87,36 @@ monitorGraph.prototype = {
     this.ctx.rotate((this.rotate * Math.PI) / 180);
     switch (this.type) {
       case 'textbox':
-        this.ctx.fillStyle = "rgba(255, 255, 255 , 1)";
+        this.ctx.fillStyle = this.initconfig.fill;
         this.ctx.font = `${this.initconfig.fontSize}px ${this.initconfig.fontFamily}`;
         this.ctx.textAlign = 'center';
         this.ctx.strokeStyle = this.initconfig.stroke;
         this.ctx.strokeWidth = this.initconfig.strokeWidth;
         this.ctx.fillText(
-          this.initconfig.text,
+          this.text,
           0,
           this.initconfig.fontSize / 3,
         );
         this.ctx.strokeText(
-          this.initconfig.text,
+          this.text,
           0,
           this.initconfig.fontSize / 3,
         );
+        if (this.focused) {
+          if (this.drawCount % 2 == 0) {
+            drawFoucsLine(this.ctx,this.w / 2 - 4,- this.initconfig.fontSize / 2,this.w / 2,- this.initconfig.fontSize / 2 + this.h - 20,this.initconfig.fill)
+
+          }
+          this.drawCount +=1
+          if (window.textFoucsIntervalBool == false ) {
+            window.textFoucsIntervalBool = true
+            this.ctx.restore();
+            window.textFoucsInterval = setInterval(window.monitor_drawGraphs_function, 1000)
+            //  = interval
+
+          }
+
+        }
         break;
       case "image":
         // this.ctx.translate(-this.centerX, -this.centerY);
@@ -328,6 +348,6 @@ monitorGraph.prototype = {
     // }
   },
   erase: function () {
-    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   },
 };

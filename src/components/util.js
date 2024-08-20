@@ -132,6 +132,14 @@ export function drawDoubleLine(ctx, a, b, c, d, _strokeStyle) {
   ctx.closePath();
   ctx.stroke();
 }
+export function drawFoucsLine(ctx, a, b, c, d, _strokeStyle) {
+  ctx.lineWidth = "1";
+  ctx.strokeStyle = _strokeStyle;
+  ctx.beginPath();
+  ctx.moveTo(a, b);
+  ctx.lineTo(c, d);
+  ctx.stroke();
+}
 export function drawTimePointer(ctx, x, h) {
   drawLine(ctx, x, 0, x, h, "#5297ff", 2);
   ctx.fillStyle = "#5297ff";

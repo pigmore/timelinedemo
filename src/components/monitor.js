@@ -15,6 +15,7 @@ import { monitorGraph } from "./monitorGraph";
 
 export function Monitor(props) {
   const STROKE_COLOR = "#ff2b5d";
+  window.textFoucsIntervalBool = false
   var canvasDom = null,
     monitorCtx = null,
     monitorGraphs = [],
@@ -37,16 +38,97 @@ export function Monitor(props) {
     drawEdgePoint(monitorCtx, item.x, item.y, item.w, item.h);
     monitorCtx.restore();
   };
+  // var focused = false
+  var isCommandKey = false
+  var focusIndex = 0
+
+
+
+  const handleOnKeyUp = function(e){
+			isCommandKey = false;
+			drawGraphs();
+		}
+    const handleOnKeyDown = function(e){
+        if (selectedItem.length < 0 && !selectedItem[0].focused) {
+          return
+        }
+  			if(e.key === "Meta" || e.key === "Control"){
+  				isCommandKey = true;
+  			}
+  			if(selectedItem[0].focused){
+  				e.preventDefault();
+  			}
+  			// if(this.isCommandKey && e.key === "a"){
+  			// 	this.selected = true;
+  			// 	this.render();
+  			// 	return
+  			// }
+  			if(selectedItem[0].focused && e.key === "Backspace"){
+  				// if(this.selected){
+  				// 	this.focusIndex = 0;
+  				// 	this.text = "";
+  				// 	this.selected = false;
+  				// 	this.render();
+  				// }
+  				var str = "";
+  				for(var i =0; i < selectedItem[0].text.length; i++){
+  					if(i !== selectedItem[0].focusIndex - 1){
+  						str += selectedItem[0].text[i];
+  					}
+  				}
+
+  				selectedItem[0].text = str;
+
+  				selectedItem[0].focusIndex --;
+  				if(selectedItem[0].focusIndex <0){
+  					selectedItem[0].focusIndex = 0;
+  				}
+  				drawGraphs();
+  			}
+  			if(selectedItem[0].focused && e.key === "ArrowLeft"){
+  				selectedItem[0].focusIndex --;
+  				if(selectedItem[0].focusIndex < 0){
+  					selectedItem[0].focusIndex = 0;
+  				}
+  				drawGraphs();
+  			}
+  			if(selectedItem[0].focused && e.key === "ArrowRight"){
+  				selectedItem[0].focusIndex ++;
+  				if(selectedItem[0].focusIndex > selectedItem[0].text.length){
+  					selectedItem[0].focusIndex = selectedItem[0].text.length;
+  				}
+  				drawGraphs();
+  			}
+  			if(!isCommandKey && selectedItem[0].focused && (e.keyCode == 32 || (e.keyCode >= 65))){
+  				selectedItem[0].text += e.key;
+  				selectedItem[0].focusIndex += 1;
+  				drawGraphs();
+  			}
+
+
+  		}
   const addEvents = () => {
+    window.addEventListener("keydown", function(event){
+      handleOnKeyDown(event);
+    });
+    window.addEventListener("keyup", function(event){
+      handleOnKeyUp(event);
+    });
     canvasDom.addEventListener("mousedown", function (e) {
       console.log(e);
       mouseDownX = e.clientX - canvasDom.getBoundingClientRect().left;
       mouseDownY = e.clientY - canvasDom.getBoundingClientRect().top;
-
+      const textSelectedid = selectedItem.length > 0 ? selectedItem[0].id : ''
       monitorAction = "";
       monitorGraphsIn = [];
+      if (window.textFoucsIntervalBool) {
+        clearInterval(window.textFoucsInterval)
+        window.textFoucsIntervalBool = false
+      }
+
       monitorGraphs.forEach((item, i) => {
         item.selected = false;
+        item.focused = false;
       });
       selectedItem = [];
       monitorGraphs.forEach(function (shape) {
@@ -66,7 +148,13 @@ export function Monitor(props) {
       });
       if (monitorGraphsIn.length > 0) {
         console.log(monitorGraphsIn, "monitorGraphsIn");
-        monitorGraphsIn[monitorGraphsIn.length - 1].selected = true;
+        const _selectedItem = monitorGraphsIn[monitorGraphsIn.length - 1]
+        _selectedItem.selected = true;
+        if (textSelectedid == _selectedItem.id){
+          // console.log('focused : true')
+          _selectedItem.focused = true;
+          _selectedItem.focusIndex = _selectedItem.initconfig.text.length
+        }
       }
       console.log("monitorGraphsIn", monitorGraphsIn);
       console.log("monitorGraphs", monitorGraphs);
@@ -224,7 +312,8 @@ export function Monitor(props) {
   };
   const drawGraphs = () => {
     // console.log(timelineGraphs)
-    monitorCtx.clearRect(0, 0, canvasDom.width, canvasDom.height);
+    if (monitorCtx) monitorCtx.clearRect(0, 0, canvasDom.width, canvasDom.height);
+
     for (var i = 0; i < monitorGraphs.length; i++) {
       monitorGraphs[i].paint();
     }
@@ -238,6 +327,10 @@ export function Monitor(props) {
       }
     }
   };
+  window.monitor_drawGraphs_function = () =>{
+    console.log('monitor_drawGraphs_function')
+    drawGraphs()
+  }
   const initCanvas = async () => {
     canvasDom = document.getElementById("monitor_canvas");
     monitorCtx = canvasDom.getContext("2d");
