@@ -28,10 +28,10 @@ export const monitorGraph = function (
   this.ctx = canvas.getContext("2d");
   if (type === "textbox") {
     // this.ctx.setFontSize(initconfig.fontSize || 16);
-    var fontArgs = this.ctx.font.split(' ');
+    // var fontArgs = this.ctx.font.split(' ');
     var newSize = `${this.initconfig.fontSize}px`;
     this.ctx.font = newSize + ' ' + this.initconfig.fontFamily;
-    const textWidth = this.ctx.measureText(text).width;
+    const textWidth = this.ctx.measureText(this.initconfig.text).width;
     const textHeight = this.initconfig.fontSize + 10;
     // debugger;
     this.centerX = x + textWidth / 2;

@@ -203,7 +203,7 @@ export function Monitor(props) {
             item.height,
             item.angle,
             item.scale_x,
-            item.text,
+            textinit[0].text,
             item.type,
             // await loadImgProssse(canvasDom, iconUrl),
             null,
