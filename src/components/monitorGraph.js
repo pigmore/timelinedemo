@@ -142,6 +142,10 @@ monitorGraph.prototype = {
           }
 
         break;
+      case "video":
+        this.ctx.translate(-this.centerX, -this.centerY);
+        this.ctx.drawImage(window.videoTest, this.x, this.y, this.w, this.h);
+        break;
       case "image":
         // this.ctx.translate(-this.centerX, -this.centerY);
         // this.ctx.drawImage(this.imageLoadedSrc, this.x, this.y, this.w, this.h);

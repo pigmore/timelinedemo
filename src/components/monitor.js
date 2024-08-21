@@ -45,7 +45,7 @@ export function Monitor(props) {
   const addEvents = () => {
 
     canvasDom.addEventListener("mousedown", function (e) {
-      // console.log(e);
+      console.log(monitorGraphs);
       mouseDownX = e.clientX - canvasDom.getBoundingClientRect().left;
       mouseDownY = e.clientY - canvasDom.getBoundingClientRect().top;
 
@@ -92,6 +92,7 @@ export function Monitor(props) {
 
       }else{
         selectedItem = [];
+        drawGraphs();
       }
       // console.log("monitorGraph/sIn", monitorGraphsIn);
       // console.log("monitorGraphs", monitorGraphs);
@@ -250,7 +251,7 @@ export function Monitor(props) {
       }
       else if (item.type === "video") {
         (async function (item) {
-          console.log("DataURL: ", item.url);
+          // console.log("DataURL: ", item.url);
           var graph = new monitorGraph(
             item.offset_x - item.width / 2,
             item.offset_y - item.height / 2,
@@ -267,7 +268,7 @@ export function Monitor(props) {
             item.end_time,
           );
           // checkIfInsideLoop(graph);
-          console.log(graph);
+          console.log(graph,'???video');
           monitorGraphs.push(graph);
           drawGraphs();
         })(item);

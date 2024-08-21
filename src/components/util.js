@@ -66,8 +66,9 @@ export function loadVideoProssse(_canvas, _url) {
               const blob = new Blob(buffer);
               const blobUrl = URL.createObjectURL(blob);
               window.videoTest.src = blobUrl;
+              resolve(blobUrl);
               break;
-              resolve();
+
           }
           buffer.push(value);
           console.log('??')
