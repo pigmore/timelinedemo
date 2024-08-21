@@ -157,7 +157,7 @@ export function drawTimePointer(ctx, x, h) {
 export function drawScale(ctx) {
   for (var i = 0; i < 200; i++) {
     if (window.timelineXScale <= 2) {
-      const _x = i * 30 * window.timelineXScale + 20;
+      const _x = i * 50 * window.timelineXScale + 20;
 
       if (i % 2 == 0) {
         drawLine(ctx, _x, 0, _x, 10, "white", 1);
@@ -168,7 +168,7 @@ export function drawScale(ctx) {
         drawLine(ctx, _x, 0, _x, 7, "white", 1);
       }
     } else if (window.timelineXScale > 2 && window.timelineXScale <= 5) {
-      const _x = i * 6 * window.timelineXScale + 20;
+      const _x = i * 10 * window.timelineXScale + 20;
 
       if (i % 5 == 0) {
         drawLine(ctx, _x, 0, _x, 10, "white", 1);
@@ -179,7 +179,7 @@ export function drawScale(ctx) {
         drawLine(ctx, _x, 0, _x, 7, "white", 1);
       }
     } else if (window.timelineXScale > 5 && window.timelineXScale < 15) {
-      const _x = i * 6 * window.timelineXScale + 20;
+      const _x = i * 10 * window.timelineXScale + 20;
 
       if (i % 2 == 0) {
         drawLine(ctx, _x, 0, _x, 10, "white", 1);
@@ -190,7 +190,7 @@ export function drawScale(ctx) {
         drawLine(ctx, _x, 0, _x, 7, "white", 1);
       }
     } else if (window.timelineXScale >= 15 && window.timelineXScale < 25) {
-      const _x = i * 3 * window.timelineXScale + 20;
+      const _x = i * 5 * window.timelineXScale + 20;
 
       if (i % 2 == 0) {
         drawLine(ctx, _x, 0, _x, 10, "white", 1);
@@ -201,7 +201,7 @@ export function drawScale(ctx) {
         drawLine(ctx, _x, 0, _x, 7, "white", 1);
       }
     } else if (window.timelineXScale >= 25) {
-      const _x = i * 1.5 * window.timelineXScale + 20;
+      const _x = i * 2.5 * window.timelineXScale + 20;
 
       if (i % 4 == 0) {
         drawLine(ctx, _x, 0, _x, 10, "white", 1);

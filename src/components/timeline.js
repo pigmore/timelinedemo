@@ -16,6 +16,7 @@ import iconVideo from "./icon/iconVideo.svg";
 import iconVoice from "./icon/iconVoice.svg";
 import iconScript from "./icon/iconScript.svg";
 import { timelineGraph } from "./timelineGraph";
+import { sample } from "./sample";
 (function () {
   var table = {};
   window.canvasEventDriver = {};
@@ -159,7 +160,7 @@ export function Timeline(props) {
     var _index = -1;
     var _item = {};
     timelineGraphs.forEach((item, i) => {
-      if (item.selected &&  ( item.x < window.currentFrame / 10 &&  item.x + item.w > window.currentFrame / 10)) {
+      if (item.selected &&  ( item.x < window.currentFrame / 6 &&  item.x + item.w > window.currentFrame / 6)) {
         _item = new timelineGraph(
           item.x,
           item.y,
@@ -174,10 +175,10 @@ export function Timeline(props) {
           "rectangle",
         );
         _item.id = uuid();
-        _item.x = window.currentFrame / 10;
-        _item.w -= window.currentFrame / 10 - item.x;
+        _item.x = window.currentFrame / 6;
+        _item.w -= window.currentFrame / 6 - item.x;
         _index = i;
-        item.w = window.currentFrame / 10 - item.x;
+        item.w = window.currentFrame / 6 - item.x;
       }
     });
     if (_index >= 0) {
@@ -186,20 +187,20 @@ export function Timeline(props) {
       drawGraph();
     }
   };
-  const addElement = async () => {
-    var typeTemp = ["Music", "Text", "Emojo", "Image", "Video"][
-      randomInt(0, 5)
-    ];
+  const addElement = async (x,y,w,type) => {
+    // var typeTemp = ["music", "textbox", "Emojo", "Image", "Video"][
+    //   randomInt(0, 5)
+    // ];
     var color = "";
     var strokeStyle = "";
     var iconUrl = "";
-    switch (typeTemp) {
-      case "Music":
+    switch (type) {
+      case "music":
         color = "rgba(140,26,255,0.6)";
         strokeStyle = "rgba(140,26,255,1)";
         iconUrl = iconMusic;
         break;
-      case "Text":
+      case "textbox":
         color = "rgba(255,114,26,0.6)";
         strokeStyle = "rgba(255,114,26,1)";
         iconUrl = iconText;
@@ -209,12 +210,13 @@ export function Timeline(props) {
         strokeStyle = "rgba(242,73,143,1)";
         iconUrl = iconEmojo;
         break;
-      case "Image":
+      case "image":
         color = "rgba(0,217,109,0.6)";
         strokeStyle = "rgba(0,217,109,1)";
         iconUrl = iconImage;
         break;
-      case "Video":
+      case "avatar":
+      case "video":
         color = "rgba(0,170,255,0.6)";
         strokeStyle = "rgba(0,170,255,1)";
         iconUrl = iconVideo;
@@ -223,12 +225,12 @@ export function Timeline(props) {
         color = "";
     }
     var graph = new timelineGraph(
-      randomInt(0, 124),
-      randomInt(2, 6) * 28,
-      randomInt(10, 40),
+      x / 100,
+      y * 28,
+      w / 100,
       24,
-      typeTemp,
-      typeTemp,
+      type,
+      type,
       await loadImgProssse(canvasDom, iconUrl),
       color,
       strokeStyle,
@@ -255,7 +257,7 @@ export function Timeline(props) {
     timelineCtx.translate(window.timelineScrollX, 0);
     drawTimePointer(
       timelineCtx,
-      (window.currentFrame * window.timelineXScale) / 10,
+      (window.currentFrame * window.timelineXScale) / 6,
       canvasDom.height,
     );
     timelineCtx.restore();
@@ -291,7 +293,7 @@ export function Timeline(props) {
       Math.abs(
         e.offsetX -
           window.timelineScrollX -
-          (window.currentFrame * window.timelineXScale) / 10,
+          (window.currentFrame * window.timelineXScale) / 6,
       ) < 5
     ) {
       window.timelineAction = "timeLinePointerMoving";
@@ -329,7 +331,7 @@ export function Timeline(props) {
       Math.abs(
         e.offsetX -
           window.timelineScrollX -
-          (window.currentFrame * window.timelineXScale) / 10,
+          (window.currentFrame * window.timelineXScale) / 6,
       ) < 5
     ) {
       canvasDom.style.cursor = "pointer";
@@ -338,7 +340,7 @@ export function Timeline(props) {
     }
 
     if (window.timelineAction == "timeLinePointerMoving") {
-      window.currentFrame += (e.movementX / window.timelineXScale) * 10;
+      window.currentFrame += (e.movementX / window.timelineXScale) * 6;
       window.currentTime = Math.floor(window.currentFrame * 1000 / 60);
       clearCanvas();
       drawGraph();
@@ -415,7 +417,7 @@ export function Timeline(props) {
     }
     if (e.offsetY < 30) {
       window.currentFrame =
-        ((e.offsetX - window.timelineScrollX) * 10) / window.timelineXScale;
+        ((e.offsetX - window.timelineScrollX) * 6) / window.timelineXScale;
       window.currentTime = Math.floor(window.currentFrame * 1000 / 60)
       clearCanvas();
       drawGraph();
@@ -523,31 +525,26 @@ export function Timeline(props) {
       clearCanvas();
       drawGraph();
     };
-    window.initJsonForCanvas = (items) => {
+    window.initJsonForCanvas = async(items) => {
       // clearCanvas();
 
       timelineCtx.clearRect(0, 0, canvasDom.width, canvasDom.height);
       timelineGraphs = [];
       for (var item of items) {
-        var graph = new timelineGraph(
-          item.x / 100,
-          item.y * 28,
-          item.w / 100,
-          24,
-          "timelineGraph",
-          `rgba(${randomInt(0, 255)}, ${randomInt(0, 255)}, ${randomInt(0, 255)} , 1) `,
-          canvasDom,
-          "rectangle",
-        );
-        timelineGraphs.push(graph);
+        await addElement(
+          item.x,
+          item.y,
+          item.w,
+          item.type
+        )
       }
 
       drawGraph();
     };
 
-    for (var i = 0; i < 12; i++) {
-      await addElement();
-    }
+    // for (var i = 0; i < 12; i++) {
+    //   await addElement();
+    // }
     addevents();
     drawGraph();
   };

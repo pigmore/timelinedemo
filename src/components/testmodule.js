@@ -42,7 +42,7 @@ export const Test = forwardRef((props, ref) => {
     },
   }));
 
-  const handleInitJson = () => {
+  const handleInitJson = async() => {
     var json = [];
     console.log(inputJson);
     // new timelineGraph(
@@ -62,7 +62,8 @@ export const Test = forwardRef((props, ref) => {
             json.push({
               x: bg_musics_item.start_time,
               w: bg_musics_item.end_time - bg_musics_item.start_time,
-              y: 0,
+              y: 2,
+              type:'music'
             });
           }
           if (variable == "elements") {
@@ -70,7 +71,8 @@ export const Test = forwardRef((props, ref) => {
               json.push({
                 x: elementsItem.start_time,
                 w: elementsItem.end_time - elementsItem.start_time,
-                y: elementsItem.layer_number,
+                y: elementsItem.layer_number + 2,
+                type:elementsItem.type
               });
             }
           }
@@ -90,11 +92,18 @@ export const Test = forwardRef((props, ref) => {
     }
     setJsonInit(JSON.stringify(json));
 
-    window.initJsonForCanvas(json);
+    await window.initJsonForCanvas(json);
   };
 
   return (
     <div>
+      <button
+        onClick={async() => {
+          await handleInitJson();
+        }}
+      >
+        初始化一波试试看
+      </button>
       {/*<input
         type="text"
         placeholder="input the json data here"
@@ -103,13 +112,7 @@ export const Test = forwardRef((props, ref) => {
           setinputJson(JSON.parse(e.target.value));
         }}
       />
-      <button
-        onClick={() => {
-          handleInitJson();
-        }}
-      >
-        初始化一波试试看
-      </button>
+
       <p>{jsonInit}</p>*/}
       <p>{JSON.stringify(jsonupdate)}</p>
     </div>
