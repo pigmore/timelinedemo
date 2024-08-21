@@ -9,6 +9,7 @@ import {
   drawEdgePoint,
   randomInt,
   loadTextProssse,
+  loadVideoProssse,
   uuid,
 } from "./util";
 import { monitorGraph } from "./monitorGraph";
@@ -247,6 +248,32 @@ export function Monitor(props) {
 
         // monitorCanvas.renderAll();
       }
+      else if (item.type === "video") {
+        (async function (item) {
+          console.log("DataURL: ", item.url);
+          var graph = new monitorGraph(
+            item.offset_x - item.width / 2,
+            item.offset_y - item.height / 2,
+            item.width,
+            item.height,
+            item.angle,
+            item.scale_x,
+            item.type,
+            item.type,
+            // await loadImgProssse(canvasDom, iconUrl),
+            await loadVideoProssse(uuid(), item.url),
+            canvasDom,
+            item.start_time,
+            item.end_time,
+          );
+          // checkIfInsideLoop(graph);
+          console.log(graph);
+          monitorGraphs.push(graph);
+          drawGraphs();
+        })(item);
+
+        // monitorCanvas.renderAll();
+      }
       else if (item.type === "textbox") {
         (async function (item) {
           const textinit = sample.data[0].objects.filter((_item) => _item.id == item.id)
@@ -302,33 +329,6 @@ export function Monitor(props) {
   const initCanvas = async () => {
     canvasDom = document.getElementById("monitor_canvas");
     monitorCtx = canvasDom.getContext("2d");
-    for (var i = 0; i < 1; i++) {
-      // var typeTemp = ["Music", "Text", "Emojo", "image", "Video"][
-      //   randomInt(0, 5)
-      // ];
-      var typeTemp = ["image", "image", "image", "image", "image"][
-        randomInt(0, 5)
-      ];
-      var iconUrl =
-        "https://static.website-files.org/assets/avatar/avatar/thumbnail/1716457024475-tristan_cloth1_20240522.webp";
-
-      var graph = new monitorGraph(
-        randomInt(0, 500),
-        randomInt(0, 500),
-        randomInt(10, 500),
-        randomInt(10, 500),
-        randomInt(0, 360),
-        randomInt(0.5, 1),
-        typeTemp,
-        typeTemp,
-        // await loadImgProssse(canvasDom, iconUrl),
-        await loadImgProssse(uuid(), iconUrl),
-        canvasDom,
-      );
-      // checkIfInsideLoop(graph);
-      console.log(graph);
-      monitorGraphs.push(graph);
-    }
     drawGraphs();
     initJson();
     addEvents();

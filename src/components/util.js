@@ -50,6 +50,34 @@ export function loadTextProssse(textName, _url) {
   });
 }
 
+export function loadVideoProssse(_canvas, _url) {
+  return new Promise(async(resolve, reject) => {
+    await fetch(_url)
+    .then((response) => response.body)
+    .then(async(body) => {
+      const reader = body.getReader();
+      let buffer = [];
+      while (1) {
+          const { value, done } = await reader.read();
+          // console.log(reader)
+          // console.log(value)
+          // console.log(done)
+          if (done) {
+              const blob = new Blob(buffer);
+              const blobUrl = URL.createObjectURL(blob);
+              window.videoTest.src = blobUrl;
+              break;
+              resolve();
+          }
+          buffer.push(value);
+          console.log('??')
+      }
+
+    });
+
+
+  });
+}
 export function loadImgProssse(_canvas, _url) {
   return new Promise((resolve, reject) => {
     // let seal = _canvas.createImage()
