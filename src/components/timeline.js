@@ -50,7 +50,9 @@ import { sample } from "./sample";
 })();
 
 export function Timeline(props) {
-  var canvasDom = null,
+  var requestId ,
+    performanceNow = 0,
+    canvasDom = null,
     timelineCtx = null,
     timelineGraphs = [],
     graphAttr = [],
@@ -156,6 +158,31 @@ export function Timeline(props) {
       xArray.push(item.x + item.w);
     }
   };
+  const playLoop = (_stamp) => {
+    const deltaTime = _stamp - performanceNow
+    window.currentTime += deltaTime;
+    window.currentFrame =  Math.floor(window.currentTime / 100 * 6);
+    clearCanvas();
+    drawGraph();
+    window.monitor_drawGraphs_function()
+    performanceNow = _stamp
+    requestId = window.requestAnimationFrame(playLoop)
+    // timelinePlay();
+  }
+  const timelinePlay = () => {
+    performanceNow = performance.now()
+    if (!requestId) {
+       requestId = window.requestAnimationFrame(playLoop);
+       window.akoolEditorState = 'play'
+    }
+  }
+  const timelineStop = () => {
+    if (requestId) {
+      window.cancelAnimationFrame(requestId);
+      requestId = undefined;
+      window.akoolEditorState = 'pause'
+    }
+  }
   const timelineCut = () => {
     var _index = -1;
     var _item = {};
@@ -513,6 +540,12 @@ export function Timeline(props) {
     window.currentFrame = 120;
     window.videoFps = 60;
     window.currentTime = 2000;
+    window.timelineStop_function = () => {
+      timelineStop();
+    };
+    window.timelinePlay_function = () => {
+      timelinePlay();
+    };
     window.timelineCut_function = () => {
       timelineCut();
     };

@@ -32,10 +32,24 @@ function App() {
       <Monitormemo />
       <button
         onClick={() => {
+          window.timelinePlay_function();
+        }}
+      >
+        play!
+      </button>
+      <button
+        onClick={() => {
+          window.timelineStop_function();
+        }}
+      >
+        stop!
+      </button>
+      <button
+        onClick={() => {
           window.timelineCut_function();
         }}
       >
-        cut
+        cut!
       </button>
       <button
         onClick={async () => {
