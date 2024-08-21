@@ -103,18 +103,18 @@ monitorGraph.prototype = {
           this.initconfig.fontSize / 3,
         );
         if (this.focused) {
-          if (this.drawCount % 2 == 0) {
-            drawFoucsLine(this.ctx,this.w / 2 - 4,- this.initconfig.fontSize / 2,this.w / 2,- this.initconfig.fontSize / 2 + this.h - 20,this.initconfig.fill)
-
-          }
-          this.drawCount +=1
-          if (window.textFoucsIntervalBool == false ) {
-            window.textFoucsIntervalBool = true
-            this.ctx.restore();
-            window.textFoucsInterval = setInterval(window.monitor_drawGraphs_function, 1000)
-            //  = interval
-
-          }
+          // if (this.drawCount % 2 == 0) {
+          //   drawFoucsLine(this.ctx,this.w / 2 - 4,- this.initconfig.fontSize / 2,this.w / 2,- this.initconfig.fontSize / 2 + this.h - 20,this.initconfig.fill)
+          //
+          // }
+          // this.drawCount +=1
+          // if (window.textFoucsIntervalBool == false ) {
+          //   window.textFoucsIntervalBool = true
+          //   this.ctx.restore();
+          //   window.textFoucsInterval = setInterval(window.monitor_drawGraphs_function, 1000)
+          //   //  = interval
+          //
+          // }
 
         }
         break;
@@ -172,17 +172,17 @@ monitorGraph.prototype = {
     // this.context.fillStyle = this.fillStyle || "rgba(255, 255, 255 , 1)";
     drawRect(this.ctx, this.square);
     this.ctx.restore();
-    console.log("isMouseInGraph");
+    // console.log("isMouseInGraph");
     if (this.isinCorner(mouse.x, mouse.y)) {
-      console.log("scale");
+      // console.log("scale");
       return "scale";
     }
     if (this.isinRotate(mouse.x, mouse.y)) {
-      console.log("rotate");
+      // console.log("rotate");
       return "rotate";
     }
     if (this.ctx.isPointInPath(mouse.x, mouse.y)) {
-      console.log("move");
+      // console.log("move");
       return "move";
     }
 

@@ -15,9 +15,24 @@ body {
   margin: 0;
   padding: 0;
 }
+#monitorWarp{
+  position: relative;
+}
+#monitorTextCover{
+  position: absolute;
+  top: 0;
+  left:0;
+  background: none;
+  text-align: center;
+  color:white;
+  resize: none;
+  border: none;
+  scrollbar-width: none;
+}
 .canvasBase {
-  margin: 20px;
+  margin: 0px;
   background: #222;
+
 }
 .canvasBase2 {
   margin: 20px;

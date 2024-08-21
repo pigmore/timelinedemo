@@ -1,4 +1,4 @@
-import { useState, useEffect, memo } from "react";
+import { useState, useEffect, memo,createRef } from "react";
 import { fabric } from "fabric";
 import { cloneDeep } from "lodash";
 import { sample } from "./sample";
@@ -14,8 +14,9 @@ import {
 import { monitorGraph } from "./monitorGraph";
 
 export function Monitor(props) {
+  const monitorTextCoverRef = createRef()
   const STROKE_COLOR = "#ff2b5d";
-  window.textFoucsIntervalBool = false
+  // window.textFoucsIntervalBool = false
   var canvasDom = null,
     monitorCtx = null,
     monitorGraphs = [],
@@ -39,81 +40,9 @@ export function Monitor(props) {
     monitorCtx.restore();
   };
   // var focused = false
-  var isCommandKey = false
-  var focusIndex = 0
 
-
-
-  const handleOnKeyUp = function(e){
-			isCommandKey = false;
-			drawGraphs();
-		}
-    const handleOnKeyDown = function(e){
-        if (selectedItem.length < 0 && !selectedItem[0].focused) {
-          return
-        }
-  			if(e.key === "Meta" || e.key === "Control"){
-  				isCommandKey = true;
-  			}
-  			if(selectedItem[0].focused){
-  				e.preventDefault();
-  			}
-  			// if(this.isCommandKey && e.key === "a"){
-  			// 	this.selected = true;
-  			// 	this.render();
-  			// 	return
-  			// }
-  			if(selectedItem[0].focused && e.key === "Backspace"){
-  				// if(this.selected){
-  				// 	this.focusIndex = 0;
-  				// 	this.text = "";
-  				// 	this.selected = false;
-  				// 	this.render();
-  				// }
-  				var str = "";
-  				for(var i =0; i < selectedItem[0].text.length; i++){
-  					if(i !== selectedItem[0].focusIndex - 1){
-  						str += selectedItem[0].text[i];
-  					}
-  				}
-
-  				selectedItem[0].text = str;
-
-  				selectedItem[0].focusIndex --;
-  				if(selectedItem[0].focusIndex <0){
-  					selectedItem[0].focusIndex = 0;
-  				}
-  				drawGraphs();
-  			}
-  			if(selectedItem[0].focused && e.key === "ArrowLeft"){
-  				selectedItem[0].focusIndex --;
-  				if(selectedItem[0].focusIndex < 0){
-  					selectedItem[0].focusIndex = 0;
-  				}
-  				drawGraphs();
-  			}
-  			if(selectedItem[0].focused && e.key === "ArrowRight"){
-  				selectedItem[0].focusIndex ++;
-  				if(selectedItem[0].focusIndex > selectedItem[0].text.length){
-  					selectedItem[0].focusIndex = selectedItem[0].text.length;
-  				}
-  				drawGraphs();
-  			}
-  			if(!isCommandKey && selectedItem[0].focused && (e.keyCode == 32 || (e.keyCode >= 65))){
-  				selectedItem[0].text += e.key;
-  				selectedItem[0].focusIndex += 1;
-  				drawGraphs();
-  			}
-
-
-  		}
   const addEvents = () => {
-    window.addEventListener("keydown", function(event){
-      handleOnKeyDown(event);
-    });
-    window.addEventListener("keyup", function(event){
-      handleOnKeyUp(event);
-    });
+
     canvasDom.addEventListener("mousedown", function (e) {
       console.log(e);
       mouseDownX = e.clientX - canvasDom.getBoundingClientRect().left;
@@ -121,10 +50,10 @@ export function Monitor(props) {
       const textSelectedid = selectedItem.length > 0 ? selectedItem[0].id : ''
       monitorAction = "";
       monitorGraphsIn = [];
-      if (window.textFoucsIntervalBool) {
-        clearInterval(window.textFoucsInterval)
-        window.textFoucsIntervalBool = false
-      }
+      // if (window.textFoucsIntervalBool) {
+      //   clearInterval(window.textFoucsInterval)
+      //   window.textFoucsIntervalBool = false
+      // }
 
       monitorGraphs.forEach((item, i) => {
         item.selected = false;
@@ -151,13 +80,22 @@ export function Monitor(props) {
         const _selectedItem = monitorGraphsIn[monitorGraphsIn.length - 1]
         _selectedItem.selected = true;
         if (textSelectedid == _selectedItem.id){
-          // console.log('focused : true')
+          console.log('focused : true')
           _selectedItem.focused = true;
-          _selectedItem.focusIndex = _selectedItem.initconfig.text.length
+          _selectedItem.focusIndex = _selectedItem.text.length
+          monitorTextCoverRef.current.style.color = _selectedItem.initconfig.fill
+          monitorTextCoverRef.current.style.fontSize = _selectedItem.initconfig.fontSize + 'px'
+          monitorTextCoverRef.current.style.fontFamily = _selectedItem.initconfig.fontFamily
+          monitorTextCoverRef.current.style.width = _selectedItem.w + 'px'
+          monitorTextCoverRef.current.style.height = _selectedItem.h + 'px'
+          monitorTextCoverRef.current.style.top = _selectedItem.x + 'px'
+          monitorTextCoverRef.current.style.left = _selectedItem.y + 'px'
+
+          monitorTextCoverRef.current.value = _selectedItem.text
         }
       }
-      console.log("monitorGraphsIn", monitorGraphsIn);
-      console.log("monitorGraphs", monitorGraphs);
+      // console.log("monitorGraph/sIn", monitorGraphsIn);
+      // console.log("monitorGraphs", monitorGraphs);
       drawGraphs();
     });
     canvasDom.addEventListener("mouseup", function (e) {
@@ -182,6 +120,7 @@ export function Monitor(props) {
       if (monitorGraphsIn[monitorGraphsIn.length - 1]) {
         const shape = monitorGraphsIn[monitorGraphsIn.length - 1];
         // console.log(monitorAction, "monitorAction");
+        if (shape.focused) return
         switch (monitorAction) {
           case "move":
             shape.x += e.movementX;
@@ -255,7 +194,7 @@ export function Monitor(props) {
     // console.log(jsonTemp);
 
     for (var item of jsonTemp) {
-      console.log(item.type,'type')
+      // console.log(item.type,'type')
       if (item.type === "image" || item.type === "avatar") {
         (async function (item) {
           console.log("DataURL: ", item.url);
@@ -378,12 +317,29 @@ export function Monitor(props) {
 
   return (
     <div>
-      <canvas
-        id="monitor_canvas"
-        className="canvasBase"
-        width="1600"
-        height="900"
-      ></canvas>
+      <div id = "monitorWarp">
+        <canvas
+          id="monitor_canvas"
+          className="canvasBase"
+          width="1600"
+          height="900"
+        >
+
+        </canvas>
+        <textarea
+          name=""
+          id="monitorTextCover"
+          ref = {monitorTextCoverRef}
+          onChange = {
+            (e)=>{
+              console.log(e)
+              selectedItem[0].text = e.target.value
+              drawGraphs()
+            }
+          }
+          ></textarea>
+      </div>
+
     </div>
   );
 }
