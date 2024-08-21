@@ -236,6 +236,8 @@ export function Monitor(props) {
             // await loadImgProssse(canvasDom, iconUrl),
             await loadImgProssse(uuid(), item.url),
             canvasDom,
+            item.start_time,
+            item.end_time,
           );
           // checkIfInsideLoop(graph);
           console.log(graph);
@@ -261,6 +263,8 @@ export function Monitor(props) {
             // await loadImgProssse(canvasDom, iconUrl),
             null,
             canvasDom,
+            item.start_time,
+            item.end_time,
             textinit[0]
           );
           // checkIfInsideLoop(graph);

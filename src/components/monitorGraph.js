@@ -19,6 +19,8 @@ export const monitorGraph = function (
   type,
   imageLoadedSrc,
   canvas,
+  startTime,
+  endTime,
   initconfig = {
     fontSize: 0,
   },
@@ -59,6 +61,8 @@ export const monitorGraph = function (
   this.scale = s;
   this.rotate = r;
   this.rotate0 = r;
+  this.startTime = startTime;
+  this.endTime = endTime;
 
   // 4个顶点坐标
   this.square = [
@@ -82,7 +86,13 @@ export const monitorGraph = function (
 };
 
 monitorGraph.prototype = {
+  checkIfinTime: function () {
+    if (this.startTime > window.currentTime) return false
+    if (this.endTime < window.currentTime) return false
+    return true
+  },
   paint: function () {
+    if (!this.checkIfinTime()) return
     this.ctx.save();
 
     // 旋转元素
@@ -126,7 +136,7 @@ monitorGraph.prototype = {
             this.w = textWidth;
             this.h = textHeight;
           }
-        
+
         break;
       case "image":
         // this.ctx.translate(-this.centerX, -this.centerY);
@@ -176,6 +186,7 @@ monitorGraph.prototype = {
     return false;
   },
   isMouseInGraph: function (mouse) {
+    if (!this.checkIfinTime()) return
     this.ctx.save();
     // this.ctx.translate(window.timelineScrollX, 0);
     // this.context.beginPath();
