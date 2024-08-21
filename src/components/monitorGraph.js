@@ -83,9 +83,20 @@ export const monitorGraph = function (
   this.focused = false;
   this.drawCount = 0;
   this.focusIndex = 0;
+  this.playCurrentTime = 0;
+  this.duration = 0;
 };
 
 monitorGraph.prototype = {
+  forceUpdateTime: function () {
+    this.playCurrentTime = window.currentTime - this.startTime
+    if (this.type == 'video') {
+      window.videoTest.currentTime = Math.max(0,Math.min(this.duration,this.playCurrentTime))
+    }
+  },
+  updateTime: function () {
+    this.playCurrentTime = window.currentTime - this.startTime
+  },
   checkIfinTime: function () {
     if (this.startTime > window.currentTime || this.endTime < window.currentTime) {
       this.selected = false;
@@ -97,6 +108,7 @@ monitorGraph.prototype = {
   },
   paint: function () {
     if (!this.checkIfinTime()) return
+    this.updateTime();
     this.ctx.save();
 
     // 旋转元素
@@ -143,8 +155,20 @@ monitorGraph.prototype = {
 
         break;
       case "video":
+        if(window.videoTest.paused){
+          window.videoTest.currentTime = this.playCurrentTime
+        }
+        if(window.videoTest.paused && window.akoolEditorState == 'playing'){
+          // window.currentTime = this.playCurrentTime
+          window.videoTest.play()
+        }
+        if(!window.videoTest.paused && window.akoolEditorState == 'paused'){
+          // window.currentTime = this.playCurrentTime
+          window.videoTest.pause()
+        }
         this.ctx.translate(-this.centerX, -this.centerY);
         this.ctx.drawImage(window.videoTest, this.x, this.y, this.w, this.h);
+
         break;
       case "image":
         // this.ctx.translate(-this.centerX, -this.centerY);

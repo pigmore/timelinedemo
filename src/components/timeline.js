@@ -173,14 +173,14 @@ export function Timeline(props) {
     performanceNow = performance.now()
     if (!requestId) {
        requestId = window.requestAnimationFrame(playLoop);
-       window.akoolEditorState = 'play'
+       window.akoolEditorState = 'playing'
     }
   }
   const timelineStop = () => {
     if (requestId) {
       window.cancelAnimationFrame(requestId);
       requestId = undefined;
-      window.akoolEditorState = 'pause'
+      window.akoolEditorState = 'paused'
     }
   }
   const timelineCut = () => {
