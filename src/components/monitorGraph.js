@@ -38,6 +38,8 @@ export const monitorGraph = function (
     // debugger;
     this.centerX = x + textWidth / 2;
     this.centerY = y + textHeight / 2;
+    this.x = x;
+    this.y = y;
     this.w = textWidth;
     this.h = textHeight;
   } else {
@@ -73,6 +75,7 @@ export const monitorGraph = function (
   this.ctx = canvas.getContext("2d");
 
   this.selected = false;
+  this.onfocus = false;
   this.focused = false;
   this.drawCount = 0;
   this.focusIndex = 0;
@@ -87,34 +90,24 @@ monitorGraph.prototype = {
     this.ctx.rotate((this.rotate * Math.PI) / 180);
     switch (this.type) {
       case 'textbox':
-        this.ctx.fillStyle = this.initconfig.fill;
-        this.ctx.font = `${this.initconfig.fontSize}px ${this.initconfig.fontFamily}`;
-        this.ctx.textAlign = 'center';
-        this.ctx.strokeStyle = this.initconfig.stroke;
-        this.ctx.strokeWidth = this.initconfig.strokeWidth;
-        this.ctx.fillText(
-          this.text,
-          0,
-          this.initconfig.fontSize / 3,
-        );
-        this.ctx.strokeText(
-          this.text,
-          0,
-          this.initconfig.fontSize / 3,
-        );
-        if (this.focused) {
-          // if (this.drawCount % 2 == 0) {
-          //   drawFoucsLine(this.ctx,this.w / 2 - 4,- this.initconfig.fontSize / 2,this.w / 2,- this.initconfig.fontSize / 2 + this.h - 20,this.initconfig.fill)
-          //
-          // }
-          // this.drawCount +=1
-          // if (window.textFoucsIntervalBool == false ) {
-          //   window.textFoucsIntervalBool = true
-          //   this.ctx.restore();
-          //   window.textFoucsInterval = setInterval(window.monitor_drawGraphs_function, 1000)
-          //   //  = interval
-          //
-          // }
+
+
+        if (!this.focused) {
+          this.ctx.fillStyle = this.initconfig.fill;
+          this.ctx.font = `${this.initconfig.fontSize}px ${this.initconfig.fontFamily}`;
+          this.ctx.textAlign = 'center';
+          this.ctx.strokeStyle = this.initconfig.stroke;
+          this.ctx.strokeWidth = this.initconfig.strokeWidth;
+          this.ctx.fillText(
+            this.text,
+            0,
+            this.initconfig.fontSize / 3,
+          );
+          this.ctx.strokeText(
+            this.text,
+            0,
+            this.initconfig.fontSize / 3,
+          );
 
         }
         break;

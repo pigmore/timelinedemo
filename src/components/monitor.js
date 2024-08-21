@@ -47,9 +47,9 @@ export function Monitor(props) {
       console.log(e);
       mouseDownX = e.clientX - canvasDom.getBoundingClientRect().left;
       mouseDownY = e.clientY - canvasDom.getBoundingClientRect().top;
-      const textSelectedid = selectedItem.length > 0 ? selectedItem[0].id : ''
+
       monitorAction = "";
-      monitorGraphsIn = [];
+      // monitorGraphsIn = [];
       // if (window.textFoucsIntervalBool) {
       //   clearInterval(window.textFoucsInterval)
       //   window.textFoucsIntervalBool = false
@@ -57,9 +57,10 @@ export function Monitor(props) {
 
       monitorGraphs.forEach((item, i) => {
         item.selected = false;
+        item.onfocus = false;
         item.focused = false;
       });
-      selectedItem = [];
+
       monitorGraphs.forEach(function (shape) {
         var offset = {
           x: mouseDownX - shape.x,
@@ -77,33 +78,53 @@ export function Monitor(props) {
       });
       if (monitorGraphsIn.length > 0) {
         console.log(monitorGraphsIn, "monitorGraphsIn");
-        const _selectedItem = monitorGraphsIn[monitorGraphsIn.length - 1]
-        _selectedItem.selected = true;
-        if (textSelectedid == _selectedItem.id){
-          console.log('focused : true')
-          _selectedItem.focused = true;
-          _selectedItem.focusIndex = _selectedItem.text.length
-          monitorTextCoverRef.current.style.color = _selectedItem.initconfig.fill
-          monitorTextCoverRef.current.style.fontSize = _selectedItem.initconfig.fontSize + 'px'
-          monitorTextCoverRef.current.style.fontFamily = _selectedItem.initconfig.fontFamily
-          monitorTextCoverRef.current.style.width = _selectedItem.w + 'px'
-          monitorTextCoverRef.current.style.height = _selectedItem.h + 'px'
-          monitorTextCoverRef.current.style.top = _selectedItem.x + 'px'
-          monitorTextCoverRef.current.style.left = _selectedItem.y + 'px'
+        const shape = monitorGraphsIn[monitorGraphsIn.length - 1];
+        shape.selected = true;
 
-          monitorTextCoverRef.current.value = _selectedItem.text
+        drawGraphs();
+        if(selectedItem.length > 0 && shape.id == selectedItem[0].id && shape.type == "textbox"){
+            shape.onfocus = true;
+        }else{
+          selectedItem = monitorGraphs.filter((item) => item.selected == true);
         }
+
+
+      }else{
+        selectedItem = [];
       }
       // console.log("monitorGraph/sIn", monitorGraphsIn);
       // console.log("monitorGraphs", monitorGraphs);
-      drawGraphs();
+
     });
     canvasDom.addEventListener("mouseup", function (e) {
+      const textSelectedid = selectedItem.length > 0 ? selectedItem[0].id : ''
       if (monitorGraphsIn[monitorGraphsIn.length - 1]) {
         const shape = monitorGraphsIn[monitorGraphsIn.length - 1];
+        // ;
         shape._rotateSquare();
+        console.log('focused : true??',shape)
+        console.log('focused : true??',shape.focused)
+        if (shape.onfocus && monitorAction == 'move'){
 
+          console.log('focused : true')
+          shape.focused = true
+          // shape.focusIndex = shape.text.length
+          monitorTextCoverRef.current.style.color = shape.initconfig.fill
+          monitorTextCoverRef.current.style.fontSize = shape.initconfig.fontSize + 'px'
+          monitorTextCoverRef.current.style.fontFamily = shape.initconfig.fontFamily
+          monitorTextCoverRef.current.style.display = 'block'
+          monitorTextCoverRef.current.style.width = shape.w + 'px'
+          monitorTextCoverRef.current.style.height = shape.h + 'px'
+          monitorTextCoverRef.current.style.left = shape.x + 'px'
+          monitorTextCoverRef.current.style.top = shape.y + 'px'
+          monitorTextCoverRef.current.value = shape.text
+          monitorTextCoverRef.current.focus()
+        }
+
+        drawGraphs();
         monitorGraphsIn = [];
+      }else{
+
       }
     });
     canvasDom.addEventListener("mousemove", function (e) {
@@ -121,12 +142,16 @@ export function Monitor(props) {
         const shape = monitorGraphsIn[monitorGraphsIn.length - 1];
         // console.log(monitorAction, "monitorAction");
         if (shape.focused) return
+        if (Math.abs(e.movementX >=1) || Math.abs(e.movementY > 1)){
+          shape.onfocus = false
+        }
         switch (monitorAction) {
           case "move":
             shape.x += e.movementX;
             shape.y += e.movementY;
             shape.centerX += e.movementX;
             shape.centerY += e.movementY;
+
             // console.log(shape, "move");
             // shape._rotateSquare()
             drawGraphs();
@@ -257,13 +282,8 @@ export function Monitor(props) {
       monitorGraphs[i].paint();
     }
 
-    if (selectedItem.length > 0) {
+    if (selectedItem.length > 0 && !selectedItem[0].focused) {
       drawBorder(selectedItem[0]);
-    } else {
-      selectedItem = monitorGraphs.filter((item) => item.selected == true);
-      if (selectedItem.length > 0) {
-        drawBorder(selectedItem[0]);
-      }
     }
   };
   window.monitor_drawGraphs_function = () =>{
@@ -334,6 +354,13 @@ export function Monitor(props) {
             (e)=>{
               console.log(e)
               selectedItem[0].text = e.target.value
+              drawGraphs()
+            }
+          }
+          onBlur = {
+            (e)=>{
+              // console.log(e)
+              e.target.style.display = 'none'
               drawGraphs()
             }
           }

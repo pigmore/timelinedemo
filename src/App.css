@@ -24,11 +24,17 @@ body {
   left:0;
   background: none;
   text-align: center;
+  line-height: 1;
   color:white;
   resize: none;
   border: none;
   scrollbar-width: none;
 }
+#monitorTextCover:focus {
+    outline: none !important;
+    border:none;
+    box-shadow: none;
+  }
 .canvasBase {
   margin: 0px;
   background: #222;
