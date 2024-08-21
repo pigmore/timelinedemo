@@ -44,7 +44,7 @@ export function Monitor(props) {
   const addEvents = () => {
 
     canvasDom.addEventListener("mousedown", function (e) {
-      console.log(e);
+      // console.log(e);
       mouseDownX = e.clientX - canvasDom.getBoundingClientRect().left;
       mouseDownY = e.clientY - canvasDom.getBoundingClientRect().top;
 
@@ -77,7 +77,7 @@ export function Monitor(props) {
         }
       });
       if (monitorGraphsIn.length > 0) {
-        console.log(monitorGraphsIn, "monitorGraphsIn");
+        // console.log(monitorGraphsIn, "monitorGraphsIn");
         const shape = monitorGraphsIn[monitorGraphsIn.length - 1];
         shape.selected = true;
 
@@ -102,8 +102,8 @@ export function Monitor(props) {
         const shape = monitorGraphsIn[monitorGraphsIn.length - 1];
         // ;
         shape._rotateSquare();
-        console.log('focused : true??',shape)
-        console.log('focused : true??',shape.focused)
+        // console.log('focused : true??',shape)
+        // console.log('focused : true??',shape.focused)
         if (shape.onfocus && monitorAction == 'move'){
 
           console.log('focused : true')
@@ -117,6 +117,7 @@ export function Monitor(props) {
           monitorTextCoverRef.current.style.height = shape.h + 'px'
           monitorTextCoverRef.current.style.left = shape.x + 'px'
           monitorTextCoverRef.current.style.top = shape.y + 'px'
+          monitorTextCoverRef.current.style.rotate = shape.rotate + 'deg'
           monitorTextCoverRef.current.value = shape.text
           monitorTextCoverRef.current.focus()
         }

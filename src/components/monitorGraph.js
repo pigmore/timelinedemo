@@ -109,7 +109,24 @@ monitorGraph.prototype = {
             this.initconfig.fontSize / 3,
           );
 
-        }
+        }else{
+
+            // this.ctx.setFontSize(initconfig.fontSize || 16);
+            // var fontArgs = this.ctx.font.split(' ');
+            // var newSize = `${this.initconfig.fontSize}px`;
+            // this.ctx.font = newSize + ' ' + this.initconfig.fontFamily;
+            const textWidth = this.ctx.measureText(this.text).width;
+            const textHeight = this.initconfig.fontSize + 10;
+            // this.text = this.initconfig.text
+            // debugger;
+            // this.centerX = x + textWidth / 2;
+            // this.centerY = y + textHeight / 2;
+            this.x = this.centerX - textWidth / 2;
+            this.y = this.centerY - textHeight / 2;
+            this.w = textWidth;
+            this.h = textHeight;
+          }
+        
         break;
       case "image":
         // this.ctx.translate(-this.centerX, -this.centerY);
