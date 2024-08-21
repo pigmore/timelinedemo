@@ -525,8 +525,34 @@ export function Timeline(props) {
       clearCanvas();
       drawGraph();
     };
-    window.initJsonForCanvas = async(items) => {
+    window.initJsonForCanvas = async(_data) => {
       // clearCanvas();
+      var items = [];
+      for (var item of _data) {
+        for (var variable in item) {
+          if (item.hasOwnProperty(variable)) {
+            if (variable == "bg_musics") {
+              const bg_musics_item = item[variable][0];
+              items.push({
+                x: bg_musics_item.start_time,
+                w: bg_musics_item.end_time - bg_musics_item.start_time,
+                y: 2,
+                type:'music'
+              });
+            }
+            if (variable == "elements") {
+              for (var elementsItem of item[variable]) {
+                items.push({
+                  x: elementsItem.start_time,
+                  w: elementsItem.end_time - elementsItem.start_time,
+                  y: elementsItem.layer_number + 2,
+                  type:elementsItem.type
+                });
+              }
+            }
+          }
+        }
+      }
 
       timelineCtx.clearRect(0, 0, canvasDom.width, canvasDom.height);
       timelineGraphs = [];
@@ -547,6 +573,7 @@ export function Timeline(props) {
     // }
     addevents();
     drawGraph();
+    window.initJsonForCanvas(sample.data)
   };
 
   return (
