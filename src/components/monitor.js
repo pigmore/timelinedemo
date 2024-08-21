@@ -286,10 +286,14 @@ export function Monitor(props) {
     for (var i = 0; i < monitorGraphs.length; i++) {
       monitorGraphs[i].paint();
     }
-
-    if (selectedItem.length > 0 && !selectedItem[0].focused) {
+    // if () {
+    if (selectedItem.length > 0 && !selectedItem[0].focused && selectedItem[0].checkIfinTime()) {
       drawBorder(selectedItem[0]);
     }
+    else if (selectedItem.length > 0 && !selectedItem[0].checkIfinTime()){
+      selectedItem = []
+    }
+
   };
   window.monitor_drawGraphs_function = () =>{
     console.log('monitor_drawGraphs_function')

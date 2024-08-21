@@ -87,8 +87,12 @@ export const monitorGraph = function (
 
 monitorGraph.prototype = {
   checkIfinTime: function () {
-    if (this.startTime > window.currentTime) return false
-    if (this.endTime < window.currentTime) return false
+    if (this.startTime > window.currentTime || this.endTime < window.currentTime) {
+      this.selected = false;
+      this.onfocus = false;
+      this.focused = false;
+      return false
+    }
     return true
   },
   paint: function () {

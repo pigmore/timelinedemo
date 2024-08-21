@@ -339,8 +339,10 @@ export function Timeline(props) {
 
     if (window.timelineAction == "timeLinePointerMoving") {
       window.currentFrame += (e.movementX / window.timelineXScale) * 10;
+      window.currentTime = Math.floor(window.currentFrame * 1000 / 60);
       clearCanvas();
       drawGraph();
+      window.monitor_drawGraphs_function()
     } else if (tempGraphArr[tempGraphArr.length - 1]) {
       var shape = tempGraphArr[tempGraphArr.length - 1];
       if (e.offsetX > canvasDom.width - 35 && window.timelineScrollX > -2400) {
@@ -414,8 +416,10 @@ export function Timeline(props) {
     if (e.offsetY < 30) {
       window.currentFrame =
         ((e.offsetX - window.timelineScrollX) * 10) / window.timelineXScale;
+      window.currentTime = Math.floor(window.currentFrame * 1000 / 60)
       clearCanvas();
       drawGraph();
+      window.monitor_drawGraphs_function()
     }
 
     tempGraphArr = [];
