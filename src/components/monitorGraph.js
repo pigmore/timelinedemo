@@ -382,7 +382,7 @@ monitorGraph.prototype = {
       diffXAfter / diffXBefore,
       diffYAfter / diffYBefore,
     );
-    if (this.type === "image" || this.type === "avatar") {
+    if (this.type === "image" || this.type === "avatar" || this.type === "video") {
       // let resize_rito = lineB / lineA
       let new_w = currentGraph.w * resize_rito;
       let new_h = currentGraph.h * resize_rito;
