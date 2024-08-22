@@ -43,7 +43,17 @@ export function Monitor(props) {
   // var focused = false
 
   const updateElement = (_elarray) => {
-      console.log(_elarray)
+      // console.log(_elarray)
+      for (var item of _elarray) {
+        for (var _item of monitorGraphs) {
+          if (_item.id == item.id) {
+            _item.startTime = item.x
+            _item.endTime = item.x + item.w
+            break;
+          }
+        }
+      }
+      drawGraphs(true)
   };
   const addEvents = () => {
 
