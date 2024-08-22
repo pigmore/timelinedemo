@@ -118,11 +118,12 @@ monitorGraph.prototype = {
   },
   checkIfinTime: function () {
     if (this.startTime <= window.currentTime && this.endTime > window.currentTime) {
-      this.selected = false;
-      this.onfocus = false;
-      this.focused = false;
+
       return true
     }
+    this.selected = false;
+    this.onfocus = false;
+    this.focused = false;
     return false
   },
   paint: function (_forceUpdate = false) {
