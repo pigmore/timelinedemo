@@ -371,7 +371,7 @@ export function Timeline(props) {
       window.currentTime = Math.floor(window.currentFrame * 1000 / 60);
       clearCanvas();
       drawGraph();
-      window.monitor_drawGraphs_function()
+      window.monitor_drawGraphs_function(true)
     } else if (tempGraphArr[tempGraphArr.length - 1]) {
       var shape = tempGraphArr[tempGraphArr.length - 1];
       if (e.offsetX > canvasDom.width - 35 && window.timelineScrollX > -2400) {
@@ -448,7 +448,8 @@ export function Timeline(props) {
       window.currentTime = Math.floor(window.currentFrame * 1000 / 60)
       clearCanvas();
       drawGraph();
-      window.monitor_drawGraphs_function()
+      window.monitor_drawGraphs_function(true)
+      // window.forceUpdateTime_function()
     }
 
     tempGraphArr = [];

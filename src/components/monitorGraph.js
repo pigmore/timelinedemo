@@ -17,7 +17,7 @@ export const monitorGraph = function (
   s,
   text,
   type,
-  imageLoadedSrc,
+  loadedSrc,
   canvas,
   startTime,
   endTime,
@@ -74,7 +74,7 @@ export const monitorGraph = function (
 
   this.text = text;
   this.type = type;
-  this.imageLoadedSrc = imageLoadedSrc;
+  this.loadedSrc = loadedSrc;
   this.canvas = canvas;
   this.ctx = canvas.getContext("2d");
 
@@ -85,13 +85,29 @@ export const monitorGraph = function (
   this.focusIndex = 0;
   this.playCurrentTime = 0;
   this.duration = 0;
+  if (this.type == 'video') {
+    this.loadedSrc.addEventListener('seeked', (event) => {
+        window.monitor_drawGraphs_function()
+    });
+  }
 };
 
 monitorGraph.prototype = {
   forceUpdateTime: function () {
     this.playCurrentTime = window.currentTime - this.startTime
+
     if (this.type == 'video') {
-      window.videoTest.currentTime = Math.max(0,Math.min(this.duration,this.playCurrentTime))
+      console.log(this.playCurrentTime)
+      console.log(this.playCurrentTime / 1000)
+      console.log(this.loadedSrc.currentTime)
+      console.log(this.loadedSrc.duration)
+
+      this.loadedSrc.currentTime = Math.max(0,Math.min(this.loadedSrc.duration,this.playCurrentTime / 1000))
+      // this.loadedSrc.play()
+      // this.loadedSrc.pause()
+      // if (!this.loadedSrc.paused) {
+      //   this.loadedSrc.pause()
+      // }
     }
   },
   updateTime: function () {
@@ -106,8 +122,10 @@ monitorGraph.prototype = {
     }
     return true
   },
-  paint: function () {
+  paint: function (_forceUpdate = false) {
+    if (_forceUpdate) this.forceUpdateTime();
     if (!this.checkIfinTime()) return
+
     this.updateTime();
     this.ctx.save();
 
@@ -155,28 +173,33 @@ monitorGraph.prototype = {
 
         break;
       case "video":
-        if(window.videoTest.paused){
-          window.videoTest.currentTime = this.playCurrentTime
-        }
-        if(window.videoTest.paused && window.akoolEditorState == 'playing'){
+        // if(this.loadedSrc.paused){
+        //   this.loadedSrc.currentTime = Math.max(0,Math.min(this.loadedSrc.duration,this.playCurrentTime / 1000))
+        //   video.onseeked = (event) => {
+        //
+        //   };
+        // }
+        if(this.loadedSrc.paused && window.akoolEditorState == 'playing'){
           // window.currentTime = this.playCurrentTime
-          window.videoTest.play()
+          this.loadedSrc.currentTime = Math.max(0,Math.min(this.loadedSrc.duration,this.playCurrentTime / 1000))
+          this.loadedSrc.play()
         }
-        if(!window.videoTest.paused && window.akoolEditorState == 'paused'){
+        if(!this.loadedSrc.paused && window.akoolEditorState == 'paused'){
           // window.currentTime = this.playCurrentTime
-          window.videoTest.pause()
+          this.loadedSrc.currentTime = Math.max(0,Math.min(this.loadedSrc.duration,this.playCurrentTime / 1000))
+          this.loadedSrc.pause()
         }
         this.ctx.translate(-this.centerX, -this.centerY);
-        this.ctx.drawImage(window.videoTest, this.x, this.y, this.w, this.h);
+        this.ctx.drawImage(this.loadedSrc, this.x, this.y, this.w, this.h);
 
         break;
       case "image":
         // this.ctx.translate(-this.centerX, -this.centerY);
-        // this.ctx.drawImage(this.imageLoadedSrc, this.x, this.y, this.w, this.h);
+        // this.ctx.drawImage(this.loadedSrc, this.x, this.y, this.w, this.h);
         // break;
       case "avatar":
         this.ctx.translate(-this.centerX, -this.centerY);
-        this.ctx.drawImage(this.imageLoadedSrc, this.x, this.y, this.w, this.h);
+        this.ctx.drawImage(this.loadedSrc, this.x, this.y, this.w, this.h);
         break;
       default:
     }

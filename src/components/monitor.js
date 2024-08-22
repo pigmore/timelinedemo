@@ -307,12 +307,12 @@ export function Monitor(props) {
     console.log(monitorGraphs);
     // console.log(monitorCanvas)
   };
-  const drawGraphs = () => {
+  const drawGraphs = (forceUpdate = false) => {
     // console.log(timelineGraphs)
     if (monitorCtx) monitorCtx.clearRect(0, 0, canvasDom.width, canvasDom.height);
 
     for (var i = 0; i < monitorGraphs.length; i++) {
-      monitorGraphs[i].paint();
+      monitorGraphs[i].paint(forceUpdate);
     }
     // if () {
     if (selectedItem.length > 0 && !selectedItem[0].focused && selectedItem[0].checkIfinTime()) {
@@ -323,9 +323,13 @@ export function Monitor(props) {
     }
 
   };
-  window.monitor_drawGraphs_function = () =>{
+  // window.forceUpdateTime_function = () =>{
+  //   console.log('monitor_drawGraphs_function')
+  //   drawGraphs(true)
+  // }
+  window.monitor_drawGraphs_function = (forceUpdate = false) =>{
     console.log('monitor_drawGraphs_function')
-    drawGraphs()
+    drawGraphs(forceUpdate)
   }
   const initCanvas = async () => {
     canvasDom = document.getElementById("monitor_canvas");

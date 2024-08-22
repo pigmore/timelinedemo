@@ -57,6 +57,7 @@ export function loadVideoProssse(_canvas, _url) {
     .then(async(body) => {
       const reader = body.getReader();
       let buffer = [];
+      let videoEl = document.createElement("video")
       while (1) {
           const { value, done } = await reader.read();
           // console.log(reader)
@@ -65,14 +66,17 @@ export function loadVideoProssse(_canvas, _url) {
           if (done) {
               const blob = new Blob(buffer);
               const blobUrl = URL.createObjectURL(blob);
-              window.videoTest.src = blobUrl;
-              resolve(blobUrl);
+
+              videoEl.src = blobUrl;
+
               break;
 
           }
+
           buffer.push(value);
           console.log('??')
       }
+      resolve(videoEl);
 
     });
 
@@ -95,7 +99,7 @@ export function loadImgByDom(_id, _url) {
     let seal = document.createElement("img");
     seal.setAttribute("id", _id);
     seal.src = _url;
-    document.body.appendChild(seal);
+    // document.body.appendChild(seal);
     // var seal = new Image();
     // seal.src = _url;
     seal.onload = () => {
