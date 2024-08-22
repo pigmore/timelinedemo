@@ -24,7 +24,7 @@ function App() {
     const [fileHandle] = await window.showOpenFilePicker({
       types: [{ accept }],
     });
-    return (await fileHandle.getFile());
+    return await fileHandle.getFile();
   }
 
   return (
@@ -73,9 +73,7 @@ function App() {
         scale:{scale}+1
       </button>
 
-
       <Timelinememo redrawTrigger={redraw} />
-
 
       {/*
         <button

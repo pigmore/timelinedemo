@@ -50,7 +50,7 @@ import { sample } from "./sample";
 })();
 
 export function Timeline(props) {
-  var requestId ,
+  var requestId,
     performanceNow = 0,
     canvasDom = null,
     timelineCtx = null,
@@ -67,7 +67,9 @@ export function Timeline(props) {
     }
     init();
     window.initReady = true;
-    return ()=>{removeEvents()}
+    return () => {
+      removeEvents();
+    };
   }, []);
   const checkIfInsideMoveing = (_shape, mouseX, needtoPiant = true) => {
     const _x = checkIfInsidemoving(
@@ -159,44 +161,47 @@ export function Timeline(props) {
     }
   };
   const playLoop = (_stamp) => {
-    const deltaTime = _stamp - performanceNow
+    const deltaTime = _stamp - performanceNow;
     window.currentTime += deltaTime;
-    window.currentFrame =  Math.floor(window.currentTime / 100 * 6);
+    window.currentFrame = Math.floor((window.currentTime / 100) * 6);
     clearCanvas();
     drawGraph();
-    window.monitor_drawGraphs_function()
-    performanceNow = _stamp
-    requestId = window.requestAnimationFrame(playLoop)
+    window.monitor_drawGraphs_function();
+    performanceNow = _stamp;
+    requestId = window.requestAnimationFrame(playLoop);
     // timelinePlay();
-  }
+  };
   const timelinePlay = () => {
-    performanceNow = performance.now()
+    performanceNow = performance.now();
     if (!requestId) {
-       requestId = window.requestAnimationFrame(playLoop);
-       window.akoolEditorState = 'playing'
+      requestId = window.requestAnimationFrame(playLoop);
+      window.akoolEditorState = "playing";
     }
-  }
+  };
   const clearSelectItem = () => {
-      timelineGraphs.forEach((item, i) => {
-        item.selected = false
-      });
-  }
+    timelineGraphs.forEach((item, i) => {
+      item.selected = false;
+    });
+  };
   const handleSelectItem = (_id) => {
-
-    timelineGraphs.find(item => item.id === _id).selected = true
-  }
+    timelineGraphs.find((item) => item.id === _id).selected = true;
+  };
   const timelineStop = () => {
     if (requestId) {
       window.cancelAnimationFrame(requestId);
       requestId = undefined;
-      window.akoolEditorState = 'paused'
+      window.akoolEditorState = "paused";
     }
-  }
+  };
   const timelineCut = () => {
     var _index = -1;
     var _item = {};
     timelineGraphs.forEach((item, i) => {
-      if (item.selected &&  ( item.x < window.currentFrame / 6 &&  item.x + item.w > window.currentFrame / 6)) {
+      if (
+        item.selected &&
+        item.x < window.currentFrame / 6 &&
+        item.x + item.w > window.currentFrame / 6
+      ) {
         const _id = uuid();
         _item = new timelineGraph(
           _id,
@@ -217,8 +222,12 @@ export function Timeline(props) {
         _item.w -= window.currentFrame / 6 - item.x;
         _index = i;
         item.w = window.currentFrame / 6 - item.x;
-        console.log(window.currentFrame / 6 - item.x)
-        window.monitorDuplicateElement_function(item.id,_id,window.currentFrame / 6 - item.x)
+        console.log(window.currentFrame / 6 - item.x);
+        window.monitorDuplicateElement_function(
+          item.id,
+          _id,
+          window.currentFrame / 6 - item.x,
+        );
       }
     });
     if (_index >= 0) {
@@ -227,7 +236,7 @@ export function Timeline(props) {
       drawGraph();
     }
   };
-  const addElement = async (id,x,y,w,type) => {
+  const addElement = async (id, x, y, w, type) => {
     // var typeTemp = ["music", "textbox", "Emojo", "Image", "Video"][
     //   randomInt(0, 5)
     // ];
@@ -307,7 +316,7 @@ export function Timeline(props) {
     let result = [];
     for (var item of timelineGraphs) {
       var temp = {
-        id:item.id,
+        id: item.id,
         x: (item.x * 100).toFixed(),
         y: (item.y / 28).toFixed(),
         w: (item.w * 100).toFixed(),
@@ -349,7 +358,7 @@ export function Timeline(props) {
         var timelineAction = shape.isMouseInGraph(mouse);
         if (timelineAction) {
           shape.selected = true;
-          window.handleMonitorSelectItem_function(shape.id)
+          window.handleMonitorSelectItem_function(shape.id);
           tempGraphArr.push(shape);
           window.timelineAction = timelineAction;
         } else {
@@ -359,8 +368,8 @@ export function Timeline(props) {
         // shape.paint();
       });
     }
-    if (window.timelineAction == 'none') {
-      window.clearMonitorSelectItem_function()
+    if (window.timelineAction == "none") {
+      window.clearMonitorSelectItem_function();
     }
     clearCanvas();
     drawGraph();
@@ -387,10 +396,10 @@ export function Timeline(props) {
 
     if (window.timelineAction == "timeLinePointerMoving") {
       window.currentFrame += (e.movementX / window.timelineXScale) * 6;
-      window.currentTime = Math.floor(window.currentFrame * 1000 / 60);
+      window.currentTime = Math.floor((window.currentFrame * 1000) / 60);
       clearCanvas();
       drawGraph();
-      window.monitor_drawGraphs_function(true)
+      window.monitor_drawGraphs_function(true);
     } else if (tempGraphArr[tempGraphArr.length - 1]) {
       var shape = tempGraphArr[tempGraphArr.length - 1];
       if (e.offsetX > canvasDom.width - 35 && window.timelineScrollX > -2400) {
@@ -464,10 +473,10 @@ export function Timeline(props) {
     if (e.offsetY < 30) {
       window.currentFrame =
         ((e.offsetX - window.timelineScrollX) * 6) / window.timelineXScale;
-      window.currentTime = Math.floor(window.currentFrame * 1000 / 60)
+      window.currentTime = Math.floor((window.currentFrame * 1000) / 60);
       clearCanvas();
       drawGraph();
-      window.monitor_drawGraphs_function(true)
+      window.monitor_drawGraphs_function(true);
       // window.forceUpdateTime_function()
     }
 
@@ -577,7 +586,7 @@ export function Timeline(props) {
       drawGraph();
     };
     window.timelineHandleSelectItem_function = (_id) => {
-      clearSelectItem()
+      clearSelectItem();
       handleSelectItem(_id);
       clearCanvas();
       drawGraph();
@@ -591,7 +600,7 @@ export function Timeline(props) {
       clearCanvas();
       drawGraph();
     };
-    window.initJsonForCanvas = async(_data) => {
+    window.initJsonForCanvas = async (_data) => {
       // clearCanvas();
       var items = [];
       for (var item of _data) {
@@ -604,7 +613,7 @@ export function Timeline(props) {
                 x: bg_musics_item.start_time,
                 w: bg_musics_item.end_time - bg_musics_item.start_time,
                 y: 2,
-                type:'music'
+                type: "music",
               });
             }
             if (variable == "elements") {
@@ -614,7 +623,7 @@ export function Timeline(props) {
                   x: elementsItem.start_time,
                   w: elementsItem.end_time - elementsItem.start_time,
                   y: elementsItem.layer_number + 2,
-                  type:elementsItem.type
+                  type: elementsItem.type,
                 });
               }
             }
@@ -625,13 +634,7 @@ export function Timeline(props) {
       timelineCtx.clearRect(0, 0, canvasDom.width, canvasDom.height);
       timelineGraphs = [];
       for (var item of items) {
-        await addElement(
-          item.id,
-          item.x,
-          item.y,
-          item.w,
-          item.type
-        )
+        await addElement(item.id, item.x, item.y, item.w, item.type);
       }
 
       drawGraph();
@@ -642,7 +645,7 @@ export function Timeline(props) {
     // }
     addevents();
     drawGraph();
-    window.initJsonForCanvas(sample.data)
+    window.initJsonForCanvas(sample.data);
   };
 
   return (

@@ -15,33 +15,32 @@ body {
   margin: 0;
   padding: 0;
 }
-#monitorWarp{
+#monitorWarp {
   position: relative;
 }
-#monitorTextCover{
+#monitorTextCover {
   position: absolute;
   top: 0;
-  left:0;
+  left: 0;
   background: none;
   text-align: center;
   line-height: 1;
-  color:white;
+  color: white;
   resize: none;
   border: none;
   scrollbar-width: none;
 }
 #monitorTextCover:focus {
-    outline: none !important;
-    border:none;
-    box-shadow: none;
-  }
+  outline: none !important;
+  border: none;
+  box-shadow: none;
+}
 #monitor_canvas {
-    height:600px;
-  }
+  height: 600px;
+}
 .canvasBase {
   margin: 0px;
   background: #222;
-
 }
 .canvasBase2 {
   margin: 20px;

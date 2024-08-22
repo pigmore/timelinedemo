@@ -42,8 +42,7 @@ export const Test = forwardRef((props, ref) => {
     },
   }));
 
-  const handleInitJson = async(_data = inputJson.data) => {
-
+  const handleInitJson = async (_data = inputJson.data) => {
     // setJsonInit(JSON.stringify(json));
 
     await window.initJsonForCanvas(_data);
@@ -52,7 +51,7 @@ export const Test = forwardRef((props, ref) => {
   return (
     <div>
       <button
-        onClick={async() => {
+        onClick={async () => {
           await handleInitJson();
         }}
       >

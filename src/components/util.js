@@ -38,49 +38,43 @@ export function drawCircleIcon(ctx, left, top) {
 }
 
 export function loadTextProssse(textName, _url) {
-  console.log(_url)
+  console.log(_url);
   return new Promise((resolve, reject) => {
-
     let f = new FontFace(textName, `url(${_url})`);
 
     f.load().then(() => {
       resolve();
     });
-
   });
 }
 
 export function loadVideoProssse(_canvas, _url) {
-  return new Promise(async(resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     await fetch(_url)
-    .then((response) => response.body)
-    .then(async(body) => {
-      const reader = body.getReader();
-      let buffer = [];
-      let videoEl = document.createElement("video")
-      while (1) {
+      .then((response) => response.body)
+      .then(async (body) => {
+        const reader = body.getReader();
+        let buffer = [];
+        let videoEl = document.createElement("video");
+        while (1) {
           const { value, done } = await reader.read();
           // console.log(reader)
           // console.log(value)
           // console.log(done)
           if (done) {
-              const blob = new Blob(buffer);
-              const blobUrl = URL.createObjectURL(blob);
+            const blob = new Blob(buffer);
+            const blobUrl = URL.createObjectURL(blob);
 
-              videoEl.src = blobUrl;
+            videoEl.src = blobUrl;
 
-              break;
-
+            break;
           }
 
           buffer.push(value);
-          console.log('??')
-      }
-      resolve(videoEl);
-
-    });
-
-
+          console.log("??");
+        }
+        resolve(videoEl);
+      });
   });
 }
 export function loadImgProssse(_canvas, _url) {

@@ -26,7 +26,7 @@ export const monitorGraph = function (
     fontSize: 0,
   },
   start_point,
-  end_point
+  end_point,
 ) {
   this.initconfig = initconfig;
   this.id = id;
@@ -36,10 +36,10 @@ export const monitorGraph = function (
     // this.ctx.setFontSize(initconfig.fontSize || 16);
     // var fontArgs = this.ctx.font.split(' ');
     var newSize = `${this.initconfig.fontSize}px`;
-    this.ctx.font = newSize + ' ' + this.initconfig.fontFamily;
+    this.ctx.font = newSize + " " + this.initconfig.fontFamily;
     const textWidth = this.ctx.measureText(this.initconfig.text).width;
     const textHeight = this.initconfig.fontSize + 10;
-    this.text = this.initconfig.text
+    this.text = this.initconfig.text;
     // debugger;
     this.centerX = x + textWidth / 2;
     this.centerY = y + textHeight / 2;
@@ -90,40 +90,46 @@ export const monitorGraph = function (
   this.focusIndex = 0;
   this.playCurrentTime = 0;
   this.duration = 0;
-  if (this.type == 'video') {
-    this.loadedSrc.addEventListener('seeked', (event) => {
-        window.monitor_drawGraphs_function()
+  if (this.type == "video") {
+    this.loadedSrc.addEventListener("seeked", (event) => {
+      window.monitor_drawGraphs_function();
     });
   }
 };
 
 monitorGraph.prototype = {
   forceUpdateTime: function () {
-    this.playCurrentTime = window.currentTime - this.startTime - (this.start_point || 0)
-    console.log(this.playCurrentTime)
-    console.log(this.startTime)
-    console.log(this.endTime)
-    if (this.type == 'video') {
-
-      this.loadedSrc.currentTime = Math.max(0,Math.min(this.loadedSrc.duration,this.playCurrentTime / 1000))
+    this.playCurrentTime =
+      window.currentTime - this.startTime - (this.start_point || 0);
+    console.log(this.playCurrentTime);
+    console.log(this.startTime);
+    console.log(this.endTime);
+    if (this.type == "video") {
+      this.loadedSrc.currentTime = Math.max(
+        0,
+        Math.min(this.loadedSrc.duration, this.playCurrentTime / 1000),
+      );
     }
   },
   updateTime: function () {
-    this.playCurrentTime = window.currentTime - this.startTime - (this.start_point || 0)
+    this.playCurrentTime =
+      window.currentTime - this.startTime - (this.start_point || 0);
   },
   checkIfinTime: function () {
-    if (this.startTime <= window.currentTime && this.endTime > window.currentTime) {
-
-      return true
+    if (
+      this.startTime <= window.currentTime &&
+      this.endTime > window.currentTime
+    ) {
+      return true;
     }
     this.selected = false;
     this.onfocus = false;
     this.focused = false;
-    return false
+    return false;
   },
   paint: function (_forceUpdate = false) {
     if (_forceUpdate) this.forceUpdateTime();
-    if (!this.checkIfinTime()) return
+    if (!this.checkIfinTime()) return;
 
     this.updateTime();
     this.ctx.save();
@@ -132,43 +138,31 @@ monitorGraph.prototype = {
     this.ctx.translate(this.centerX, this.centerY);
     this.ctx.rotate((this.rotate * Math.PI) / 180);
     switch (this.type) {
-      case 'textbox':
-
-
+      case "textbox":
         if (!this.focused) {
           this.ctx.fillStyle = this.initconfig.fill;
           this.ctx.font = `${this.initconfig.fontSize}px ${this.initconfig.fontFamily}`;
-          this.ctx.textAlign = 'center';
+          this.ctx.textAlign = "center";
           this.ctx.strokeStyle = this.initconfig.stroke;
           this.ctx.strokeWidth = this.initconfig.strokeWidth;
-          this.ctx.fillText(
-            this.text,
-            0,
-            this.initconfig.fontSize / 3,
-          );
-          this.ctx.strokeText(
-            this.text,
-            0,
-            this.initconfig.fontSize / 3,
-          );
-
-        }else{
-
-            // this.ctx.setFontSize(initconfig.fontSize || 16);
-            // var fontArgs = this.ctx.font.split(' ');
-            // var newSize = `${this.initconfig.fontSize}px`;
-            // this.ctx.font = newSize + ' ' + this.initconfig.fontFamily;
-            const textWidth = this.ctx.measureText(this.text).width;
-            const textHeight = this.initconfig.fontSize + 10;
-            // this.text = this.initconfig.text
-            // debugger;
-            // this.centerX = x + textWidth / 2;
-            // this.centerY = y + textHeight / 2;
-            this.x = this.centerX - textWidth / 2;
-            this.y = this.centerY - textHeight / 2;
-            this.w = textWidth;
-            this.h = textHeight;
-          }
+          this.ctx.fillText(this.text, 0, this.initconfig.fontSize / 3);
+          this.ctx.strokeText(this.text, 0, this.initconfig.fontSize / 3);
+        } else {
+          // this.ctx.setFontSize(initconfig.fontSize || 16);
+          // var fontArgs = this.ctx.font.split(' ');
+          // var newSize = `${this.initconfig.fontSize}px`;
+          // this.ctx.font = newSize + ' ' + this.initconfig.fontFamily;
+          const textWidth = this.ctx.measureText(this.text).width;
+          const textHeight = this.initconfig.fontSize + 10;
+          // this.text = this.initconfig.text
+          // debugger;
+          // this.centerX = x + textWidth / 2;
+          // this.centerY = y + textHeight / 2;
+          this.x = this.centerX - textWidth / 2;
+          this.y = this.centerY - textHeight / 2;
+          this.w = textWidth;
+          this.h = textHeight;
+        }
 
         break;
       case "video":
@@ -178,24 +172,30 @@ monitorGraph.prototype = {
         //
         //   };
         // }
-        if(this.loadedSrc.paused && window.akoolEditorState == 'playing'){
+        if (this.loadedSrc.paused && window.akoolEditorState == "playing") {
           // window.currentTime = this.playCurrentTime
-          this.loadedSrc.currentTime = Math.max(0,Math.min(this.loadedSrc.duration,this.playCurrentTime / 1000))
-          this.loadedSrc.play()
+          this.loadedSrc.currentTime = Math.max(
+            0,
+            Math.min(this.loadedSrc.duration, this.playCurrentTime / 1000),
+          );
+          this.loadedSrc.play();
         }
-        if(!this.loadedSrc.paused && window.akoolEditorState == 'paused'){
+        if (!this.loadedSrc.paused && window.akoolEditorState == "paused") {
           // window.currentTime = this.playCurrentTime
-          this.loadedSrc.currentTime = Math.max(0,Math.min(this.loadedSrc.duration,this.playCurrentTime / 1000))
-          this.loadedSrc.pause()
+          this.loadedSrc.currentTime = Math.max(
+            0,
+            Math.min(this.loadedSrc.duration, this.playCurrentTime / 1000),
+          );
+          this.loadedSrc.pause();
         }
         this.ctx.translate(-this.centerX, -this.centerY);
         this.ctx.drawImage(this.loadedSrc, this.x, this.y, this.w, this.h);
 
         break;
       case "image":
-        // this.ctx.translate(-this.centerX, -this.centerY);
-        // this.ctx.drawImage(this.loadedSrc, this.x, this.y, this.w, this.h);
-        // break;
+      // this.ctx.translate(-this.centerX, -this.centerY);
+      // this.ctx.drawImage(this.loadedSrc, this.x, this.y, this.w, this.h);
+      // break;
       case "avatar":
         this.ctx.translate(-this.centerX, -this.centerY);
         this.ctx.drawImage(this.loadedSrc, this.x, this.y, this.w, this.h);
@@ -240,7 +240,7 @@ monitorGraph.prototype = {
     return false;
   },
   isMouseInGraph: function (mouse) {
-    if (!this.checkIfinTime()) return
+    if (!this.checkIfinTime()) return;
     this.ctx.save();
     // this.ctx.translate(window.timelineScrollX, 0);
     // this.context.beginPath();
@@ -381,7 +381,11 @@ monitorGraph.prototype = {
       diffXAfter / diffXBefore,
       diffYAfter / diffYBefore,
     );
-    if (this.type === "image" || this.type === "avatar" || this.type === "video") {
+    if (
+      this.type === "image" ||
+      this.type === "avatar" ||
+      this.type === "video"
+    ) {
       // let resize_rito = lineB / lineA
       let new_w = currentGraph.w * resize_rito;
       let new_h = currentGraph.h * resize_rito;
