@@ -217,7 +217,8 @@ export function Timeline(props) {
         _item.w -= window.currentFrame / 6 - item.x;
         _index = i;
         item.w = window.currentFrame / 6 - item.x;
-        window.monitorDuplicateElement_function(item.id,_id)
+        console.log(window.currentFrame / 6 - item.x)
+        window.monitorDuplicateElement_function(item.id,_id,window.currentFrame / 6 - item.x)
       }
     });
     if (_index >= 0) {

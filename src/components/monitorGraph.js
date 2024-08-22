@@ -25,6 +25,8 @@ export const monitorGraph = function (
   initconfig = {
     fontSize: 0,
   },
+  start_point,
+  end_point
 ) {
   this.initconfig = initconfig;
   this.id = id;
@@ -64,6 +66,8 @@ export const monitorGraph = function (
   this.rotate0 = r;
   this.startTime = startTime;
   this.endTime = endTime;
+  this.startPoint = start_point;
+  this.end_point = end_point;
 
   // 4个顶点坐标
   this.square = [
@@ -95,26 +99,17 @@ export const monitorGraph = function (
 
 monitorGraph.prototype = {
   forceUpdateTime: function () {
-    this.playCurrentTime = window.currentTime - this.startTime
+    this.playCurrentTime = window.currentTime - this.startTime - (this.start_point || 0)
     console.log(this.playCurrentTime)
     console.log(this.startTime)
     console.log(this.endTime)
     if (this.type == 'video') {
-      // console.log(this.playCurrentTime)
-      // console.log(this.playCurrentTime / 1000)
-      // console.log(this.loadedSrc.currentTime)
-      // console.log(this.loadedSrc.duration)
 
       this.loadedSrc.currentTime = Math.max(0,Math.min(this.loadedSrc.duration,this.playCurrentTime / 1000))
-      // this.loadedSrc.play()
-      // this.loadedSrc.pause()
-      // if (!this.loadedSrc.paused) {
-      //   this.loadedSrc.pause()
-      // }
     }
   },
   updateTime: function () {
-    this.playCurrentTime = window.currentTime - this.startTime
+    this.playCurrentTime = window.currentTime - this.startTime - (this.start_point || 0)
   },
   checkIfinTime: function () {
     if (this.startTime <= window.currentTime && this.endTime > window.currentTime) {

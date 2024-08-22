@@ -55,11 +55,14 @@ export function Monitor(props) {
     monitorGraphs[monitorGraphs.findIndex(item => item.id === _id)].selected = true
     selectedItem = monitorGraphs.filter((item) => item.selected == true)
   }
-  const monitorDuplicateElement = (_idOld,_id) => {
+  const monitorDuplicateElement = (_idOld,_id,_deltaX) => {
 
     const duplicateItem = monitorGraphs.find(item => item.id === _idOld)
     let clone = Object.assign(Object.create(Object.getPrototypeOf(duplicateItem)), duplicateItem)
     clone.id = _id
+    if (clone.type = "video") {
+      clone.start_point += _deltaX * 100
+    }
     monitorGraphs.push(clone)
 
   }
@@ -70,6 +73,7 @@ export function Monitor(props) {
           if (_item.id == item.id) {
             _item.startTime = item.x
             _item.endTime = parseInt(item.x) + parseInt(item.w)
+
             break;
           }
         }
@@ -229,22 +233,7 @@ export function Monitor(props) {
           switch (variable) {
             case "elements":
               for (var elementsItem of item[variable]) {
-                jsonTemp.push({
-                  type: elementsItem.type,
-                  url: elementsItem.url,
-                  id: elementsItem.id,
-                  angle: elementsItem.angle,
-                  scale_x: elementsItem.scale_x,
-                  scale_y: elementsItem.scale_y,
-                  width: elementsItem.width,
-                  height: elementsItem.height,
-                  offset_x: elementsItem.offset_x,
-                  offset_y: elementsItem.offset_y,
-                  opacity: elementsItem.opacity,
-                  layer_number: elementsItem.layer_number,
-                  start_time: elementsItem.start_time,
-                  end_time: elementsItem.end_time,
-                });
+                jsonTemp.push(elementsItem);
               }
               break;
             default:
@@ -303,6 +292,9 @@ export function Monitor(props) {
             canvasDom,
             item.start_time,
             item.end_time,
+            {},
+            item.start_point,
+            item.end_point,
           );
           // checkIfInsideLoop(graph);
           console.log(graph,'???video');
@@ -369,9 +361,9 @@ export function Monitor(props) {
     console.log('monitor_drawGraphs_function')
     drawGraphs(forceUpdate)
   }
-  window.monitorDuplicateElement_function = (_idOld,_id) =>{
+  window.monitorDuplicateElement_function = (_idOld,_id,_deltaX) =>{
     console.log('monitorDuplicateElement_function')
-    monitorDuplicateElement(_idOld,_id)
+    monitorDuplicateElement(_idOld,_id,_deltaX)
   }
   window.handleMonitorSelectItem_function = (_id) =>{
     console.log('handleSelectItem_function')
