@@ -74,11 +74,13 @@ export function Monitor(props) {
           if (_item.id == item.id) {
             _item.startTime = item.x
             _item.endTime = parseInt(item.x) + parseInt(item.w)
+            _item.layer_number = item.y
 
             break;
           }
         }
       }
+      monitorGraphs.sort((a, b) => b.layer_number - a.layer_number);
       drawGraphs(true)
   };
   const addEvents = () => {
@@ -243,7 +245,7 @@ export function Monitor(props) {
       }
     }
     // console.log(jsonTemp);
-    jsonTemp.sort((a, b) => a.layer_number - b.layer_number);
+    jsonTemp.sort((a, b) => b.layer_number - a.layer_number);
     // console.log(jsonTemp);
 
     for (var item of jsonTemp) {

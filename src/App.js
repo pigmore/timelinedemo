@@ -51,14 +51,7 @@ function App() {
       >
         cut!
       </button>
-      <button
-        onClick={async () => {
-          setCount((count) => count + 1);
-          await window.addElement_function();
-        }}
-      >
-        {count}+1
-      </button>
+
       <button
         onClick={() => {
           window.timelineXScale = Math.max(scale - 1, 1);
@@ -79,36 +72,45 @@ function App() {
       >
         scale:{scale}+1
       </button>
-      <button
-        onClick={async() => {
-          const file = await loadFile({ 'video/*': ['.mp4', '.mov'] });
-          console.log(file)
-          const stream = file.stream()
-          console.log(stream)
-          window.videoTest.src = stream
-          const reader = stream.getReader()
-          console.log(reader)
-          let buffer = [];
-          while (1) {
-              const { value, done } = await reader.read();
-              if (done) {
-                  const blob = new Blob(buffer);
-                  const blobUrl = URL.createObjectURL(blob);
-                  window.videoTest.src = blobUrl;
-                  break;
-              }
-              buffer.push(value);
-              console.log('??')
-          }
-        }}
-      >
-        input Video
-      </button>
+
 
       <Timelinememo redrawTrigger={redraw} />
 
 
       {/*
+        <button
+          onClick={async () => {
+            setCount((count) => count + 1);
+            await window.addElement_function();
+          }}
+        >
+          {count}+1
+        </button>
+        <button
+          onClick={async() => {
+            const file = await loadFile({ 'video/*': ['.mp4', '.mov'] });
+            console.log(file)
+            const stream = file.stream()
+            console.log(stream)
+            window.videoTest.src = stream
+            const reader = stream.getReader()
+            console.log(reader)
+            let buffer = [];
+            while (1) {
+                const { value, done } = await reader.read();
+                if (done) {
+                    const blob = new Blob(buffer);
+                    const blobUrl = URL.createObjectURL(blob);
+                    window.videoTest.src = blobUrl;
+                    break;
+                }
+                buffer.push(value);
+                console.log('??')
+            }
+          }}
+        >
+          input Video
+        </button>
         <video src="" id='videoTest' controls={true}></video>
         <ColorPickermemo />
         <video controls id = "myStreamingVideo"></video>
@@ -124,6 +126,7 @@ function App() {
         */}
 
       {/*
+
         <button
           onClick={() => {
             handlemyRefCount();
