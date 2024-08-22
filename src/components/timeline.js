@@ -176,6 +176,15 @@ export function Timeline(props) {
        window.akoolEditorState = 'playing'
     }
   }
+  const clearSelectItem = () => {
+      timelineGraphs.forEach((item, i) => {
+        item.selected = false
+      });
+  }
+  const handleSelectItem = (_id) => {
+
+    timelineGraphs.find(item => item.id === _id).selected = true
+  }
   const timelineStop = () => {
     if (requestId) {
       window.cancelAnimationFrame(requestId);
@@ -339,6 +348,7 @@ export function Timeline(props) {
         var timelineAction = shape.isMouseInGraph(mouse);
         if (timelineAction) {
           shape.selected = true;
+          window.handleMonitorSelectItem_function(shape.id)
           tempGraphArr.push(shape);
           window.timelineAction = timelineAction;
         } else {
@@ -347,6 +357,9 @@ export function Timeline(props) {
         }
         // shape.paint();
       });
+    }
+    if (window.timelineAction == 'none') {
+      window.clearMonitorSelectItem_function()
     }
     clearCanvas();
     drawGraph();
@@ -556,6 +569,17 @@ export function Timeline(props) {
     };
     window.timelineCut_function = () => {
       timelineCut();
+    };
+    window.timelineClearSelectItem_function = () => {
+      clearSelectItem();
+      clearCanvas();
+      drawGraph();
+    };
+    window.timelineHandleSelectItem_function = (_id) => {
+      clearSelectItem()
+      handleSelectItem(_id);
+      clearCanvas();
+      drawGraph();
     };
     window.redraw_function = () => {
       clearCanvas();

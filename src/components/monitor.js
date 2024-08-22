@@ -42,6 +42,19 @@ export function Monitor(props) {
   };
   // var focused = false
 
+  const clearSelectItem = () => {
+    monitorGraphs.forEach((item, i) => {
+      item.selected = false
+      item.onfocus = false
+      item.focused = false
+    });
+    selectedItem = [];
+  }
+  const handleSelectItem = (_id) => {
+    clearSelectItem()
+    monitorGraphs[monitorGraphs.findIndex(item => item.id === _id)].selected = true
+    selectedItem = monitorGraphs.filter((item) => item.selected == true)
+  }
   const monitorDuplicateElement = (_idOld,_id) => {
 
     const duplicateItem = monitorGraphs.find(item => item.id === _idOld)
@@ -102,7 +115,7 @@ export function Monitor(props) {
         // console.log(monitorGraphsIn, "monitorGraphsIn");
         const shape = monitorGraphsIn[monitorGraphsIn.length - 1];
         shape.selected = true;
-
+        window.timelineHandleSelectItem_function(shape.id)
         drawGraphs();
         if(selectedItem.length > 0 && shape.id == selectedItem[0].id && shape.type == "textbox"){
             shape.onfocus = true;
@@ -113,6 +126,7 @@ export function Monitor(props) {
 
       }else{
         selectedItem = [];
+        window.timelineClearSelectItem_function()
         drawGraphs();
       }
       // console.log("monitorGraph/sIn", monitorGraphsIn);
@@ -300,8 +314,8 @@ export function Monitor(props) {
       }
       else if (item.type === "textbox") {
         (async function (item) {
-          const textinit = sample.data[0].objects.filter((_item) => _item.id == item.id)
-          await loadTextProssse(textinit[0].fontFamily,textinit[0].data.fontURL)
+          const textinit = sample.data[0].objects.find(_item => _item.id == item.id)
+          await loadTextProssse(textinit.fontFamily,textinit.data.fontURL)
           var graph = new monitorGraph(
             item.id,
             item.offset_x - item.width / 2,
@@ -310,14 +324,14 @@ export function Monitor(props) {
             item.height,
             item.angle,
             item.scale_x,
-            textinit[0].text,
+            textinit.text,
             item.type,
             // await loadImgProssse(canvasDom, iconUrl),
             null,
             canvasDom,
             item.start_time,
             item.end_time,
-            textinit[0]
+            textinit
           );
           // checkIfInsideLoop(graph);
           console.log(graph);
@@ -358,6 +372,14 @@ export function Monitor(props) {
   window.monitorDuplicateElement_function = (_idOld,_id) =>{
     console.log('monitorDuplicateElement_function')
     monitorDuplicateElement(_idOld,_id)
+  }
+  window.handleMonitorSelectItem_function = (_id) =>{
+    console.log('handleSelectItem_function')
+    handleSelectItem(_id)
+  }
+  window.clearMonitorSelectItem_function = (_id) =>{
+    console.log('clearSelectItem_function')
+    clearSelectItem(_id)
   }
   const initCanvas = async () => {
     canvasDom = document.getElementById("monitor_canvas");
