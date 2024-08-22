@@ -106,9 +106,10 @@ function App() {
       </button>
 
       <Timelinememo redrawTrigger={redraw} />
-      <video src="" id='videoTest' controls={true}></video>
+
 
       {/*
+        <video src="" id='videoTest' controls={true}></video>
         <ColorPickermemo />
         <video controls id = "myStreamingVideo"></video>
 

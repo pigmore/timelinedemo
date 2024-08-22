@@ -19,6 +19,7 @@ export function Monitor(props) {
   const STROKE_COLOR = "#ff2b5d";
   // window.textFoucsIntervalBool = false
   var canvasDom = null,
+    monitorCanvasRatio = 1,
     monitorCtx = null,
     monitorGraphs = [],
     selectedItem = [],
@@ -84,8 +85,8 @@ export function Monitor(props) {
 
     canvasDom.addEventListener("mousedown", function (e) {
       console.log(monitorGraphs);
-      mouseDownX = e.clientX - canvasDom.getBoundingClientRect().left;
-      mouseDownY = e.clientY - canvasDom.getBoundingClientRect().top;
+      mouseDownX = (e.clientX - canvasDom.getBoundingClientRect().left) * monitorCanvasRatio;
+      mouseDownY = (e.clientY - canvasDom.getBoundingClientRect().top) * monitorCanvasRatio;
 
       monitorAction = "";
       // monitorGraphsIn = [];
@@ -101,13 +102,13 @@ export function Monitor(props) {
       });
 
       monitorGraphs.forEach(function (shape) {
-        var offset = {
-          x: mouseDownX - shape.x,
-          y: mouseDownY - shape.y,
-        };
+        // var offset = {
+        //   x: mouseDownX - shape.x,
+        //   y: mouseDownY - shape.y,
+        // };
         var _monitorActiontemp = shape.isMouseInGraph({
-          x: mouseDownX,
-          y: mouseDownY,
+          x: mouseDownX ,
+          y: mouseDownY ,
         });
         if (_monitorActiontemp) {
           monitorGraphsIn.push(shape);
@@ -189,10 +190,10 @@ export function Monitor(props) {
         }
         switch (monitorAction) {
           case "move":
-            shape.x += e.movementX;
-            shape.y += e.movementY;
-            shape.centerX += e.movementX;
-            shape.centerY += e.movementY;
+            shape.x += e.movementX * monitorCanvasRatio;
+            shape.y += e.movementY * monitorCanvasRatio;
+            shape.centerX += e.movementX * monitorCanvasRatio;
+            shape.centerY += e.movementY * monitorCanvasRatio;
 
             // console.log(shape, "move");
             // shape._rotateSquare()
@@ -202,8 +203,8 @@ export function Monitor(props) {
             shape.transform(
               mouseDownX,
               mouseDownY,
-              e.offsetX,
-              e.offsetY,
+              e.offsetX * monitorCanvasRatio,
+              e.offsetY * monitorCanvasRatio,
               currentGraph,
             );
             drawGraphs();
@@ -212,8 +213,8 @@ export function Monitor(props) {
             shape.rotateAction(
               mouseDownX,
               mouseDownY,
-              e.offsetX,
-              e.offsetY,
+              e.offsetX * monitorCanvasRatio,
+              e.offsetY * monitorCanvasRatio,
               currentGraph,
             );
             drawGraphs();
@@ -376,6 +377,10 @@ export function Monitor(props) {
   const initCanvas = async () => {
     canvasDom = document.getElementById("monitor_canvas");
     monitorCtx = canvasDom.getContext("2d");
+    // console.log(canvasDom)
+    // console.log(canvasDom.height)
+    // console.log(canvasDom.offsetHeight)
+    monitorCanvasRatio = canvasDom.height / canvasDom.offsetHeight
     drawGraphs();
     initJson();
     addEvents();
@@ -401,8 +406,8 @@ export function Monitor(props) {
         <canvas
           id="monitor_canvas"
           className="canvasBase"
-          width="1600"
-          height="900"
+          width="1920"
+          height="1080"
         >
 
         </canvas>
