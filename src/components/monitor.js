@@ -60,7 +60,27 @@ export function Monitor(props) {
   const monitorDuplicateElement = (_idOld, _id, _deltaX) => {
     const duplicateItem = monitorGraphs.find((item) => item.id === _idOld);
     let clone = Object.assign(
-      Object.create(Object.getPrototypeOf(duplicateItem)),
+      Object.create(Object.getPrototypeOf(new monitorGraph(
+
+          duplicateItem.id,
+          duplicateItem.x,
+          duplicateItem.y,
+          duplicateItem.w,
+          duplicateItem.h,
+          duplicateItem.rotate,
+          duplicateItem.scale,
+          duplicateItem.text,
+          duplicateItem.type,
+          // await loadImgProssse(canvasDom, iconUrl),
+          duplicateItem.loadedSrc,
+          canvasDom,
+          duplicateItem.startTime,
+          duplicateItem.endTime,
+          {},
+          duplicateItem.start_point,
+          duplicateItem.end_point,
+
+      ))),
       duplicateItem,
     );
     clone.id = _id;
