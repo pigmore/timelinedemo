@@ -84,7 +84,7 @@ export function Timeline(props) {
       } else {
         _shape.x = _x;
       }
-      console.log(_shape.y);
+      // console.log(_shape.y);
       // checkIfInsideLoop(_shape);
     }
   };
@@ -214,7 +214,7 @@ export function Timeline(props) {
       drawGraph();
     }
   };
-  const addElement = async (x,y,w,type) => {
+  const addElement = async (id,x,y,w,type) => {
     // var typeTemp = ["music", "textbox", "Emojo", "Image", "Video"][
     //   randomInt(0, 5)
     // ];
@@ -252,6 +252,7 @@ export function Timeline(props) {
         color = "";
     }
     var graph = new timelineGraph(
+      id,
       x / 100,
       y * 28,
       w / 100,
@@ -293,6 +294,7 @@ export function Timeline(props) {
     let result = [];
     for (var item of timelineGraphs) {
       var temp = {
+        id:item.id,
         x: (item.x * 100).toFixed(),
         y: (item.y / 28).toFixed(),
         w: (item.w * 100).toFixed(),
@@ -427,7 +429,7 @@ export function Timeline(props) {
           shape.drawTheXAttach(x[1] ? shape.x + shape.w : shape.x);
         }
       }
-      exportJson();
+      // exportJson();
     }
   };
   eventFunctions.mouseup = (e) => {
@@ -454,6 +456,8 @@ export function Timeline(props) {
 
     tempGraphArr = [];
     getXArray(timelineGraphs);
+
+    // updateMonitorElement();
     exportJson();
     window.timelineAction = "none";
   };
@@ -568,6 +572,7 @@ export function Timeline(props) {
             if (variable == "bg_musics") {
               const bg_musics_item = item[variable][0];
               items.push({
+                id: bg_musics_item.id,
                 x: bg_musics_item.start_time,
                 w: bg_musics_item.end_time - bg_musics_item.start_time,
                 y: 2,
@@ -577,6 +582,7 @@ export function Timeline(props) {
             if (variable == "elements") {
               for (var elementsItem of item[variable]) {
                 items.push({
+                  id: elementsItem.id,
                   x: elementsItem.start_time,
                   w: elementsItem.end_time - elementsItem.start_time,
                   y: elementsItem.layer_number + 2,
@@ -592,6 +598,7 @@ export function Timeline(props) {
       timelineGraphs = [];
       for (var item of items) {
         await addElement(
+          item.id,
           item.x,
           item.y,
           item.w,

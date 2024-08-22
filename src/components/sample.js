@@ -31,7 +31,7 @@ export const sample = {
       },
       elements: [
         {
-          id: "avatar",
+          id: "avatar0",
           url: "https://static.website-files.org/assets/avatar/avatar/thumbnail/1716457024475-tristan_cloth1_20240522.webp",
           scale_x: 1,
           scale_y: 1,
@@ -327,7 +327,7 @@ export const sample = {
       },
       elements: [
         {
-          id: "avatar",
+          id: "avatar1",
           url: "https://static.website-files.org/assets/avatar/avatar/thumbnail/1716457024475-tristan_cloth1_20240522.webp",
           scale_x: 1,
           scale_y: 1,

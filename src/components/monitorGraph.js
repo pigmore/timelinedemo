@@ -9,6 +9,7 @@ import {
   fillEdgeCircle,
 } from "./util.js";
 export const monitorGraph = function (
+  id,
   x,
   y,
   w,
@@ -26,7 +27,7 @@ export const monitorGraph = function (
   },
 ) {
   this.initconfig = initconfig;
-  this.id = uuid();
+  this.id = id;
   this.canvas = canvas;
   this.ctx = canvas.getContext("2d");
   if (type === "textbox") {
@@ -376,8 +377,8 @@ monitorGraph.prototype = {
     const lineB = Math.sqrt(
       Math.pow(this.centerX - x, 2) + Math.pow(this.centerY - y, 2),
     );
-    console.log(diffXBefore, "diffXBefore");
-    console.log(diffXAfter, "diffXAfter");
+    // console.log(diffXBefore, "diffXBefore");
+    // console.log(diffXAfter, "diffXAfter");
     const resize_rito = Math.min(
       diffXAfter / diffXBefore,
       diffYAfter / diffYBefore,

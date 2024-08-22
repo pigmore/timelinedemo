@@ -42,6 +42,9 @@ export function Monitor(props) {
   };
   // var focused = false
 
+  const updateElement = (_elarray) => {
+      console.log(_elarray)
+  };
   const addEvents = () => {
 
     canvasDom.addEventListener("mousedown", function (e) {
@@ -227,6 +230,7 @@ export function Monitor(props) {
         (async function (item) {
           console.log("DataURL: ", item.url);
           var graph = new monitorGraph(
+            item.id,
             item.offset_x - item.width / 2,
             item.offset_y - item.height / 2,
             item.width,
@@ -253,6 +257,7 @@ export function Monitor(props) {
         (async function (item) {
           // console.log("DataURL: ", item.url);
           var graph = new monitorGraph(
+            item.id,
             item.offset_x - item.width / 2,
             item.offset_y - item.height / 2,
             item.width,
@@ -280,6 +285,7 @@ export function Monitor(props) {
           const textinit = sample.data[0].objects.filter((_item) => _item.id == item.id)
           await loadTextProssse(textinit[0].fontFamily,textinit[0].data.fontURL)
           var graph = new monitorGraph(
+            item.id,
             item.offset_x - item.width / 2,
             item.offset_y - item.height / 2,
             item.width,
@@ -337,6 +343,10 @@ export function Monitor(props) {
     drawGraphs();
     initJson();
     addEvents();
+    // registerEvent
+    window.canvasEventDriver.register("update", (_prop) => {
+      updateElement(_prop);
+    });
   };
 
   useEffect(() => {

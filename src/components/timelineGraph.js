@@ -7,6 +7,7 @@ import {
   fillEdgeCircle,
 } from "./util.js";
 export const timelineGraph = function (
+  id,
   x,
   y,
   w,
@@ -19,7 +20,7 @@ export const timelineGraph = function (
   canvas,
   graphShape,
 ) {
-  this.id = uuid();
+  this.id = id;
   this.x = x;
   this.y = y;
   this.w = w;
