@@ -96,12 +96,14 @@ export const monitorGraph = function (
 monitorGraph.prototype = {
   forceUpdateTime: function () {
     this.playCurrentTime = window.currentTime - this.startTime
-
+    console.log(this.playCurrentTime)
+    console.log(this.startTime)
+    console.log(this.endTime)
     if (this.type == 'video') {
-      console.log(this.playCurrentTime)
-      console.log(this.playCurrentTime / 1000)
-      console.log(this.loadedSrc.currentTime)
-      console.log(this.loadedSrc.duration)
+      // console.log(this.playCurrentTime)
+      // console.log(this.playCurrentTime / 1000)
+      // console.log(this.loadedSrc.currentTime)
+      // console.log(this.loadedSrc.duration)
 
       this.loadedSrc.currentTime = Math.max(0,Math.min(this.loadedSrc.duration,this.playCurrentTime / 1000))
       // this.loadedSrc.play()
@@ -115,13 +117,13 @@ monitorGraph.prototype = {
     this.playCurrentTime = window.currentTime - this.startTime
   },
   checkIfinTime: function () {
-    if (this.startTime > window.currentTime || this.endTime < window.currentTime) {
+    if (this.startTime <= window.currentTime && this.endTime > window.currentTime) {
       this.selected = false;
       this.onfocus = false;
       this.focused = false;
-      return false
+      return true
     }
-    return true
+    return false
   },
   paint: function (_forceUpdate = false) {
     if (_forceUpdate) this.forceUpdateTime();

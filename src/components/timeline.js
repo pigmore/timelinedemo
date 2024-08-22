@@ -188,7 +188,9 @@ export function Timeline(props) {
     var _item = {};
     timelineGraphs.forEach((item, i) => {
       if (item.selected &&  ( item.x < window.currentFrame / 6 &&  item.x + item.w > window.currentFrame / 6)) {
+        const _id = uuid();
         _item = new timelineGraph(
+          _id,
           item.x,
           item.y,
           item.w,
@@ -201,11 +203,12 @@ export function Timeline(props) {
           canvasDom,
           "rectangle",
         );
-        _item.id = uuid();
+        // _item.id = uuid();
         _item.x = window.currentFrame / 6;
         _item.w -= window.currentFrame / 6 - item.x;
         _index = i;
         item.w = window.currentFrame / 6 - item.x;
+        window.monitorDuplicateElement_function(item.id,_id)
       }
     });
     if (_index >= 0) {

@@ -42,13 +42,21 @@ export function Monitor(props) {
   };
   // var focused = false
 
+  const monitorDuplicateElement = (_idOld,_id) => {
+
+    const duplicateItem = monitorGraphs.find(item => item.id === _idOld)
+    let clone = Object.assign(Object.create(Object.getPrototypeOf(duplicateItem)), duplicateItem)
+    clone.id = _id
+    monitorGraphs.push(clone)
+
+  }
   const updateElement = (_elarray) => {
       // console.log(_elarray)
       for (var item of _elarray) {
         for (var _item of monitorGraphs) {
           if (_item.id == item.id) {
             _item.startTime = item.x
-            _item.endTime = item.x + item.w
+            _item.endTime = parseInt(item.x) + parseInt(item.w)
             break;
           }
         }
@@ -346,6 +354,10 @@ export function Monitor(props) {
   window.monitor_drawGraphs_function = (forceUpdate = false) =>{
     console.log('monitor_drawGraphs_function')
     drawGraphs(forceUpdate)
+  }
+  window.monitorDuplicateElement_function = (_idOld,_id) =>{
+    console.log('monitorDuplicateElement_function')
+    monitorDuplicateElement(_idOld,_id)
   }
   const initCanvas = async () => {
     canvasDom = document.getElementById("monitor_canvas");
