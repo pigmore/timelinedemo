@@ -20,7 +20,7 @@ import { sample } from "./sample";
 (function () {
   var table = {};
   window.canvasEventDriver = {};
-  // console.log(canvasEventDriver,'Commons.canvasEventDriver')
+  //
   window.canvasEventDriver.register = function (event, callback) {
     var tablelist = table[event] || [];
     tablelist.push(callback);
@@ -79,21 +79,21 @@ export function Timeline(props) {
       _shape.id,
       mouseX,
     );
-    console.log(_x);
+
     if (_x >= 0) {
       if (needtoPiant) {
         _shape.drawVirtuRect(_x);
       } else {
         _shape.x = _x;
       }
-      // console.log(_shape.y);
+      //
       // checkIfInsideLoop(_shape);
     }
   };
   const checkIfInsideLoop = (_shape) => {
     if (checkIfInside(_shape.x, _shape.w, _shape.y, _shape.id)) {
       _shape.y += 28;
-      console.log(_shape.y);
+
       checkIfInsideLoop(_shape);
     }
   };
@@ -222,7 +222,7 @@ export function Timeline(props) {
         _item.w -= window.currentFrame / 6 - item.x;
         _index = i;
         item.w = window.currentFrame / 6 - item.x;
-        console.log(window.currentFrame / 6 - item.x);
+
         window.monitorDuplicateElement_function(
           item.id,
           _id,
@@ -295,7 +295,7 @@ export function Timeline(props) {
     timelineCtx.clearRect(0, 0, canvasDom.width, canvasDom.height);
   };
   const drawGraph = () => {
-    // console.log(timelineGraphs)
+    //
     timelineCtx.save();
     timelineCtx.translate(window.timelineScrollX, 0);
     drawScale(timelineCtx);
@@ -338,9 +338,9 @@ export function Timeline(props) {
       x: e.offsetX,
       y: e.offsetY,
     };
-    // console.log(mouse.x);
+    //
     xArray = [];
-    console.log(timelineGraphs)
+
     if (
       Math.abs(
         e.offsetX -
@@ -416,9 +416,9 @@ export function Timeline(props) {
         window.timelineScrollX += 1;
       }
 
-      // console.log('mouse.x',mouse.x)
-      // console.log('shape.w + shape.x',shape.w + shape.x)
-      // console.log('mouse.x - (shape.w + shape.x)',mouse.x - (shape.w + shape.x))
+      //
+      //
+      //
 
       if (window.timelineAction === "edge0") {
         shape.w = Math.max(
@@ -490,7 +490,7 @@ export function Timeline(props) {
   };
   eventFunctions.mousewheel = (e) => {
     e.preventDefault();
-    // console.log(e);
+    //
     window.timelineScrollX = Math.min(
       Math.max(window.timelineScrollX + e.deltaY, -2400),
       0,
@@ -498,7 +498,7 @@ export function Timeline(props) {
     clearCanvas();
     drawGraph();
     getXArray(timelineGraphs);
-    // console.log(e.window.scrollX)
+    //
   };
 
   const addevents = () => {

@@ -24,7 +24,7 @@ function App() {
     myRef.current.callmycount();
   };
   const addImageElement = async () => {
-    try{
+    try {
       let loadedSrc = await loadLocalImgProssse();
       const item = {
         id: uuid(),
@@ -36,15 +36,14 @@ function App() {
         loadedSrc: loadedSrc,
         type: "image",
       };
-      console.log(loadedSrc, "loadedSrc");
-      console.log(item);
+
       window.timelineAddElement_function(item);
       window.monitorAddElement_function(item);
 
       window.timelineRedraw_function();
       window.monitor_drawGraphs_function(true);
-    }catch{
-      return
+    } catch {
+      return;
     }
   };
   const addVideoElement = async () => {
@@ -60,17 +59,15 @@ function App() {
         loadedSrc: loadedSrc[0],
         type: "video",
       };
-      console.log(loadedSrc);
-      console.log(item);
+
       window.timelineAddElement_function(item);
       window.monitorAddElement_function(item);
 
       window.timelineRedraw_function();
       window.monitor_drawGraphs_function(true);
     } catch (e) {
-      return
+      return;
     }
-
   };
   useEffect(() => {}, []);
 

@@ -92,7 +92,6 @@ export const monitorGraph = function (
   this.duration = 0;
   if (this.type == "video") {
     this.loadedSrc.addEventListener("seeked", (event) => {
-      console.log("seeked");
       window.monitor_drawGraphs_function();
     });
   }
@@ -102,9 +101,7 @@ monitorGraph.prototype = {
   forceUpdateTime: function () {
     this.playCurrentTime =
       window.currentTime - this.startTime - (this.start_point || 0);
-    console.log(this.playCurrentTime);
-    console.log(this.startTime);
-    console.log(this.endTime);
+
     if (this.type == "video") {
       this.loadedSrc.currentTime = Math.max(
         0,
@@ -248,17 +245,17 @@ monitorGraph.prototype = {
     // this.context.fillStyle = this.fillStyle || "rgba(255, 255, 255 , 1)";
     drawRect(this.ctx, this.square);
     this.ctx.restore();
-    // console.log("isMouseInGraph");
+    //
     if (this.isinCorner(mouse.x, mouse.y)) {
-      // console.log("scale");
+      //
       return "scale";
     }
     if (this.isinRotate(mouse.x, mouse.y)) {
-      // console.log("rotate");
+      //
       return "rotate";
     }
     if (this.ctx.isPointInPath(mouse.x, mouse.y)) {
-      // console.log("move");
+      //
       return "move";
     }
 
@@ -266,7 +263,7 @@ monitorGraph.prototype = {
   },
 
   drawTheXAttach: function (_x) {
-    // console.log('drawTheXAttach',_x)
+    //
     this.context.save();
     this.context.translate(window.timelineScrollX, 0);
     drawLine(
@@ -323,7 +320,7 @@ monitorGraph.prototype = {
     ];
   },
   _rotatePoint: function (x, y, centerX, centerY, degrees) {
-    // console.log(x, y, centerX, centerY, degrees)
+    //
     let newX =
       (x - centerX) * Math.cos((degrees * Math.PI) / 180) -
       (y - centerY) * Math.sin((degrees * Math.PI) / 180) +
@@ -376,8 +373,8 @@ monitorGraph.prototype = {
     const lineB = Math.sqrt(
       Math.pow(this.centerX - x, 2) + Math.pow(this.centerY - y, 2),
     );
-    // console.log(diffXBefore, "diffXBefore");
-    // console.log(diffXAfter, "diffXAfter");
+    //
+    //
     const resize_rito = Math.min(
       diffXAfter / diffXBefore,
       diffYAfter / diffYBefore,

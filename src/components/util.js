@@ -38,7 +38,6 @@ export function drawCircleIcon(ctx, left, top) {
 }
 
 export function loadTextProssse(textName, _url) {
-  console.log(_url);
   return new Promise((resolve, reject) => {
     let f = new FontFace(textName, `url(${_url})`);
 
@@ -58,9 +57,9 @@ export function loadVideoProssse(_canvas, _url) {
         let videoEl = document.createElement("video");
         while (1) {
           const { value, done } = await reader.read();
-          // console.log(reader)
-          // console.log(value)
-          // console.log(done)
+          //
+          //
+          //
           if (done) {
             const blob = new Blob(buffer);
             const blobUrl = URL.createObjectURL(blob);
@@ -71,7 +70,6 @@ export function loadVideoProssse(_canvas, _url) {
           }
 
           buffer.push(value);
-          console.log("??");
         }
         resolve(videoEl);
       });
@@ -81,8 +79,8 @@ export function loadLocalVideoProssse() {
   return new Promise(async (resolve, reject) => {
     const file = await loadFile({ "video/*": [".mp4", ".mov"] });
     if (!file) {
-      reject()
-      return
+      reject();
+      return;
     }
     const stream = file.stream();
     let videoEl = document.createElement("video");
@@ -101,7 +99,7 @@ export function loadLocalVideoProssse() {
             var width = this.videoWidth,
               height = this.videoHeight,
               duration = this.duration;
-            console.log("videoWidth", width);
+
             resolve([
               videoEl,
               {
@@ -120,15 +118,13 @@ export function loadLocalVideoProssse() {
   });
 }
 async function loadFile(accept) {
-
-
   try {
     const [fileHandle] = await window.showOpenFilePicker({
       types: [{ accept }],
     });
     return await fileHandle.getFile();
   } catch (e) {
-    return false
+    return false;
   }
 }
 export function loadImgProssse(_canvas, _url) {
@@ -148,8 +144,8 @@ export function loadLocalImgProssse() {
     // seal.src = _url
     const file = await loadFile({ "image/*": [] });
     if (!file) {
-      reject()
-      return
+      reject();
+      return;
     }
     const blobUrl = URL.createObjectURL(file);
     var seal = new Image();

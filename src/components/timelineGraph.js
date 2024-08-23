@@ -167,7 +167,7 @@ timelineGraph.prototype = {
     }
   },
   drawTheXAttach: function (_x) {
-    // console.log('drawTheXAttach',_x)
+    //
     this.context.save();
     this.context.translate(window.timelineScrollX, 0);
     this.context.setLineDash([4, 5]);

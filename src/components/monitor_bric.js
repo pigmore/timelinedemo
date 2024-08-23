@@ -17,10 +17,7 @@ export function Monitor(props) {
       opt.e.preventDefault();
       opt.e.stopPropagation();
     });
-    monitorCanvas.on("mouse:up", function (options) {
-      console.log(options);
-      console.log(options.e.clientX, options.e.clientY);
-    });
+    monitorCanvas.on("mouse:up", function (options) {});
   };
   const initJson = () => {
     var jsonTemp = [];
@@ -52,14 +49,12 @@ export function Monitor(props) {
         }
       }
     }
-    console.log(jsonTemp);
+
     jsonTemp.sort((a, b) => a.layer_number - b.layer_number);
-    console.log(jsonTemp);
 
     for (var item of jsonTemp) {
       if (item.type === "image" || "avatar") {
         (function (item) {
-          console.log("DataURL: ", item.url);
           // fabric.Image.fromURL(item.url, function (img) {
           //     // var img = new fabric.Image(_img)
           //     img.scaleToWidth(item.width);
@@ -96,10 +91,9 @@ export function Monitor(props) {
         // monitorCanvas.renderAll();
       }
     }
-    console.log(monitorCanvas);
   };
   const initCanvas = () => {
-    // console.log(fabric)
+    //
     monitorCanvas = new fabric.Canvas("monitor_canvas", {
       preserveObjectStacking: true,
     });
@@ -113,8 +107,8 @@ export function Monitor(props) {
     fabric.Object.prototype.cornerSize = 12;
     fabric.Object.prototype.borderScaleFactor = 0;
     fabric.Object.prototype.borderOpacityWhenMoving = 0.8;
-    console.log(monitorCanvas);
-    // console.log(FabricObject)
+
+    //
 
     monitorCanvas.renderAll();
     initJson();

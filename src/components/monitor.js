@@ -53,10 +53,8 @@ export function Monitor(props) {
   };
   const handleSelectItem = (_id) => {
     clearSelectItem();
-    console.log(_id)
-    console.log(monitorGraphs)
-    monitorGraphs.find((item) => item.id === _id).selected =
-      true;
+
+    monitorGraphs.find((item) => item.id === _id).selected = true;
     selectedItem = monitorGraphs.filter((item) => item.selected == true);
   };
   const monitorDuplicateElement = (_idOld, _id, _deltaX) => {
@@ -94,7 +92,7 @@ export function Monitor(props) {
     monitorGraphs.push(clone);
   };
   const updateElement = (_elarray) => {
-    // console.log(_elarray)
+    //
     for (var item of _elarray) {
       for (var _item of monitorGraphs) {
         if (_item.id == item.id) {
@@ -111,7 +109,6 @@ export function Monitor(props) {
   };
   const addEvents = () => {
     canvasDom.addEventListener("mousedown", function (e) {
-      console.log(monitorGraphs);
       mouseDownX =
         (e.clientX - canvasDom.getBoundingClientRect().left) *
         monitorCanvasRatio;
@@ -148,7 +145,7 @@ export function Monitor(props) {
         }
       });
       if (monitorGraphsIn.length > 0) {
-        // console.log(monitorGraphsIn, "monitorGraphsIn");
+        //
         const shape = monitorGraphsIn[monitorGraphsIn.length - 1];
         shape.selected = true;
         window.timelineHandleSelectItem_function(shape.id);
@@ -167,8 +164,8 @@ export function Monitor(props) {
         window.timelineClearSelectItem_function();
         drawGraphs();
       }
-      // console.log("monitorGraph/sIn", monitorGraphsIn);
-      // console.log("monitorGraphs", monitorGraphs);
+      //
+      //
     });
     canvasDom.addEventListener("mouseup", function (e) {
       const textSelectedid = selectedItem.length > 0 ? selectedItem[0].id : "";
@@ -176,10 +173,10 @@ export function Monitor(props) {
         const shape = monitorGraphsIn[monitorGraphsIn.length - 1];
         // ;
         shape._rotateSquare();
-        // console.log('focused : true??',shape)
-        // console.log('focused : true??',shape.focused)
+        //
+        //
         if (shape.onfocus && monitorAction == "move") {
-          console.log("focused : true");
+          //
           shape.focused = true;
           // shape.focusIndex = shape.text.length
           monitorTextCoverRef.current.style.color = shape.initconfig.fill;
@@ -188,10 +185,14 @@ export function Monitor(props) {
           monitorTextCoverRef.current.style.fontFamily =
             shape.initconfig.fontFamily;
           monitorTextCoverRef.current.style.display = "block";
-          monitorTextCoverRef.current.style.width = shape.w / monitorCanvasRatio + "px";
-          monitorTextCoverRef.current.style.height = shape.h / monitorCanvasRatio + "px";
-          monitorTextCoverRef.current.style.left = shape.x / monitorCanvasRatio + "px";
-          monitorTextCoverRef.current.style.top = shape.y / monitorCanvasRatio + "px";
+          monitorTextCoverRef.current.style.width =
+            shape.w / monitorCanvasRatio + "px";
+          monitorTextCoverRef.current.style.height =
+            shape.h / monitorCanvasRatio + "px";
+          monitorTextCoverRef.current.style.left =
+            shape.x / monitorCanvasRatio + "px";
+          monitorTextCoverRef.current.style.top =
+            shape.y / monitorCanvasRatio + "px";
           monitorTextCoverRef.current.style.rotate = shape.rotate + "deg";
           monitorTextCoverRef.current.value = shape.text;
           monitorTextCoverRef.current.focus();
@@ -205,8 +206,14 @@ export function Monitor(props) {
     canvasDom.addEventListener("mousemove", function (e) {
       if (selectedItem.length > 0) {
         if (
-          selectedItem[0].isinCorner(e.offsetX * monitorCanvasRatio, e.offsetY* monitorCanvasRatio) ||
-          selectedItem[0].isinRotate(e.offsetX* monitorCanvasRatio, e.offsetY* monitorCanvasRatio)
+          selectedItem[0].isinCorner(
+            e.offsetX * monitorCanvasRatio,
+            e.offsetY * monitorCanvasRatio,
+          ) ||
+          selectedItem[0].isinRotate(
+            e.offsetX * monitorCanvasRatio,
+            e.offsetY * monitorCanvasRatio,
+          )
         ) {
           canvasDom.style.cursor = "pointer";
         } else {
@@ -215,7 +222,7 @@ export function Monitor(props) {
       }
       if (monitorGraphsIn[monitorGraphsIn.length - 1]) {
         const shape = monitorGraphsIn[monitorGraphsIn.length - 1];
-        // console.log(monitorAction, "monitorAction");
+        //
         if (shape.focused) return;
         if (Math.abs(e.movementX >= 1) || Math.abs(e.movementY > 1)) {
           shape.onfocus = false;
@@ -227,7 +234,7 @@ export function Monitor(props) {
             shape.centerX += e.movementX * monitorCanvasRatio;
             shape.centerY += e.movementY * monitorCanvasRatio;
 
-            // console.log(shape, "move");
+            //
             // shape._rotateSquare()
             drawGraphs();
             break;
@@ -251,8 +258,8 @@ export function Monitor(props) {
             );
             drawGraphs();
             break;
-          // console.log(shape.x,'shape.x')
-          // console.log(shape.y,'shape.y')
+          //
+          //
           default:
         }
       }
@@ -261,7 +268,7 @@ export function Monitor(props) {
   const addElement = (item) => {
     if (item.type === "image" || item.type === "avatar") {
       (async function (item) {
-        console.log("DataURL: ", item.url);
+        //
         var graph = new monitorGraph(
           item.id,
           (item.offset_x || canvasDom.width / 2) - item.width / 2,
@@ -279,7 +286,7 @@ export function Monitor(props) {
           item.end_time || 1000,
         );
         // checkIfInsideLoop(graph);
-        console.log(graph);
+        //
         monitorGraphs.push(graph);
         drawGraphs();
       })(item);
@@ -287,7 +294,7 @@ export function Monitor(props) {
       // monitorCanvas.renderAll();
     } else if (item.type === "video") {
       (async function (item) {
-        // console.log("DataURL: ", item.url);
+        //
         var graph = new monitorGraph(
           item.id,
           (item.offset_x || canvasDom.width / 2) - item.width / 2,
@@ -308,7 +315,7 @@ export function Monitor(props) {
           item.end_point || 1000,
         );
         // checkIfInsideLoop(graph);
-        console.log(graph, "???video");
+        //
         monitorGraphs.push(graph);
         drawGraphs();
       })(item);
@@ -338,10 +345,10 @@ export function Monitor(props) {
           textinit,
         );
         // checkIfInsideLoop(graph);
-        console.log(graph);
+        //
         monitorGraphs.push(graph);
         drawGraphs();
-        console.log(monitorGraphs, "???");
+        //
       })(item);
     }
   };
@@ -361,19 +368,19 @@ export function Monitor(props) {
         }
       }
     }
-    // console.log(jsonTemp);
+    //
     jsonTemp.sort((a, b) => b.layer_number - a.layer_number);
-    // console.log(jsonTemp);
+    //
 
     for (var item of jsonTemp) {
-      // console.log(item.type,'type')
+      //
       addElement(item);
     }
-    console.log(monitorGraphs);
-    // console.log(monitorCanvas)
+
+    //
   };
   const drawGraphs = (forceUpdate = false) => {
-    // console.log(timelineGraphs)
+    //
     if (monitorCtx)
       monitorCtx.clearRect(0, 0, canvasDom.width, canvasDom.height);
 
@@ -392,35 +399,35 @@ export function Monitor(props) {
     }
   };
   // window.forceUpdateTime_function = () =>{
-  //   console.log('monitor_drawGraphs_function')
+  //
   //   drawGraphs(true)
   // }
   window.monitor_drawGraphs_function = (forceUpdate = false) => {
-    console.log("monitor_drawGraphs_function");
+    //
     drawGraphs(forceUpdate);
   };
   window.monitorDuplicateElement_function = (_idOld, _id, _deltaX) => {
-    console.log("monitorDuplicateElement_function");
+    //
     monitorDuplicateElement(_idOld, _id, _deltaX);
   };
   window.handleMonitorSelectItem_function = (_id) => {
-    console.log("handleSelectItem_function");
+    //
     handleSelectItem(_id);
   };
   window.clearMonitorSelectItem_function = (_id) => {
-    console.log("clearSelectItem_function");
+    //
     clearSelectItem(_id);
   };
   window.monitorAddElement_function = (item) => {
-    console.log("clearSelectItem_function");
+    //
     addElement(item);
   };
   const initCanvas = async () => {
     canvasDom = document.getElementById("monitor_canvas");
     monitorCtx = canvasDom.getContext("2d");
-    // console.log(canvasDom)
-    // console.log(canvasDom.height)
-    // console.log(canvasDom.offsetHeight)
+    //
+    //
+    //
     monitorCanvasRatio = canvasDom.height / canvasDom.offsetHeight;
     drawGraphs();
     initJson();
@@ -455,12 +462,12 @@ export function Monitor(props) {
           id="monitorTextCover"
           ref={monitorTextCoverRef}
           onChange={(e) => {
-            console.log(e);
+            //
             selectedItem[0].text = e.target.value;
             drawGraphs();
           }}
           onBlur={(e) => {
-            // console.log(e)
+            //
             e.target.style.display = "none";
             drawGraphs();
           }}

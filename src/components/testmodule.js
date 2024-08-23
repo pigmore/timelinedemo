@@ -19,7 +19,6 @@ export const Test = forwardRef((props, ref) => {
     async function init() {
       if (typeof window !== "undefined" || window.initReady !== true) {
         // initCanvas();
-        console.log("mycount", mycount);
 
         window.canvasEventDriver.register("update", (_prop) => {
           setJsonupdate(_prop);
@@ -38,7 +37,6 @@ export const Test = forwardRef((props, ref) => {
   useImperativeHandle(ref, () => ({
     callmycount() {
       mycount += 1;
-      console.log(mycount);
     },
   }));
 
