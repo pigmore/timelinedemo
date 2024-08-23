@@ -60,27 +60,29 @@ export function Monitor(props) {
   const monitorDuplicateElement = (_idOld, _id, _deltaX) => {
     const duplicateItem = monitorGraphs.find((item) => item.id === _idOld);
     let clone = Object.assign(
-      Object.create(Object.getPrototypeOf(new monitorGraph(
-
-          duplicateItem.id,
-          duplicateItem.x,
-          duplicateItem.y,
-          duplicateItem.w,
-          duplicateItem.h,
-          duplicateItem.rotate,
-          duplicateItem.scale,
-          duplicateItem.text,
-          duplicateItem.type,
-          // await loadImgProssse(canvasDom, iconUrl),
-          duplicateItem.loadedSrc,
-          canvasDom,
-          duplicateItem.startTime,
-          duplicateItem.endTime,
-          {},
-          duplicateItem.start_point,
-          duplicateItem.end_point,
-
-      ))),
+      Object.create(
+        Object.getPrototypeOf(
+          new monitorGraph(
+            duplicateItem.id,
+            duplicateItem.x,
+            duplicateItem.y,
+            duplicateItem.w,
+            duplicateItem.h,
+            duplicateItem.rotate,
+            duplicateItem.scale,
+            duplicateItem.text,
+            duplicateItem.type,
+            // await loadImgProssse(canvasDom, iconUrl),
+            duplicateItem.loadedSrc,
+            canvasDom,
+            duplicateItem.startTime,
+            duplicateItem.endTime,
+            {},
+            duplicateItem.start_point,
+            duplicateItem.end_point,
+          ),
+        ),
+      ),
       duplicateItem,
     );
     clone.id = _id;
@@ -269,7 +271,7 @@ export function Monitor(props) {
           item.type,
           item.type,
           // await loadImgProssse(canvasDom, iconUrl),
-          item.loadedSrc || await loadImgProssse(uuid(), item.url),
+          item.loadedSrc || (await loadImgProssse(uuid(), item.url)),
           canvasDom,
           item.start_time || 0,
           item.end_time || 1000,
@@ -295,7 +297,7 @@ export function Monitor(props) {
           item.type,
           item.type,
           // await loadImgProssse(canvasDom, iconUrl),
-          item.loadedSrc || await loadImgProssse(uuid(), item.url),
+          item.loadedSrc || (await loadImgProssse(uuid(), item.url)),
           canvasDom,
           item.start_time || 0,
           item.end_time || 1000,
@@ -340,7 +342,7 @@ export function Monitor(props) {
         console.log(monitorGraphs, "???");
       })(item);
     }
-  }
+  };
   const initJson = () => {
     var jsonTemp = [];
     for (var item of sample.data) {
@@ -363,8 +365,7 @@ export function Monitor(props) {
 
     for (var item of jsonTemp) {
       // console.log(item.type,'type')
-      addElement(item)
-
+      addElement(item);
     }
     console.log(monitorGraphs);
     // console.log(monitorCanvas)

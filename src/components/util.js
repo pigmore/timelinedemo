@@ -79,36 +79,40 @@ export function loadVideoProssse(_canvas, _url) {
 }
 export function loadLocalVideoProssse() {
   return new Promise(async (resolve, reject) => {
-    const file = await loadFile({ 'video/*': ['.mp4', '.mov'] });
-    const stream = file.stream()
+    const file = await loadFile({ "video/*": [".mp4", ".mov"] });
+    const stream = file.stream();
     let videoEl = document.createElement("video");
-    videoEl.src = stream
-    const reader = stream.getReader()
+    videoEl.src = stream;
+    const reader = stream.getReader();
     let buffer = [];
     while (1) {
-        const { value, done } = await reader.read();
-        if (done) {
-            const blob = new Blob(buffer);
-            const blobUrl = URL.createObjectURL(blob);
-            videoEl.src = blobUrl;
-            videoEl.addEventListener( "loadedmetadata", function (e) {
-              var width = this.videoWidth,
-                  height = this.videoHeight,
-                  duration = this.duration;
-                  console.log('videoWidth',width)
-                  resolve([
-                    videoEl,
-                    {
-                      width:width,
-                      height:height,
-                      duration:duration,
-                    }]);
-              }, false );
-            break;
-        }
-        buffer.push(value);
+      const { value, done } = await reader.read();
+      if (done) {
+        const blob = new Blob(buffer);
+        const blobUrl = URL.createObjectURL(blob);
+        videoEl.src = blobUrl;
+        videoEl.addEventListener(
+          "loadedmetadata",
+          function (e) {
+            var width = this.videoWidth,
+              height = this.videoHeight,
+              duration = this.duration;
+            console.log("videoWidth", width);
+            resolve([
+              videoEl,
+              {
+                width: width,
+                height: height,
+                duration: duration,
+              },
+            ]);
+          },
+          false,
+        );
+        break;
+      }
+      buffer.push(value);
     }
-
   });
 }
 async function loadFile(accept) {
@@ -129,10 +133,10 @@ export function loadImgProssse(_canvas, _url) {
   });
 }
 export function loadLocalImgProssse() {
-  return new Promise(async(resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     // let seal = _canvas.createImage()
     // seal.src = _url
-    const file = await loadFile({ 'image/*': [] });
+    const file = await loadFile({ "image/*": [] });
     const blobUrl = URL.createObjectURL(file);
     var seal = new Image();
     seal.src = blobUrl;

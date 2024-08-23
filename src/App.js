@@ -3,7 +3,11 @@ import "./App.css";
 import React, { useState, memo, useRef, useEffect } from "react";
 import { Timelinememo } from "./components/timeline";
 import { Monitormemo } from "./components/monitor";
-import { uuid,loadLocalVideoProssse,loadLocalImgProssse } from "./components/util";
+import {
+  uuid,
+  loadLocalVideoProssse,
+  loadLocalImgProssse,
+} from "./components/util";
 import { ColorPickermemo } from "./components/colorPicker";
 import { CallChild, CallChildMemo } from "./components/callChild";
 import { Test, Testmemo } from "./components/testmodule";
@@ -19,49 +23,47 @@ function App() {
   const handlemyRefCount = () => {
     myRef.current.callmycount();
   };
-  const addImageElement = async() => {
-    let loadedSrc = await loadLocalImgProssse()
+  const addImageElement = async () => {
+    let loadedSrc = await loadLocalImgProssse();
     const item = {
-      id:uuid(),
-      x:0,
-      y:2,
-      w:3000,
+      id: uuid(),
+      x: 0,
+      y: 2,
+      w: 3000,
       width: loadedSrc.width,
       height: loadedSrc.height,
-      loadedSrc:loadedSrc,
-      type:'image'
-    }
-    console.log(loadedSrc,'loadedSrc')
-    console.log(item)
-    window.timelineAddElement_function(item)
-    window.monitorAddElement_function(item)
+      loadedSrc: loadedSrc,
+      type: "image",
+    };
+    console.log(loadedSrc, "loadedSrc");
+    console.log(item);
+    window.timelineAddElement_function(item);
+    window.monitorAddElement_function(item);
 
-    window.timelineRedraw_function()
-    window.monitor_drawGraphs_function(true)
-  }
-  const addVideoElement = async() => {
-    let loadedSrc = await loadLocalVideoProssse()
+    window.timelineRedraw_function();
+    window.monitor_drawGraphs_function(true);
+  };
+  const addVideoElement = async () => {
+    let loadedSrc = await loadLocalVideoProssse();
     const item = {
-      id:uuid(),
-      x:0,
-      y:2,
-      w:loadedSrc[1].duration * 1000,
+      id: uuid(),
+      x: 0,
+      y: 2,
+      w: loadedSrc[1].duration * 1000,
       width: loadedSrc[1].width,
       height: loadedSrc[1].height,
-      loadedSrc:loadedSrc[0],
-      type:'video'
-    }
-    console.log(loadedSrc)
-    console.log(item)
-    window.timelineAddElement_function(item)
-    window.monitorAddElement_function(item)
+      loadedSrc: loadedSrc[0],
+      type: "video",
+    };
+    console.log(loadedSrc);
+    console.log(item);
+    window.timelineAddElement_function(item);
+    window.monitorAddElement_function(item);
 
-    window.timelineRedraw_function()
-    window.monitor_drawGraphs_function(true)
+    window.timelineRedraw_function();
+    window.monitor_drawGraphs_function(true);
   };
   useEffect(() => {}, []);
-
-
 
   return (
     <div className="App">
@@ -110,15 +112,15 @@ function App() {
       </button>
 
       <button
-        onClick={async() => {
-          addVideoElement()
+        onClick={async () => {
+          addVideoElement();
         }}
       >
         input Video
       </button>
       <button
-        onClick={async() => {
-          addImageElement()
+        onClick={async () => {
+          addImageElement();
         }}
       >
         input img
