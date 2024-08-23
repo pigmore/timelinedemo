@@ -128,6 +128,19 @@ export function loadImgProssse(_canvas, _url) {
     };
   });
 }
+export function loadLocalImgProssse() {
+  return new Promise(async(resolve, reject) => {
+    // let seal = _canvas.createImage()
+    // seal.src = _url
+    const file = await loadFile({ 'image/*': [] });
+    const blobUrl = URL.createObjectURL(file);
+    var seal = new Image();
+    seal.src = blobUrl;
+    seal.onload = () => {
+      resolve(seal);
+    };
+  });
+}
 export function loadImgByDom(_id, _url) {
   return new Promise((resolve, reject) => {
     let seal = document.createElement("img");
