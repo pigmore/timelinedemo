@@ -203,8 +203,8 @@ export function Monitor(props) {
     canvasDom.addEventListener("mousemove", function (e) {
       if (selectedItem.length > 0) {
         if (
-          selectedItem[0].isinCorner(e.offsetX, e.offsetY) ||
-          selectedItem[0].isinRotate(e.offsetX, e.offsetY)
+          selectedItem[0].isinCorner(e.offsetX * monitorCanvasRatio, e.offsetY* monitorCanvasRatio) ||
+          selectedItem[0].isinRotate(e.offsetX* monitorCanvasRatio, e.offsetY* monitorCanvasRatio)
         ) {
           canvasDom.style.cursor = "pointer";
         } else {
