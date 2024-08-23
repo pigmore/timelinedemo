@@ -80,6 +80,10 @@ export function loadVideoProssse(_canvas, _url) {
 export function loadLocalVideoProssse() {
   return new Promise(async (resolve, reject) => {
     const file = await loadFile({ "video/*": [".mp4", ".mov"] });
+    if (!file) {
+      reject()
+      return
+    }
     const stream = file.stream();
     let videoEl = document.createElement("video");
     videoEl.src = stream;
@@ -116,10 +120,16 @@ export function loadLocalVideoProssse() {
   });
 }
 async function loadFile(accept) {
-  const [fileHandle] = await window.showOpenFilePicker({
-    types: [{ accept }],
-  });
-  return await fileHandle.getFile();
+
+
+  try {
+    const [fileHandle] = await window.showOpenFilePicker({
+      types: [{ accept }],
+    });
+    return await fileHandle.getFile();
+  } catch (e) {
+    return false
+  }
 }
 export function loadImgProssse(_canvas, _url) {
   return new Promise((resolve, reject) => {
@@ -137,6 +147,10 @@ export function loadLocalImgProssse() {
     // let seal = _canvas.createImage()
     // seal.src = _url
     const file = await loadFile({ "image/*": [] });
+    if (!file) {
+      reject()
+      return
+    }
     const blobUrl = URL.createObjectURL(file);
     var seal = new Image();
     seal.src = blobUrl;
