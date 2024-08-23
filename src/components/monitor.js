@@ -53,7 +53,9 @@ export function Monitor(props) {
   };
   const handleSelectItem = (_id) => {
     clearSelectItem();
-    monitorGraphs[monitorGraphs.findIndex((item) => item.id === _id)].selected =
+    console.log(_id)
+    console.log(monitorGraphs)
+    monitorGraphs.find((item) => item.id === _id).selected =
       true;
     selectedItem = monitorGraphs.filter((item) => item.selected == true);
   };
@@ -297,7 +299,7 @@ export function Monitor(props) {
           item.type,
           item.type,
           // await loadImgProssse(canvasDom, iconUrl),
-          item.loadedSrc || (await loadImgProssse(uuid(), item.url)),
+          item.loadedSrc || (await loadVideoProssse(uuid(), item.url)),
           canvasDom,
           item.start_time || 0,
           item.end_time || 1000,
@@ -308,7 +310,7 @@ export function Monitor(props) {
         // checkIfInsideLoop(graph);
         console.log(graph, "???video");
         monitorGraphs.push(graph);
-        drawGraphs(true);
+        drawGraphs();
       })(item);
 
       // monitorCanvas.renderAll();

@@ -340,6 +340,7 @@ export function Timeline(props) {
     };
     // console.log(mouse.x);
     xArray = [];
+    console.log(timelineGraphs)
     if (
       Math.abs(
         e.offsetX -
