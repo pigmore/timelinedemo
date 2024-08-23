@@ -182,14 +182,14 @@ export function Monitor(props) {
           // shape.focusIndex = shape.text.length
           monitorTextCoverRef.current.style.color = shape.initconfig.fill;
           monitorTextCoverRef.current.style.fontSize =
-            shape.initconfig.fontSize + "px";
+            shape.initconfig.fontSize / monitorCanvasRatio + "px";
           monitorTextCoverRef.current.style.fontFamily =
             shape.initconfig.fontFamily;
           monitorTextCoverRef.current.style.display = "block";
-          monitorTextCoverRef.current.style.width = shape.w + "px";
-          monitorTextCoverRef.current.style.height = shape.h + "px";
-          monitorTextCoverRef.current.style.left = shape.x + "px";
-          monitorTextCoverRef.current.style.top = shape.y + "px";
+          monitorTextCoverRef.current.style.width = shape.w / monitorCanvasRatio + "px";
+          monitorTextCoverRef.current.style.height = shape.h / monitorCanvasRatio + "px";
+          monitorTextCoverRef.current.style.left = shape.x / monitorCanvasRatio + "px";
+          monitorTextCoverRef.current.style.top = shape.y / monitorCanvasRatio + "px";
           monitorTextCoverRef.current.style.rotate = shape.rotate + "deg";
           monitorTextCoverRef.current.value = shape.text;
           monitorTextCoverRef.current.focus();
