@@ -92,6 +92,7 @@ export const monitorGraph = function (
   this.duration = 0;
   if (this.type == "video") {
     this.loadedSrc.addEventListener("seeked", (event) => {
+      console.log('seeked')
       window.monitor_drawGraphs_function();
     });
   }

@@ -254,6 +254,93 @@ export function Monitor(props) {
       }
     });
   };
+  const addElement = (item) => {
+    if (item.type === "image" || item.type === "avatar") {
+      (async function (item) {
+        console.log("DataURL: ", item.url);
+        var graph = new monitorGraph(
+          item.id,
+          (item.offset_x || canvasDom.width / 2) - item.width / 2,
+          (item.offset_y || canvasDom.height / 2) - item.height / 2,
+          item.width,
+          item.height,
+          item.angle || 0,
+          item.scale_x || 1,
+          item.type,
+          item.type,
+          // await loadImgProssse(canvasDom, iconUrl),
+          item.loadedSrc || await loadImgProssse(uuid(), item.url),
+          canvasDom,
+          item.start_time || 0,
+          item.end_time || 1000,
+        );
+        // checkIfInsideLoop(graph);
+        console.log(graph);
+        monitorGraphs.push(graph);
+        drawGraphs();
+      })(item);
+
+      // monitorCanvas.renderAll();
+    } else if (item.type === "video") {
+      (async function (item) {
+        // console.log("DataURL: ", item.url);
+        var graph = new monitorGraph(
+          item.id,
+          (item.offset_x || canvasDom.width / 2) - item.width / 2,
+          (item.offset_y || canvasDom.height / 2) - item.height / 2,
+          item.width,
+          item.height,
+          item.angle || 0,
+          item.scale_x || 1,
+          item.type,
+          item.type,
+          // await loadImgProssse(canvasDom, iconUrl),
+          item.loadedSrc || await loadImgProssse(uuid(), item.url),
+          canvasDom,
+          item.start_time || 0,
+          item.end_time || 1000,
+          {},
+          item.start_point || 0,
+          item.end_point || 1000,
+        );
+        // checkIfInsideLoop(graph);
+        console.log(graph, "???video");
+        monitorGraphs.push(graph);
+        drawGraphs();
+      })(item);
+
+      // monitorCanvas.renderAll();
+    } else if (item.type === "textbox") {
+      (async function (item) {
+        const textinit = sample.data[0].objects.find(
+          (_item) => _item.id == item.id,
+        );
+        await loadTextProssse(textinit.fontFamily, textinit.data.fontURL);
+        var graph = new monitorGraph(
+          item.id,
+          item.offset_x - item.width / 2,
+          item.offset_y - item.height / 2,
+          item.width,
+          item.height,
+          item.angle,
+          item.scale_x,
+          textinit.text,
+          item.type,
+          // await loadImgProssse(canvasDom, iconUrl),
+          null,
+          canvasDom,
+          item.start_time,
+          item.end_time,
+          textinit,
+        );
+        // checkIfInsideLoop(graph);
+        console.log(graph);
+        monitorGraphs.push(graph);
+        drawGraphs();
+        console.log(monitorGraphs, "???");
+      })(item);
+    }
+  }
   const initJson = () => {
     var jsonTemp = [];
     for (var item of sample.data) {
@@ -276,91 +363,8 @@ export function Monitor(props) {
 
     for (var item of jsonTemp) {
       // console.log(item.type,'type')
-      if (item.type === "image" || item.type === "avatar") {
-        (async function (item) {
-          console.log("DataURL: ", item.url);
-          var graph = new monitorGraph(
-            item.id,
-            item.offset_x - item.width / 2,
-            item.offset_y - item.height / 2,
-            item.width,
-            item.height,
-            item.angle,
-            item.scale_x,
-            item.type,
-            item.type,
-            // await loadImgProssse(canvasDom, iconUrl),
-            await loadImgProssse(uuid(), item.url),
-            canvasDom,
-            item.start_time,
-            item.end_time,
-          );
-          // checkIfInsideLoop(graph);
-          console.log(graph);
-          monitorGraphs.push(graph);
-          drawGraphs();
-        })(item);
+      addElement(item)
 
-        // monitorCanvas.renderAll();
-      } else if (item.type === "video") {
-        (async function (item) {
-          // console.log("DataURL: ", item.url);
-          var graph = new monitorGraph(
-            item.id,
-            item.offset_x - item.width / 2,
-            item.offset_y - item.height / 2,
-            item.width,
-            item.height,
-            item.angle,
-            item.scale_x,
-            item.type,
-            item.type,
-            // await loadImgProssse(canvasDom, iconUrl),
-            await loadVideoProssse(uuid(), item.url),
-            canvasDom,
-            item.start_time,
-            item.end_time,
-            {},
-            item.start_point,
-            item.end_point,
-          );
-          // checkIfInsideLoop(graph);
-          console.log(graph, "???video");
-          monitorGraphs.push(graph);
-          drawGraphs();
-        })(item);
-
-        // monitorCanvas.renderAll();
-      } else if (item.type === "textbox") {
-        (async function (item) {
-          const textinit = sample.data[0].objects.find(
-            (_item) => _item.id == item.id,
-          );
-          await loadTextProssse(textinit.fontFamily, textinit.data.fontURL);
-          var graph = new monitorGraph(
-            item.id,
-            item.offset_x - item.width / 2,
-            item.offset_y - item.height / 2,
-            item.width,
-            item.height,
-            item.angle,
-            item.scale_x,
-            textinit.text,
-            item.type,
-            // await loadImgProssse(canvasDom, iconUrl),
-            null,
-            canvasDom,
-            item.start_time,
-            item.end_time,
-            textinit,
-          );
-          // checkIfInsideLoop(graph);
-          console.log(graph);
-          monitorGraphs.push(graph);
-          drawGraphs();
-          console.log(monitorGraphs, "???");
-        })(item);
-      }
     }
     console.log(monitorGraphs);
     // console.log(monitorCanvas)
@@ -403,6 +407,10 @@ export function Monitor(props) {
   window.clearMonitorSelectItem_function = (_id) => {
     console.log("clearSelectItem_function");
     clearSelectItem(_id);
+  };
+  window.monitorAddElement_function = (item) => {
+    console.log("clearSelectItem_function");
+    addElement(item);
   };
   const initCanvas = async () => {
     canvasDom = document.getElementById("monitor_canvas");

@@ -3,6 +3,7 @@ import "./App.css";
 import React, { useState, memo, useRef, useEffect } from "react";
 import { Timelinememo } from "./components/timeline";
 import { Monitormemo } from "./components/monitor";
+import { uuid,loadLocalVideoProssse } from "./components/util";
 import { ColorPickermemo } from "./components/colorPicker";
 import { CallChild, CallChildMemo } from "./components/callChild";
 import { Test, Testmemo } from "./components/testmodule";
@@ -18,14 +19,28 @@ function App() {
   const handlemyRefCount = () => {
     myRef.current.callmycount();
   };
+  const addVideoElement = async() => {
+    let loadedSrc = await loadLocalVideoProssse()
+    const item = {
+      id:uuid(),
+      x:0,
+      y:2,
+      w:loadedSrc[1].duration * 1000,
+      width: loadedSrc[1].width,
+      height: loadedSrc[1].height,
+      loadedSrc:loadedSrc[0],
+      type:'video'
+    }
+    console.log(loadedSrc)
+    console.log(item)
+    window.timelineAddElement_function(item)
+    window.monitorAddElement_function(item)
+    window.timelineRedraw_function()
+    window.monitor_drawGraphs_function(true)
+  };
   useEffect(() => {}, []);
 
-  async function loadFile(accept) {
-    const [fileHandle] = await window.showOpenFilePicker({
-      types: [{ accept }],
-    });
-    return await fileHandle.getFile();
-  }
+
 
   return (
     <div className="App">
@@ -57,7 +72,7 @@ function App() {
           window.timelineXScale = Math.max(scale - 1, 1);
           setScale((scale) => Math.max(scale - 1, 1));
           // handleRedraw()
-          window.redraw_function();
+          window.timelineRedraw_function();
         }}
       >
         scale:{scale}-1
@@ -67,10 +82,18 @@ function App() {
           window.timelineXScale = Math.min(scale + 1, 30);
           setScale((scale) => Math.min(scale + 1, 30));
           // handleRedraw()
-          window.redraw_function();
+          window.timelineRedraw_function();
         }}
       >
         scale:{scale}+1
+      </button>
+
+      <button
+        onClick={async() => {
+          addVideoElement()
+        }}
+      >
+        input Video
       </button>
 
       <Timelinememo redrawTrigger={redraw} />
@@ -84,31 +107,7 @@ function App() {
         >
           {count}+1
         </button>
-        <button
-          onClick={async() => {
-            const file = await loadFile({ 'video/*': ['.mp4', '.mov'] });
-            console.log(file)
-            const stream = file.stream()
-            console.log(stream)
-            window.videoTest.src = stream
-            const reader = stream.getReader()
-            console.log(reader)
-            let buffer = [];
-            while (1) {
-                const { value, done } = await reader.read();
-                if (done) {
-                    const blob = new Blob(buffer);
-                    const blobUrl = URL.createObjectURL(blob);
-                    window.videoTest.src = blobUrl;
-                    break;
-                }
-                buffer.push(value);
-                console.log('??')
-            }
-          }}
-        >
-          input Video
-        </button>
+
         <video src="" id='videoTest' controls={true}></video>
         <ColorPickermemo />
         <video controls id = "myStreamingVideo"></video>

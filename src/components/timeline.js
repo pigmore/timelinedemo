@@ -591,12 +591,12 @@ export function Timeline(props) {
       clearCanvas();
       drawGraph();
     };
-    window.redraw_function = () => {
+    window.timelineRedraw_function = () => {
       clearCanvas();
       drawGraph();
     };
-    window.addElement_function = async () => {
-      await addElement();
+    window.timelineAddElement_function = async (item) => {
+      await addElement(item.id, item.x, item.y, item.w, item.type);
       clearCanvas();
       drawGraph();
     };
