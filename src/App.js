@@ -35,6 +35,7 @@ function App() {
     console.log(item)
     window.timelineAddElement_function(item)
     window.monitorAddElement_function(item)
+
     window.timelineRedraw_function()
     window.monitor_drawGraphs_function(true)
   };

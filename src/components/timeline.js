@@ -597,6 +597,7 @@ export function Timeline(props) {
     };
     window.timelineAddElement_function = async (item) => {
       await addElement(item.id, item.x, item.y, item.w, item.type);
+      exportJson();
       clearCanvas();
       drawGraph();
     };

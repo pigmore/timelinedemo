@@ -306,7 +306,7 @@ export function Monitor(props) {
         // checkIfInsideLoop(graph);
         console.log(graph, "???video");
         monitorGraphs.push(graph);
-        drawGraphs();
+        drawGraphs(true);
       })(item);
 
       // monitorCanvas.renderAll();
