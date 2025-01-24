@@ -15,8 +15,19 @@ body {
   margin: 0;
   padding: 0;
 }
-#monitorWarp {
+
+
+
+#timeLineCanvas {
+  width: 100%;
+  height: 185px;
+}
+#monitorwrap {
   position: relative;
+}
+#monitorwrap {
+  position: relative;
+  height: 100%;
 }
 #monitorTextCover {
   position: absolute;
@@ -24,19 +35,140 @@ body {
   left: 0;
   background: none;
   text-align: center;
+  transform-origin: center center;
+  transform: translate(-50%, -50%);
   line-height: 1;
   color: white;
   resize: none;
   border: none;
   scrollbar-width: none;
 }
+#loadingwrap {
+  position: absolute;
+  display: none;
+  top: 0px;
+  bottom: 3px;
+  right: 0px;
+  left: 0px;
+  background: #555555dd;
+  -webkit-animation: appearwithOpacity 0.2s ease-out;
+  -moz-animation: appearwithOpacity 0.2s ease-out;
+  animation: appearwithOpacity 0.2s ease-out;
+}
+input[type="range"]#controlTimeslider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: calc(100% - 358px);
+  cursor: pointer;
+  outline: none;
+  border-radius: 15px;
+  height: 6px;
+  background: #ccc;
+}
+
+input[type="range"]#controlTimeslider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 15px;
+  width: 15px;
+  background-color: #7b30f5;
+  border-radius: 50%;
+  border: none;
+  transition: 0.2s ease-in-out;
+}
+
+input[type="range"]#controlTimeslider::-moz-range-thumb {
+  height: 15px;
+  width: 15px;
+  background-color: #7b30f5;
+  border-radius: 50%;
+  border: none;
+  transition: 0.2s ease-in-out;
+}
+#controlsWrap {
+  position: absolute;
+  display: none;
+  /* top:0px; */
+  bottom: 10px;
+  right: 10%;
+  left: 10%;
+  background: #55555522;
+  -webkit-animation: appearwithOpacity 0.2s ease-out;
+  -moz-animation: appearwithOpacity 0.2s ease-out;
+  animation: appearwithOpacity 0.2s ease-out;
+}
+
+#monitorloading {
+  position: absolute;
+  top: calc(50% - 40px);
+  left: calc(50% - 40px);
+  /* transform: translate(-50%, -50%); */
+  width: 80px;
+  height: 80px;
+  color: white;
+  filter: invert(0.95) sepia(1) saturate(0) hue-rotate(175deg);
+  -webkit-animation: spin 1s linear infinite;
+  -moz-animation: spin 1s linear infinite;
+  animation: spin 1s linear infinite;
+}
+@-moz-keyframes spin {
+  100% {
+    -moz-transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@-moz-keyframes appearwithOpacity {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes appearwithOpacity {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes appearwithOpacity {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 #monitorTextCover:focus {
   outline: none !important;
   border: none;
   box-shadow: none;
 }
+#monitor_canvasOver {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
 #monitor_canvas {
-  height: 600px;
+  background-size: cover;
+  background-position: center center;
+  height: 100%;
 }
 .canvasBase {
   margin: 0px;
